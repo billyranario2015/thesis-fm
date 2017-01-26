@@ -49,6 +49,34 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 | Examples:	my-controller/index	-> my_controller/index
 |		my-controller/my-method	-> my_controller/my_method
 */
-$route['default_controller'] = 'welcome';
+$route['default_controller'] = 'AuthController';
 $route['404_override'] = '';
 $route['translate_uri_dashes'] = FALSE;
+
+
+/*
+| -------------------------------------------------------------------------
+| AUTHENTICATION
+| -------------------------------------------------------------------------
+*/
+$route['login']['GET']							= 'AuthController/login';
+$route['auth/login']['POST']					= 'AuthController/post_login';
+$route['logout']['GET']							= 'AuthController/logout';
+
+/*
+| -------------------------------------------------------------------------
+| ADMIN ROUTES
+| -------------------------------------------------------------------------
+*/
+$route['admin/(:any)']['GET']					= 'AdminController/admin_page/$1';
+$route['organization/create']['POST']			= 'AdminController/create_organization';
+$route['admin/organization/(:num)/edit']['GET']	= 'AdminController/edit_organization/$1';
+$route['organization/update']['POST']			= 'AdminController/update_organization';
+$route['organization/(:num)/delete']['GET']		= 'AdminController/delete_organization';
+
+/*
+| -------------------------------------------------------------------------
+| USER ROUTES
+| -------------------------------------------------------------------------
+*/
+$route['user/(:any)']['GET']					= 'UsersController/user_page/$1';

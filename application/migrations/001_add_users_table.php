@@ -21,27 +21,42 @@ class Migration_Add_Users_Table extends CI_Migration {
            ),
             'fname' => array(
                 'type' => 'VARCHAR',
-                'constraint' => 150
+                'constraint' => 150,
+                'default' => 'John'
             ),
             'mname' => array(
                 'type' => 'VARCHAR',
-                'constraint' => 150
+                'constraint' => 150,
+                'default' => 'Don'
             ),
             'lname' => array(
                 'type' => 'VARCHAR',
-                'constraint' => 150
+                'constraint' => 150,
+                'default' => 'Doe'
             ),
-            'user_type' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 255
+            // user_levels = [ 
+            //  1 => 'Superadmin'
+            //  2 => 'Admin'
+            //  3 => 'User'
+            //  4 => 'Guest'
+            // ]
+            'user_level' => array(
+                'type' => 'INT',
+                'constraint' => 11,
+                'default'   => 3,
             ),
-            'account_type' => array(
+            'role' => array(
                 'type' => 'VARCHAR',
                 'constraint' => 255
             ),
             'profile_image' => array(
                 'type' => 'VARCHAR',
                 'constraint' => 255
+            ),
+            'organization_id' => array(
+                'type' => 'INT',
+                'constraint' => 11,
+                'null' => true
             ),
             'email' => array(
                 'type' => 'VARCHAR',
@@ -69,8 +84,8 @@ class Migration_Add_Users_Table extends CI_Migration {
                 'fname'             => 'Billy Joel',
                 'mname'             => 'Loyola',
                 'lname'             => 'Ranario',
-                'user_type'         => 'Superadmin',
-                'account_type'      => 'Website Admin',
+                'user_level'        => 1,
+                'role'              => 'Website Admin',
                 'email'             => 'billy.ranario@must.edu.ph',
                 'profile_image'     => 'avatar5.png',
                 'password'          => sha1( 'blades200' ),
@@ -80,8 +95,8 @@ class Migration_Add_Users_Table extends CI_Migration {
                 'fname'             => 'Billy Joel',
                 'mname'             => 'Loyola',
                 'lname'             => 'Ranario',
-                'user_type'         => 'Superadmin',
-                'account_type'      => 'Chairman',
+                'user_level'        => 2,
+                'role'              => 'Chairman',
                 'email'             => 'billyranario@gmail.com',
                 'profile_image'     => 'avatar5.png',
                 'password'          => sha1( 'blades200' ),
