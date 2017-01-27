@@ -1,6 +1,6 @@
 <?php 
-class Organization extends CI_Model {
-	private $table = 'organization';
+class Course extends CI_Model {
+	private $table = 'courses';
 
 	public function create($data)
 	{
@@ -12,7 +12,11 @@ class Organization extends CI_Model {
 
 	public function get()
 	{
-		$query = $this->db->get($this->table);
+		$this->db->select( 'courses.id as course_id, courses.course_name, organization.id as organization_id, organization.organization_name' )
+				 ->from( $this->table )
+				 ->join( 'organization', 'organization.id = courses.organization_id' )
+				 ->order_by( 'courses.course_name', 'ASC' );
+		$query = $this->db->get();
 
 		if ($query->num_rows() > 0)
 			return $query->result_array();
@@ -20,7 +24,7 @@ class Organization extends CI_Model {
 			return array();
 	}
 
-	public function get_by_id($data)
+	public function get_course_by_id($data)
 	{
 		$this->db->where('id',$data);
 		$query = $this->db->get($this->table);
@@ -50,5 +54,4 @@ class Organization extends CI_Model {
 			return false;
 		}
 	}
-
 }

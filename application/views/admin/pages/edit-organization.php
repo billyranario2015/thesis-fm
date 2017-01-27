@@ -3,6 +3,14 @@
         <div class="container-fluid">
             <div class="block-header">
                 <h2>ORGANIZATIONS</h2>
+
+                <?php if ( $this->session->flashdata('message') ) { ?>
+                <br>
+                <div class="alert alert-info">
+                    <strong>Success!</strong>  <?php echo $this->session->flashdata('message'); ?>
+                </div>
+                <?php } ?> 
+                
             </div>
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -37,14 +45,6 @@
                                 </div>
                                 <div class="col-sm-12">
                                     <button type="submit" class="btn btn-success btn-lg waves-effect">UPDATE</button>
-                                </div>
-
-                                <div class="col-xs-12">
-                                    <?php if ( $this->session->flashdata('message') ) { ?>
-                                    <div class="alert alert-info">
-                                        <strong>Success!</strong>  <?php echo $this->session->flashdata('message'); ?>
-                                    </div>
-                                    <?php } ?> 
                                 </div>
                             </form>
                         </div>

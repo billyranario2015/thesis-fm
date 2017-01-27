@@ -69,14 +69,36 @@ $route['logout']['GET']							= 'AuthController/logout';
 | -------------------------------------------------------------------------
 */
 $route['admin/(:any)']['GET']					= 'AdminController/admin_page/$1';
+// ORGANIZATION
 $route['organization/create']['POST']			= 'AdminController/create_organization';
 $route['admin/organization/(:num)/edit']['GET']	= 'AdminController/edit_organization/$1';
 $route['organization/update']['POST']			= 'AdminController/update_organization';
-$route['organization/(:num)/delete']['GET']		= 'AdminController/delete_organization';
+// USER
+$route['user/create']['POST']					= 'AdminController/create_user';
+$route['admin/user/(:num)/edit']['GET']			= 'AdminController/edit_user/$1';
+$route['user/update']['POST']					= 'AdminController/update_user';
+// COURSE
+$route['course/create']['POST']					= 'AdminController/create_course';
+$route['admin/course/(:num)/edit']['GET']		= 'AdminController/edit_course/$1';
+$route['course/update']['POST']					= 'AdminController/update_course';
+
+// ANGULARJS API ROUTES
+$route['api/user/delete']['POST']				= 'AdminController/delete_user';
+$route['api/course/delete']['POST']				= 'AdminController/delete_course';
+$route['api/organization/delete']['POST']		= 'AdminController/delete_organization';
+$route['api/area/delete']['POST']				= 'UsersController/delete_area';
 
 /*
 | -------------------------------------------------------------------------
 | USER ROUTES
 | -------------------------------------------------------------------------
 */
+// USER
 $route['user/(:any)']['GET']					= 'UsersController/user_page/$1';
+$route['user/user/create']['POST']				= 'UsersController/create_user';
+$route['user/(:num)/edit']['GET']				= 'UsersController/edit_user/$1';
+$route['user/user/update']['POST']				= 'UsersController/update_user';
+// AREA
+$route['area/create']['POST']					= 'UsersController/create_area';
+$route['user/area/(:num)/edit']['GET']			= 'UsersController/edit_area/$1';
+$route['area/update']['POST']					= 'UsersController/update_area';

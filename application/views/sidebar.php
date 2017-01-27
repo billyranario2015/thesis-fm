@@ -12,9 +12,13 @@
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
-                            <li><a href="javascript:void(0);"><i class="material-icons">person</i>Profile</a></li>
+                            <?php if ( $this->session->userdata( 'user_level' ) != 1 ) { ?>
+                            <li><a href="<?php echo base_url('/user/profile'); ?>"><i class="material-icons">person</i>Profile</a></li>    
+                            <?php } else { ?>
+                            <li><a href="<?php echo base_url('/admin/profile'); ?>"><i class="material-icons">person</i>Profile</a></li>
+                            <?php } ?>
                             <li role="seperator" class="divider"></li>
-                            <li><a href="javascript:void(0);"><i class="material-icons">input</i>Sign Out</a></li>
+                            <li><a href="<?php echo base_url('/logout'); ?>"><i class="material-icons">input</i>Sign Out</a></li>
                         </ul>
                     </div>
                 </div>
@@ -25,13 +29,16 @@
             <div class="menu">
                 <ul class="list">
                     <li class="header">MAIN NAVIGATION</li>
-                    <li class="<?php if( $tpl == 'dashboard' ) echo 'active'; ?>">
+
+                    <!-- USER_LEVEL == 1 -->
+                    <?php if( $this->session->userdata( 'user_level' ) == 1 ) { ?>
+                    <li class="<?php if( isset( $tpl ) && $tpl == 'dashboard' ) echo 'active'; ?>">
                         <a href="<?php echo base_url( 'admin/dashboard' ); ?>">
                             <i class="material-icons">home</i>
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="<?php if( $tpl == 'organizations' ) echo 'active'; ?>">
+                    <li class="<?php if( isset( $tpl ) && $tpl == 'organizations' ) echo 'active'; ?>">
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">widgets</i>
                             <span>Organizations</span>
@@ -49,24 +56,106 @@
                             </li>
                         </ul>
                     </li>
-                    <li>
+                    <li class="<?php if( isset( $tpl ) && $tpl == 'courses' ) echo 'active'; ?>">
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">school</i>
+                            <span>Courses</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li class="<?php if( isset($tpl2) && $tpl2 == 'courses' ) echo 'active'; ?>">
+                                <a href="<?php echo base_url( 'admin/courses' ); ?>">
+                                    <span>All Courses</span>
+                                </a>
+                            </li>
+                            <li class="<?php if( isset($tpl2) && $tpl2 == 'create-course' ) echo 'active'; ?>">
+                                <a href="<?php echo base_url( 'admin/create-course' ); ?>">
+                                    <span>New Course</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="<?php if( isset( $tpl ) && $tpl == 'users' ) echo 'active'; ?>">
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">people</i>
                             <span>Users</span>
                         </a>
                         <ul class="ml-menu">
-                            <li>
-                                <a href="javascript:void(0);">
+                            <li class="<?php if( isset($tpl2) && $tpl2 == 'users' ) echo 'active'; ?>">
+                                <a href="<?php echo base_url( 'admin/users' ); ?>">
                                     <span>All Users</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="javascript:void(0);">
+                            <li class="<?php if( isset($tpl2) && $tpl2 == 'create-user' ) echo 'active'; ?>">
+                                <a href="<?php echo base_url( 'admin/create-user' ); ?>">
                                     <span>New User</span>
                                 </a>
                             </li>
                         </ul>
                     </li>
+
+
+                    <?php } elseif( $this->session->userdata( 'user_level' ) == 2 ) { ?>
+                    <li class="<?php if( isset( $tpl ) && $tpl == 'dashboard' ) echo 'active'; ?>">
+                        <a href="<?php echo base_url( 'user/dashboard' ); ?>">
+                            <i class="material-icons">home</i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="<?php if( isset( $tpl ) && $tpl == 'templates' ) echo 'active'; ?>">
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">folder_open</i>
+                            <span>Templates</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li class="<?php if( isset($tpl2) && $tpl2 == 'templates' ) echo 'active'; ?>">
+                                <a href="<?php echo base_url( 'user/templates' ); ?>">
+                                    <span>All Templates</span>
+                                </a>
+                            </li>
+                            <li class="<?php if( isset($tpl2) && $tpl2 == 'create-template' ) echo 'active'; ?>">
+                                <a href="<?php echo base_url( 'user/create-template' ); ?>">
+                                    <span>New Template</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="<?php if( isset( $tpl ) && $tpl == 'area' ) echo 'active'; ?>">
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">poll</i>
+                            <span>Area</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li class="<?php if( isset($tpl2) && $tpl2 == 'area' ) echo 'active'; ?>">
+                                <a href="<?php echo base_url( 'user/area' ); ?>">
+                                    <span>All Areas</span>
+                                </a>
+                            </li>
+                            <li class="<?php if( isset($tpl2) && $tpl2 == 'create-area' ) echo 'active'; ?>">
+                                <a href="<?php echo base_url( 'user/create-area' ); ?>">
+                                    <span>New Area</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="<?php if( isset( $tpl ) && $tpl == 'users' ) echo 'active'; ?>">
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">people</i>
+                            <span>Users</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li class="<?php if( isset($tpl2) && $tpl2 == 'users' ) echo 'active'; ?>">
+                                <a href="<?php echo base_url( 'user/users' ); ?>">
+                                    <span>All Users</span>
+                                </a>
+                            </li>
+                            <li class="<?php if( isset($tpl2) && $tpl2 == 'create-user' ) echo 'active'; ?>">
+                                <a href="<?php echo base_url( 'user/create-user' ); ?>">
+                                    <span>New User</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <?php } ?>
                 </ul>
             </div>
             <!-- #Menu -->

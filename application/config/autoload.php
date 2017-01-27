@@ -135,5 +135,7 @@ $autoload['language'] = array();
 $autoload['model'] = array(
 	'authentication' => 'auth',
 	'users' 		 => 'users',
-	'organization'   => 'org'
+	'organization'   => 'org',
+	'course'		 => 'course',
+	'area'		 	 => 'area'
 );

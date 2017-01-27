@@ -13,7 +13,7 @@ class AuthController extends CI_Controller {
 		$this->load->view('login');
 	}
 	public function post_login()
-	{
+	{ 
 		$response = $this->auth->postLogin( $_POST );
 		if ( $response ) {
 			// Retrieve User Info and Make SESSION for user
@@ -33,13 +33,11 @@ class AuthController extends CI_Controller {
 			else
 				redirect( base_url('user/dashboard') );
 
-
-
 		} else {
 			$this->session->set_flashdata( 'old_email', $_POST['email']);
 			// BaseController::redirect_w_msg(['route' => base_url('login/') , 'item' => 'err_message' , 'msg' => '' ]);
 
-			$this->session->set_flashdata( 'intl_get_error_message(oid)' , 'Please check if email and password are matched.' );
+			$this->session->set_flashdata( 'err_message' , 'Please check if email and password are matched.' );
 			redirect( base_url('login') );
 		}
 	}

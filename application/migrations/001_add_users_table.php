@@ -51,9 +51,10 @@ class Migration_Add_Users_Table extends CI_Migration {
             ),
             'profile_image' => array(
                 'type' => 'VARCHAR',
-                'constraint' => 255
+                'constraint' => 255,
+                'default' => 'avatar5.png'
             ),
-            'organization_id' => array(
+            'course_id' => array(
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => true
@@ -87,19 +88,27 @@ class Migration_Add_Users_Table extends CI_Migration {
                 'user_level'        => 1,
                 'role'              => 'Website Admin',
                 'email'             => 'billy.ranario@must.edu.ph',
-                'profile_image'     => 'avatar5.png',
-                'password'          => sha1( 'blades200' ),
+                'password'          => sha1( '123' ),
             ),
             array(
                 'id'                => 2,
-                'fname'             => 'Billy Joel',
-                'mname'             => 'Loyola',
-                'lname'             => 'Ranario',
+                'fname'             => 'Jane',
+                'mname'             => 'Smith',
+                'lname'             => 'Doe',
                 'user_level'        => 2,
                 'role'              => 'Chairman',
-                'email'             => 'billyranario@gmail.com',
-                'profile_image'     => 'avatar5.png',
-                'password'          => sha1( 'blades200' ),
+                'email'             => 'jane@gmail.com',
+                'password'          => sha1( '123' ),
+            ),
+            array(
+                'id'                => 3,
+                'fname'             => 'Not Assigned',
+                'mname'             => '',
+                'lname'             => '',
+                'user_level'        => 2,
+                'role'              => '',
+                'email'             => 'test@gmail.com',
+                'password'          => sha1( '123' ),
             ),
         );
         $this->db->insert_batch('users', $data);

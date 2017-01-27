@@ -1,10 +1,5 @@
 
 
-
-
-    <!-- Jquery Core Js -->
-    <script src="<?php echo base_url( '/assets/admin/plugins/jquery/jquery.min.js' ); ?>"></script>
-
     <!-- Bootstrap Core Js -->
     <script src="<?php echo base_url( '/assets/admin/plugins/bootstrap/js/bootstrap.js' ); ?>"></script>
 
@@ -22,6 +17,15 @@
 
     <!-- Demo Js -->
     <script src="<?php echo base_url( '/assets/admin/js/demo.js' ); ?>"></script>
+
+    <!-- Angular JS -->
+    <script src="<?php echo base_url( '/assets/admin/js/angularjs/angular.min.js' ); ?>"></script>
+    <script src="<?php echo base_url( '/assets/admin/js/angularjs/app.js' ); ?>"></script>
+
+    <!-- CUSTOM SCRIPT -->
+    <?php echo isset( $scripts ) ? $scripts : ''; ?>
+
+
 </body>
 
 </html>

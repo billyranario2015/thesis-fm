@@ -1,3 +1,9 @@
+<?php 
+    if ( empty($this->session->userdata('id')) && empty($this->session->userdata('is_logged_in')) ) {
+        redirect( base_url('login') );
+    }
+?>
+
 <!DOCTYPE html>
 <html>
 
@@ -14,6 +20,9 @@
 
     <!-- Bootstrap Core Css -->
     <link href="<?php echo base_url('/assets/admin/plugins/bootstrap/css/bootstrap.css'); ?>" rel="stylesheet">
+    
+    <!-- Bootstrap Select Css -->
+    <link href="<?php echo base_url('/assets/admin/plugins/bootstrap-select/css/bootstrap-select.css') ?>" rel="stylesheet" />
 
     <!-- Waves Effect Css -->
     <link href="<?php echo base_url('/assets/admin/plugins/node-waves/waves.css'); ?>" rel="stylesheet" />
@@ -26,9 +35,12 @@
 
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="<?php echo base_url('/assets/admin/css/themes/all-themes.css'); ?>" rel="stylesheet" />
+
+    <!-- Jquery Core Js -->
+    <script src="<?php echo base_url( '/assets/admin/plugins/jquery/jquery.min.js' ); ?>"></script>
 </head>
 
-<body class="theme-red">
+<body class="theme-red" ng-app="MUSTFM">
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
