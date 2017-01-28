@@ -100,5 +100,7 @@ $route['user/(:num)/edit']['GET']				= 'UsersController/edit_user/$1';
 $route['user/user/update']['POST']				= 'UsersController/update_user';
 // AREA
 $route['area/create']['POST']					= 'UsersController/create_area';
-$route['user/area/(:num)/edit']['GET']			= 'UsersController/edit_area/$1';
+$route['user/area/(:num)']['GET']				= 'UsersController/edit_area/$1';
 $route['area/update']['POST']					= 'UsersController/update_area';
+// TEMPLATE
+$route['user/area/(:num)/(:any)']['GET']		= 'UsersController/area_view/$1/$2';

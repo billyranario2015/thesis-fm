@@ -129,9 +129,11 @@ class UsersController extends CI_Controller {
 	public function edit_area($id)
 	{
 		$data = array(
-			'tpl' => 'organizations',
+			'tpl' => 'area',
 			'data' => $this->area->get_by_id($id),
-			'users' => $this->users->get_all_users_by_course($this->session->userdata('course_id'))
+			'users' => $this->users->get_all_users_by_course($this->session->userdata('course_id')),
+			'tab'	=> 'templates',
+			'action' => 'templates',
 		);
 		$this->load->view('users/pages/edit-area',$data);
 	}
@@ -143,7 +145,7 @@ class UsersController extends CI_Controller {
 		);
 		if ( $this->area->update($_POST) ) {
 			$this->session->set_flashdata( 'message' , 'Area successfully updated.' );
-			redirect( base_url( 'user/area/'.$_POST['id'].'/edit' ) );
+			redirect( base_url( 'user/area/'.$_POST['id'] ) );
 		}
 	}
 
@@ -153,4 +155,28 @@ class UsersController extends CI_Controller {
 		echo json_encode( [ 'response' => $this->area->delete($obj) ] );
 	}
 
+	// Area Template
+	public function area_view($id,$tpl)
+	{
+		$data = array(
+			'tpl' => 'area',
+			'data' => $this->area->get_by_id($id),
+			'users' => $this->users->get_all_users_by_course($this->session->userdata('course_id')),
+			'tab'	=> 'templates',
+			'action' => 'templates',
+		);
+
+		if ( $tpl == 'templates' ) {
+			$data['tab'] = 'templates';
+			$data['action'] = $tpl;
+		} elseif ( $tpl == 'template-create' ) {
+			$data['tab'] = 'templates';
+			$data['action'] = $tpl;
+		} elseif ( $tpl == 'settings' ) {
+			$data['tab'] = 'settings';
+			$data['action'] = $tpl;
+		}
+		$this->load->view('users/pages/edit-area',$data);
+
+	}	
 }

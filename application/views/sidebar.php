@@ -101,24 +101,6 @@
                             <span>Dashboard</span>
                         </a>
                     </li>
-                    <li class="<?php if( isset( $tpl ) && $tpl == 'templates' ) echo 'active'; ?>">
-                        <a href="javascript:void(0);" class="menu-toggle">
-                            <i class="material-icons">folder_open</i>
-                            <span>Templates</span>
-                        </a>
-                        <ul class="ml-menu">
-                            <li class="<?php if( isset($tpl2) && $tpl2 == 'templates' ) echo 'active'; ?>">
-                                <a href="<?php echo base_url( 'user/templates' ); ?>">
-                                    <span>All Templates</span>
-                                </a>
-                            </li>
-                            <li class="<?php if( isset($tpl2) && $tpl2 == 'create-template' ) echo 'active'; ?>">
-                                <a href="<?php echo base_url( 'user/create-template' ); ?>">
-                                    <span>New Template</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
                     <li class="<?php if( isset( $tpl ) && $tpl == 'area' ) echo 'active'; ?>">
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">poll</i>

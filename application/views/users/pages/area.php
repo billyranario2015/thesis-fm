@@ -44,7 +44,7 @@
                                         <td><?php echo $area['area_name'] ?></td>
                                         <td><?php echo $area['fname'] . ' ' . $area['lname']; ?></td>
                                         <td class="text-right">
-                                            <a href="<?php echo base_url('user/area/'.$area['area_id'].'/edit') ?>" class="btn bg-blue waves-effect">
+                                            <a href="<?php echo base_url('user/area/'.$area['area_id']) ?>" class="btn bg-blue waves-effect">
                                                 <i class="material-icons">edit</i>
                                             </a>
                                             <a href="#" ng-click="deleteArea(<?php echo $area['area_id']; ?>)" class="btn bg-pink waves-effect">
