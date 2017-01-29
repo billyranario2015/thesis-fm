@@ -7,7 +7,6 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 				$( '#area-' + id ).fadeOut();
 			} );
 		}
-
 	}
 
 });

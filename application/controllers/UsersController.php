@@ -164,8 +164,9 @@ class UsersController extends CI_Controller {
 			'users' => $this->users->get_all_users_by_course($this->session->userdata('course_id')),
 			'tab'	=> 'templates',
 			'action' => 'templates',
+			'scripts'=> '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>',
 		);
-
+		
 		if ( $tpl == 'templates' ) {
 			$data['tab'] = 'templates';
 			$data['action'] = $tpl;

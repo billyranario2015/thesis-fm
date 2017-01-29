@@ -1,6 +1,6 @@
 <?php $this->load->view('header'); ?>
 
-    <section class="content">
+    <section class="content" ng-controller="">
         <div class="container-fluid">
             <div class="block-header">
                 <?php if ( $this->session->flashdata('message') ) { ?>
