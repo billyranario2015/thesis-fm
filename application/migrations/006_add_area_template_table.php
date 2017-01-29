@@ -45,8 +45,7 @@ class Migration_Add_Area_Template_Table extends CI_Migration {
                 'null' => true
             ),
             'data_of_actual_survey' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 255,
+                'type' => 'DATE',
                 'null' => true
             ),
             'created_at' => array(
@@ -62,8 +61,8 @@ class Migration_Add_Area_Template_Table extends CI_Migration {
 
     }
 
-  public function down()
-  {
-    $this->dbforge->drop_table('area_template', TRUE);
-  }
+    public function down()
+    {
+        $this->dbforge->drop_table('area_template', TRUE);
+    }
 }
