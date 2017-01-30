@@ -16,10 +16,10 @@
                                                 <h2 class="card-inside-title">Parameter Name</h2>
                                                 <div class="input-group">
                                                     <div class="form-line">
-                                                        <input type="text" class="form-control date" placeholder="Parameter Name">
+                                                        <input type="text" class="form-control date" ng-model="parameter.parameter_name" placeholder="Parameter Name">
                                                     </div>
                                                    <span class="input-group-addon">
-                                                        <a href="#" ng-click="addParameter()" class="btn btn-default">
+                                                        <a style="cursor:pointer" ng-click="createParameter(<?php echo $data['id']; ?>)" class="btn btn-default">
                                                             <div class="demo-google-material-icon"> 
                                                                 <i class="material-icons">add</i> 
                                                                 <span class="icon-name" style="position: relative;top: -3px">ADD</span>
@@ -32,12 +32,13 @@
                                                 <h2 class="card-inside-title">Sub-Parameter</h2>
                                                 <div class="form-group form-float form-group-md">
                                                     <div class="form-line">
-                                                        <select class="form-control show-tick selectpicker" name="parent_id">
-                                                            <option value="">---- Select parent parameter ----</option>
-                                                            
+                                                        <select class="form-control" name="parent_id">
+                                                            <option value="">---- Select parent parameter (Leave this field if no parent) ----</option>
+                                                            <option ng-repeat="list in parameters" value="{{ list.id }}">{{ list.parameter_name }}</option>
                                                         </select>
                                                     </div>
                                                 </div>
+
                                                 <div class="input-group">
                                                     <div class="form-line">
                                                         <input type="text" class="form-control date" placeholder="Sub-Parameter Name">

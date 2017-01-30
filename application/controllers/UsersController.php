@@ -180,4 +180,16 @@ class UsersController extends CI_Controller {
 		$this->load->view('users/pages/edit-area',$data);
 
 	}	
+
+	// Parameters
+	public function create_param()
+	{
+		$obj = json_decode(file_get_contents('php://input'));
+		echo json_encode( [ 'response' => $this->area_params->create($obj) ] );
+	}
+
+	public function get_parameters($area_id)
+	{
+		echo json_encode( [ 'response' => $this->area_params->get_by_area_id($area_id) ] );
+	}
 }

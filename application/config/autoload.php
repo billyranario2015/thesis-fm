@@ -137,5 +137,6 @@ $autoload['model'] = array(
 	'users' 		 => 'users',
 	'organization'   => 'org',
 	'course'		 => 'course',
-	'area'		 	 => 'area'
+	'area'		 	 => 'area',
+	'area_parameters'=> 'area_params',
 );

@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_Add_Parameters_Table extends CI_Migration {
+class Migration_Add_Area_Parameters_Table extends CI_Migration {
 
     public function __construct()
     {
