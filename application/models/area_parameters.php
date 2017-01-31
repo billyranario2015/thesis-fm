@@ -33,6 +33,19 @@ class Area_Parameters extends CI_Model {
 			return array();
 	}
 
+	public function get_child_by_parent_id($parent_id,$area_id)
+	{
+		$this->db->where( 'area_id' , $area_id )
+				 ->where( 'parent_id' , $parent_id )
+				 ->order_by( 'id', 'ASC' );
+		$query = $this->db->get($this->table);
+
+		if ($query->num_rows() > 0)
+			return $query->result_array();
+		else
+			return array();
+	}
+
 	public function get_by_id($data)
 	{
 		$this->db->where('id',$data);

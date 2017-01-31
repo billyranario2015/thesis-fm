@@ -22,22 +22,27 @@ class UsersController extends CI_Controller {
 		if ( $tpl == 'create-user' ) {
 			$data['tpl'] = 'users';
 			$data['tpl2'] = 'create-user';
+			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
 			$data['courses'] = $this->course->get();
 		} elseif ( $tpl == 'users' ) {
 			$data['tpl'] = 'users';
 			$data['tpl2'] = 'users';
 			$data['users'] = $this->users->get_all_users_by_course($this->session->userdata('course_id'));
 			// Load Custom Scripts in footer
-			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/admin/users.js').'"></script>';
+			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
+			$data['scripts'] .= '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/admin/users.js').'"></script>';
 		} elseif ( $tpl == 'area' ) {
 			$data['tpl'] = 'area';
 			$data['tpl2'] = 'area';
 			$data['areas'] = $this->area->get_by_course_id($this->session->userdata('course_id'));
 			// Load Custom Scripts in footer
+			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
+
 			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>';
 		} elseif ( $tpl == 'create-area' ) {
 			$data['tpl'] = 'area';
 			$data['tpl2'] = 'create-area';
+			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
 			$data['users'] = $this->users->get_all_users_by_course($this->session->userdata('course_id'));
 		}
 		$this->load->view('users/pages/'.$tpl, $data);
@@ -135,6 +140,7 @@ class UsersController extends CI_Controller {
 			'tab'	=> 'templates',
 			'action' => 'templates',
 		);
+
 		$this->load->view('users/pages/edit-area',$data);
 	}
 
@@ -145,7 +151,7 @@ class UsersController extends CI_Controller {
 		);
 		if ( $this->area->update($_POST) ) {
 			$this->session->set_flashdata( 'message' , 'Area successfully updated.' );
-			redirect( base_url( 'user/area/'.$_POST['id'] ) );
+			redirect( base_url( 'user/area/'.$_POST['id'] . '/settings' ) );
 		}
 	}
 
@@ -167,6 +173,7 @@ class UsersController extends CI_Controller {
 			'scripts'=> '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>',
 		);
 		
+		
 		if ( $tpl == 'templates' ) {
 			$data['tab'] = 'templates';
 			$data['action'] = $tpl;
@@ -176,6 +183,7 @@ class UsersController extends CI_Controller {
 		} elseif ( $tpl == 'settings' ) {
 			$data['tab'] = 'settings';
 			$data['action'] = $tpl;
+			$data['scripts'] .= '<br><script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
 		}
 		$this->load->view('users/pages/edit-area',$data);
 
@@ -190,6 +198,27 @@ class UsersController extends CI_Controller {
 
 	public function get_parameters($area_id)
 	{
-		echo json_encode( [ 'response' => $this->area_params->get_by_area_id($area_id) ] );
+		echo json_encode( [ 'response' => $this->categoryParentChildTree(0,'','',$area_id) ] );
+	}
+
+	public function categoryParentChildTree($parent = 0, $spacing = '', $category_tree_array = '', $area_id) {
+		if (!is_array($category_tree_array))
+			$category_tree_array = array();
+		// Fetch parameter by area_id and parent_id
+		$parameters = $this->area_params->get_child_by_parent_id($parent,$area_id);
+
+		if ( count( $parameters ) > 0 ) {
+			foreach ($parameters as $key => $param) {
+				$category_tree_array[] = array(
+					"id" 				=> $param['id'], 
+					'area_id'			=> $param['area_id'],
+					"parameter_name"	=> $spacing . $param['parameter_name'],
+					"parent_id" 		=> $param['parent_id']
+				);
+
+				$category_tree_array = $this->categoryParentChildTree($param['id'], '::::: '.$spacing, $category_tree_array, $area_id);
+			}
+		}
+		return $category_tree_array;
 	}
 }
