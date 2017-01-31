@@ -20,6 +20,8 @@
 
     <!-- Angular JS -->
     <script src="<?php echo base_url( '/assets/admin/js/angularjs/angular.min.js' ); ?>"></script>
+    <script src="<?php echo base_url( '/assets/admin/js/angularjs/angular-sanitize.min.js' ); ?>"></script>
+    
     <script src="<?php echo base_url( '/assets/admin/js/angularjs/app.js' ); ?>"></script>
 
     <!-- CUSTOM SCRIPT -->

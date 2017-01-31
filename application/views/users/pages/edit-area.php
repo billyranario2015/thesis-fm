@@ -1,6 +1,6 @@
 <?php $this->load->view('header'); ?>
 
-    <section class="content" ng-controller="AreasController" ng-init="getParameters(<?php echo $data['id'] ?>)">
+    <section class="content" ng-controller="AreasController" ng-init="getParameters(<?php echo $data['id'] ?>);getCleanParameters(<?php echo $data['id'] ?>)">
         <div class="container-fluid">
             <div class="block-header">
                 <?php if ( $this->session->flashdata('message') ) { ?>

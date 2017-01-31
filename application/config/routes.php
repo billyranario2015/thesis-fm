@@ -59,34 +59,34 @@ $route['translate_uri_dashes'] = FALSE;
 | AUTHENTICATION
 | -------------------------------------------------------------------------
 */
-$route['login']['GET']							= 'AuthController/login';
-$route['auth/login']['POST']					= 'AuthController/post_login';
-$route['logout']['GET']							= 'AuthController/logout';
+$route['login']['GET']									= 'AuthController/login';
+$route['auth/login']['POST']							= 'AuthController/post_login';
+$route['logout']['GET']									= 'AuthController/logout';
 
 /*
 | -------------------------------------------------------------------------
 | ADMIN ROUTES
 | -------------------------------------------------------------------------
 */
-$route['admin/(:any)']['GET']					= 'AdminController/admin_page/$1';
+$route['admin/(:any)']['GET']							= 'AdminController/admin_page/$1';
 // ORGANIZATION
-$route['organization/create']['POST']			= 'AdminController/create_organization';
-$route['admin/organization/(:num)/edit']['GET']	= 'AdminController/edit_organization/$1';
-$route['organization/update']['POST']			= 'AdminController/update_organization';
+$route['organization/create']['POST']					= 'AdminController/create_organization';
+$route['admin/organization/(:num)/edit']['GET']			= 'AdminController/edit_organization/$1';
+$route['organization/update']['POST']					= 'AdminController/update_organization';
 // USER
-$route['user/create']['POST']					= 'AdminController/create_user';
-$route['admin/user/(:num)/edit']['GET']			= 'AdminController/edit_user/$1';
-$route['user/update']['POST']					= 'AdminController/update_user';
+$route['user/create']['POST']							= 'AdminController/create_user';
+$route['admin/user/(:num)/edit']['GET']					= 'AdminController/edit_user/$1';
+$route['user/update']['POST']							= 'AdminController/update_user';
 // COURSE
-$route['course/create']['POST']					= 'AdminController/create_course';
-$route['admin/course/(:num)/edit']['GET']		= 'AdminController/edit_course/$1';
-$route['course/update']['POST']					= 'AdminController/update_course';
+$route['course/create']['POST']							= 'AdminController/create_course';
+$route['admin/course/(:num)/edit']['GET']				= 'AdminController/edit_course/$1';
+$route['course/update']['POST']							= 'AdminController/update_course';
 
 // ANGULARJS API ROUTES
-$route['api/user/delete']['POST']				= 'AdminController/delete_user';
-$route['api/course/delete']['POST']				= 'AdminController/delete_course';
-$route['api/organization/delete']['POST']		= 'AdminController/delete_organization';
-$route['api/area/delete']['POST']				= 'UsersController/delete_area';
+$route['api/user/delete']['POST']						= 'AdminController/delete_user';
+$route['api/course/delete']['POST']						= 'AdminController/delete_course';
+$route['api/organization/delete']['POST']				= 'AdminController/delete_organization';
+$route['api/area/delete']['POST']						= 'UsersController/delete_area';
 
 /*
 | -------------------------------------------------------------------------
@@ -94,16 +94,17 @@ $route['api/area/delete']['POST']				= 'UsersController/delete_area';
 | -------------------------------------------------------------------------
 */
 // USER
-$route['user/(:any)']['GET']					= 'UsersController/user_page/$1';
-$route['user/user/create']['POST']				= 'UsersController/create_user';
-$route['user/(:num)/edit']['GET']				= 'UsersController/edit_user/$1';
-$route['user/user/update']['POST']				= 'UsersController/update_user';
+$route['user/(:any)']['GET']							= 'UsersController/user_page/$1';
+$route['user/user/create']['POST']						= 'UsersController/create_user';
+$route['user/(:num)/edit']['GET']						= 'UsersController/edit_user/$1';
+$route['user/user/update']['POST']						= 'UsersController/update_user';
 // AREA
-$route['area/create']['POST']					= 'UsersController/create_area';
-$route['user/area/(:num)']['GET']				= 'UsersController/edit_area/$1';
-$route['area/update']['POST']					= 'UsersController/update_area';
+$route['area/create']['POST']							= 'UsersController/create_area';
+$route['user/area/(:num)']['GET']						= 'UsersController/edit_area/$1';
+$route['area/update']['POST']							= 'UsersController/update_area';
 // TEMPLATE
-$route['user/area/(:num)/(:any)']['GET']		= 'UsersController/area_view/$1/$2';
+$route['user/area/(:num)/(:any)']['GET']				= 'UsersController/area_view/$1/$2';
 // Parameters
-$route['api/create/parameter']['POST']			= 'UsersController/create_param';
-$route['api/get/parameters/(:num)']['GET']		= 'UsersController/get_parameters/$1';
+$route['api/create/parameter']['POST']					= 'UsersController/create_param';
+$route['api/get/parameters/(:num)']['GET']				= 'UsersController/get_parameters/$1';
+$route['api/get/clean_parameters/(:num)']['GET']		= 'UsersController/get_parameters_clean/$1';

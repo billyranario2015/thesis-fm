@@ -200,6 +200,10 @@ class UsersController extends CI_Controller {
 	{
 		echo json_encode( [ 'response' => $this->categoryParentChildTree(0,'','',$area_id) ] );
 	}
+	public function get_parameters_clean($area_id)
+	{
+		echo json_encode( [ 'response' => $this->categoryParentChildTreeClean(0,'','',$area_id) ] );
+	}
 
 	public function categoryParentChildTree($parent = 0, $spacing = '', $category_tree_array = '', $area_id) {
 		if (!is_array($category_tree_array))
@@ -219,6 +223,42 @@ class UsersController extends CI_Controller {
 				$category_tree_array = $this->categoryParentChildTree($param['id'], '::::: '.$spacing, $category_tree_array, $area_id);
 			}
 		}
+		return $category_tree_array;
+	}
+
+	public function categoryParentChildTreeClean($parent = 0, $spacing = '', $category_tree_array = '', $area_id) {
+		if (!is_array($category_tree_array))
+			$category_tree_array = array();
+		// Fetch parameter by area_id and parent_id
+		$parameters = $this->area_params->get_child_by_parent_id($parent,$area_id);
+		$numItems = count( $parameters );
+
+		if ( count( $parameters ) > 0 ) {
+  			
+			foreach ($parameters as $key => $param) {
+				$category_tree_array[] = array(
+					"id" 				=> $param['id'], 
+					'area_id'			=> $param['area_id'],
+					"parameter_name"	=> $spacing . $param['parameter_name'],
+					"parent_id" 		=> $param['parent_id'],
+					"ul_open" 			=> 0,
+					"ul_close" 			=> 0,
+				);
+
+				$category_tree_array = $this->categoryParentChildTreeClean($param['id'], '&nbsp;&nbsp;&nbsp;&nbsp;'.$spacing .'-&nbsp;' , $category_tree_array, $area_id);
+			}
+		}
+
+	 	// $parameters = $this->area_params->get_child_by_parent_id($parent,$area_id);
+	  //   if ( count( $parameters ) > 0 ) {
+	  //       echo '<ul>';
+	  //       while($rs = mysql_fetch_array($sql)){
+	  //           echo  '<li>' . $rs['name'];
+	  //           echo show_subcategory(($rs['cat_id']));
+	  //           echo '</li>';
+	  //       }
+	  //       echo '</ul>';
+	  //   }		
 		return $category_tree_array;
 	}
 }

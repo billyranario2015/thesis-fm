@@ -1,4 +1,4 @@
-var fm = angular.module( 'MUSTFM' , [] );
+var fm = angular.module( 'MUSTFM' , ['ngSanitize'] );
 
 
 fm.factory( 'settings' , function(){
