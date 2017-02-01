@@ -210,8 +210,8 @@ class UsersController extends CI_Controller {
 			$category_tree_array = array();
 		// Fetch parameter by area_id and parent_id
 		$parameters = $this->area_params->get_child_by_parent_id($parent,$area_id);
-
 		if ( count( $parameters ) > 0 ) {
+			$num = 0;
 			foreach ($parameters as $key => $param) {
 				$category_tree_array[] = array(
 					"id" 				=> $param['id'], 
@@ -234,31 +234,37 @@ class UsersController extends CI_Controller {
 		$numItems = count( $parameters );
 
 		if ( count( $parameters ) > 0 ) {
-  			
+			$num = 0;
 			foreach ($parameters as $key => $param) {
 				$category_tree_array[] = array(
 					"id" 				=> $param['id'], 
 					'area_id'			=> $param['area_id'],
-					"parameter_name"	=> $spacing . $param['parameter_name'],
-					"parent_id" 		=> $param['parent_id'],
-					"ul_open" 			=> 0,
-					"ul_close" 			=> 0,
+					"parameter_name"	=> '<span class="spacer">' . $spacing . ++$num .'.) </span> <span class="param_name"> ' . $param['parameter_name'] . '</span>',
+					"clean_parameter"	=> $param['parameter_name'],
+					"parent_id" 		=> $param['parent_id']
 				);
 
-				$category_tree_array = $this->categoryParentChildTreeClean($param['id'], '&nbsp;&nbsp;&nbsp;&nbsp;'.$spacing .'-&nbsp;' , $category_tree_array, $area_id);
+				$category_tree_array = $this->categoryParentChildTreeClean($param['id'], '::::: '.$spacing, $category_tree_array, $area_id);
 			}
 		}
-
-	 	// $parameters = $this->area_params->get_child_by_parent_id($parent,$area_id);
-	  //   if ( count( $parameters ) > 0 ) {
-	  //       echo '<ul>';
-	  //       while($rs = mysql_fetch_array($sql)){
-	  //           echo  '<li>' . $rs['name'];
-	  //           echo show_subcategory(($rs['cat_id']));
-	  //           echo '</li>';
-	  //       }
-	  //       echo '</ul>';
-	  //   }		
 		return $category_tree_array;
+		return $category_tree_array;
+	}
+
+	public function get_parameters_by_id($id)
+	{
+		echo json_encode( ['response' => $this->area_params->get_by_id($id)] );
+	}
+
+	public function update_parameter()
+	{
+		$obj = json_decode(file_get_contents('php://input'));
+		echo json_encode( [ 'response' => $this->area_params->update($obj) ] );
+	}
+
+	public function delete_parameter()
+	{
+		$obj = json_decode(file_get_contents('php://input'));
+		echo json_encode( [ 'response' => $this->area_params->delete($obj) ] );
 	}
 }

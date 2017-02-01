@@ -108,3 +108,6 @@ $route['user/area/(:num)/(:any)']['GET']				= 'UsersController/area_view/$1/$2';
 $route['api/create/parameter']['POST']					= 'UsersController/create_param';
 $route['api/get/parameters/(:num)']['GET']				= 'UsersController/get_parameters/$1';
 $route['api/get/clean_parameters/(:num)']['GET']		= 'UsersController/get_parameters_clean/$1';
+$route['api/edit/parameter/(:num)']['GET']				= 'UsersController/get_parameters_by_id/$1';
+$route['api/update/parameter']['POST']					= 'UsersController/update_parameter';
+$route['api/delete/parameter']['POST']					= 'UsersController/delete_parameter';

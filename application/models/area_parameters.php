@@ -71,7 +71,7 @@ class Area_Parameters extends CI_Model {
 
 	public function update($data)
 	{
-		$this->db->where('id',$data['id']);
+		$this->db->where('id',$data->id);
 		$query = $this->db->update( $this->table, $data );
 		
 		if ( $query )
@@ -83,6 +83,10 @@ class Area_Parameters extends CI_Model {
 	public function delete($data)
 	{
 		if ( $this->db->delete($this->table, array('id' => $data->id)) ) {
+			//if this is a parent, delete childs
+			if ( $this->db->delete($this->table, array('parent_id' => $data->id)) ) {
+				return 	$data->id;
+			}
 			return true;
 		} else {
 			return false;
