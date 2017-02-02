@@ -36,6 +36,7 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		$http.post( settings.base_url + 'api/create/parameter', $scope.parameter )
 		.success( function(response) {
 			$scope.getParameters( area_id );
+			$scope.getCleanParameters(area_id);
 			console.log( response );
 			$scope.parameter = {};
 		} );
