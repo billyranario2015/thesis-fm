@@ -102,9 +102,9 @@ class Migration_Add_Users_Table extends CI_Migration {
             ),
             array(
                 'id'                => 3,
-                'fname'             => 'Not Assigned',
+                'fname'             => 'Elizabeth',
                 'mname'             => '',
-                'lname'             => '',
+                'lname'             => 'Swang',
                 'user_level'        => 2,
                 'role'              => '',
                 'email'             => 'test@gmail.com',

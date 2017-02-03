@@ -1,8 +1,8 @@
-                                        <div class="text-right">
-                                            <a href="<?php echo base_url( 'user/area/'.$data['id'].'/template-create' ); ?>" class="btn btn-primary">CREATE TEMPLATE</a>
+                                        <div class="text-left">
+                                            <a href="<?php echo base_url( 'user/area/'.$data['id'].'/template-create' ); ?>" class="btn btn-primary btn-lg">CREATE TEMPLATE</a>
                                         </div>
                                         <br>
-                                        <table class="table table-hover">
+                                       <!--  <table class="table table-hover">
                                             <thead>
                                                 <tr>
                                                     <th>#</th>
@@ -13,4 +13,4 @@
                                             <tbody>
 
                                             </tbody>
-                                        </table>
+                                        </table> -->

@@ -34,9 +34,15 @@
                                     <div class="form-group form-float form-group-md">
                                         <select class="form-control show-tick selectpicker" name="organization_id">
                                             <?php foreach ($orgs as $key => $org) { ?>
+                                                <?php if ( isset( $data['organization_id'] ) ) { ?>
                                                 <option value="<?php echo $org['id']; ?>" <?php if ( $data['organization_id'] == $org['id'] ) echo 'selected' ?>>
                                                     <?php echo $org['organization_name']; ?>
                                                 </option>
+                                                <?php } else { ?>
+                                                <option value="0">
+                                                    Select an Organization
+                                                </option>
+                                                <?php } ?>
                                             <?php } ?>
                                         </select>
                                     </div>

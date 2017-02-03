@@ -128,7 +128,8 @@ class AdminController extends CI_Controller {
 		$data = array(
 			'tpl' => 'users',
 			'data' => $this->users->get_user_by_id($id),
-			'courses' => $this->course->get()
+			'courses' => $this->course->get(),
+			'scripts' => '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>'
 		);
 		$this->load->view('admin/pages/edit-user',$data);
 	}
@@ -182,7 +183,8 @@ class AdminController extends CI_Controller {
 		$data = array(
 			'tpl' => 'courses',
 			'data' => $this->course->get_course_by_id($id),
-			'orgs' => $this->org->get()
+			'orgs' => $this->org->get(),
+			'scripts' => '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>'
 		);
 		$this->load->view('admin/pages/edit-course',$data);
 	}

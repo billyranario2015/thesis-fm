@@ -48,7 +48,7 @@
                                 <div class="col-sm-12">
                                     <h2 class="card-inside-title">Select Course</h2>
                                     <div class="form-group form-float form-group-md">
-                                        <select class="form-control show-tick selectpicker" name="course_id">
+                                        <select class="form-control show-tick selectpicker" name="course_id" required>
                                             <?php foreach ($courses as $key => $course) { ?>
                                                 <option value="<?php echo $course['course_id']; ?>" <?php if ( $this->session->flashdata('course_id') == $course['course_id'] ) echo 'selected' ?>>
                                                     <?php echo $course['course_name'] . ' (' . $course['organization_name']. ')'  ; ?>
