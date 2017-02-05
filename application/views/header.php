@@ -36,6 +36,9 @@
     <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
     <link href="<?php echo base_url('/assets/admin/css/themes/all-themes.css'); ?>" rel="stylesheet" />
 
+    <!-- Dropzone -->
+    <!-- <link rel="stylesheet" type="text/css" href="<?php echo base_url( 'assets/admin/plugins/dropzone/dropzone.css' ) ?>"> -->
+    
     <!-- CUSTOM STYLESHEETS -->
     <?php echo isset( $styles ) ? $styles : ''; ?>
     

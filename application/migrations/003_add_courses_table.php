@@ -60,6 +60,26 @@ class Migration_Add_Courses_Table extends CI_Migration {
         );
         // $this->db->insert_batch('courses', $data);
 
+        // Defaults
+        $data = array(
+            array(
+                'id'                => 1,
+                'organization_id'   => 1,
+                'course_name'       => 'Information Technology'
+            ),
+            array(
+                'id'                => 2,
+                'organization_id'   => 1,
+                'course_name'       => 'Auto-Mechanical Technology'
+            ),
+            array(
+                'id'                => 3,
+                'organization_id'   => 1,
+                'course_name'       => 'Electro-Mechanical Technology'
+            ),
+        );
+        $this->db->insert_batch('courses', $data);
+
     }
 
   public function down()

@@ -55,6 +55,27 @@ class Migration_Add_Organizations_Table extends CI_Migration {
         );
         // $this->db->insert_batch('organization', $data);
 
+        // Defaults
+        $data = array(
+            array(
+                'id'                => 1,
+                'organization_name' => 'CIIT',
+            ),
+            array(
+                'id'                => 2,
+                'organization_name' => 'CEA',
+            ),
+            array(
+                'id'                => 3,
+                'organization_name' => 'CPSEM',
+            ),
+            array(
+                'id'                => 4,
+                'organization_name' => 'CAS',
+            ),
+        );
+        $this->db->insert_batch('organization', $data);
+
     }
 
   public function down()
