@@ -79,26 +79,25 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 
 	$scope.files = [];
 
-	$scope.related_files = {};
 	$scope.parameter_id = 0;
 	$scope.uploadFile = function(files,parameter_id) {
+		$scope.related_files = [];
 	    $scope.files = files;
 	    // Check for similar file uploads
 	    if ( files.length > 0 ) {
 	    	for( x in files ) {
-	    		if ( files[x].name ) {
+	    		if ( files[x].name != null ) {
 		    		var file = files[x].name;
 					var name = file.substring(file.lastIndexOf('/')+1, file.lastIndexOf('.'));
-					console.log(name);
 		    		$http.post( settings.base_url + 'api/search_for_file/', { data : name, parameter_id : parameter_id } )
 		    		.success( function (response) {
-		    			console.log( response );
+		    			$scope.related_files.push(response.response);
 		    		} )	
 	    		}
 
 		    }
 	    }
-	    // console.log( parameter_id );
+	    console.log( $scope.related_files );
 	};
 
 	$scope.submitFileUpload = function submitFileUpload(parameter_id) {

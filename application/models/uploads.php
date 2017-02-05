@@ -10,12 +10,21 @@ class Uploads extends CI_Model {
 			return false; // error, fail on create
 	}
 
+	public function get()
+	{
+		$query = $this->db->get($this->table);
+
+		if ($query->num_rows() > 0)
+			return $query->result_array();
+		else
+			return array();
+	}
+
 	public function search($data)
 	{
-		$this->db->where( 'shared_status', 1 )
-				 ->or_where( 'shared_status = 2 AND parameter_id =' . $data->parameter_id);
-				 ->where( 'location LIKE', '%'.$your_string.'%' );
-		$query = $this->db->get();
+		$this->db->like('filename', $data->data)
+				 ->where( 'shared_status',1 );
+		$query = $this->db->get($this->table);
 
 		if ($query->num_rows() > 0)
 			return $query->result_array();

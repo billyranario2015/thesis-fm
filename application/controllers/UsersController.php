@@ -236,6 +236,7 @@ class UsersController extends CI_Controller {
 			'users' => $this->users->get_all_users_by_course($this->session->userdata('course_id')),
 			'tab'	=> 'entries',
 			'action' => 'entries',
+			'param_id' => $parameter_id,
 			// 'styles' => '<link rel="stylesheet" type="text/css" href="'.base_url('assets/admin/plugins/dropzone/dropzone.css').'">',
 			// 'scripts' => '<script type="text/javascript" src="'.base_url('assets/admin/plugins/dropzone/dropzone.js').'"></script>',
 			'styles' => '<link rel="stylesheet" type="text/css" href="'.base_url('assets/admin/css/fileinput.min.css').'">',
@@ -364,6 +365,11 @@ class UsersController extends CI_Controller {
         $config['max_size'] = '0';
         $config['overwrite'] = FALSE;
   		return $config;
+	}
+
+	public function get_uploads()
+	{
+		echo json_encode( ['response'=>$this->files->get()] );
 	}
 
 	public function search_file()
