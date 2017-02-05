@@ -77,26 +77,53 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		}
 	}
 
-	$scope.fileUpload = function fileUpload() {
-		//Dropzone
-		// Dropzone.options.frmFileUpload = {
-		//   	paramName: "file", // The name that will be used to transfer the file
-		//   	maxFilesize: 2, // MB
-		//   	method: 'post',
-		//  	accept: function(file, done) {
-		//     	console.log(file);
-		//     	// done("Naha, you don't.");
-		//   	}
-		// };
-		$( "#input-702" ).fileinput({  
-	    	uploadUrl: window.location.origin + '/api/upload/' ,
-	        uploadAsync: true,
-		    maxFileCount: 15,
-		    overwriteInitial: false,
 
-	    })
+	$scope.files = [];
+
+	$scope.related_files = {};
+	$scope.parameter_id = 0;
+	$scope.uploadFile = function(files,parameter_id) {
+	    $scope.files = files;
+	    // Check for similar file uploads
+	    if ( files.length > 0 ) {
+	    	for( x in files ) {
+	    		if ( files[x].name ) {
+		    		var file = files[x].name;
+					var name = file.substring(file.lastIndexOf('/')+1, file.lastIndexOf('.'));
+					console.log(name);
+		    		$http.post( settings.base_url + 'api/search_for_file/', { data : name, parameter_id : parameter_id } )
+		    		.success( function (response) {
+		    			console.log( response );
+		    		} )	
+	    		}
+
+		    }
+	    }
+	    // console.log( parameter_id );
+	};
+
+	$scope.submitFileUpload = function submitFileUpload(parameter_id) {
+		var fd = new FormData();
+
+		if ( $scope.files != null ) {
+
+			for( var x in $scope.files ) {
+				if ( $scope.files[x].name  ) {
+					$scope.files[x].parameter_id = parameter_id;
+					fd.append("file[]", $scope.files[x], $scope.files[x].name);
+				}
+			}
+
+			$http.post( settings.base_url + 'user/file_upload/' + parameter_id, fd, {
+				headers: {'Content-Type': undefined },
+				transformRequest: angular.identity
+		  	}).success( function(data) {
+				console.log( data );
+			});
+
+		} else {
+			console.log( 'empty' );
+		}
 	}
-
-	$scope.fileUpload();
 
 });

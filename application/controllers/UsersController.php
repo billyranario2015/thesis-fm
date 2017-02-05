@@ -235,13 +235,12 @@ class UsersController extends CI_Controller {
 			'data' => $this->area->get_by_id($area_id),
 			'users' => $this->users->get_all_users_by_course($this->session->userdata('course_id')),
 			'tab'	=> 'entries',
+			'param_id' => $parameter_id,
 			'action' => 'entries',
-			// 'styles' => '<link rel="stylesheet" type="text/css" href="'.base_url('assets/admin/plugins/dropzone/dropzone.css').'">',
-			// 'scripts' => '<script type="text/javascript" src="'.base_url('assets/admin/plugins/dropzone/dropzone.js').'"></script>',
-			'styles' => '<link rel="stylesheet" type="text/css" href="'.base_url('assets/admin/css/fileinput.min.css').'">',
-			'scripts' => '<script type="text/javascript" src="'.base_url('assets/admin/js/fileinput.min.js').'"></script>',
+			// 'styles' => '<link rel="stylesheet" type="text/css" href="'.base_url('assets/admin/css/fileinput.min.css').'">',
+			// 'scripts' => '<script type="text/javascript" src="'.base_url('assets/admin/js/fileinput.min.js').'"></script>',
 		);
-		$data['scripts'] .= '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>';
+		$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>';
 		$this->load->view('users/pages/edit-area',$data);
 	}
 
@@ -324,4 +323,52 @@ class UsersController extends CI_Controller {
 		$obj = json_decode(file_get_contents('php://input'));
 		echo json_encode( [ 'response' => $this->area_params->delete($obj) ] );
 	}
+
+	// File Upload
+	public function file_upload($parameter_id)
+	{
+		$files = $_FILES;
+		$filedata = [];
+		$cpt = count($_FILES['file']['name']);
+		for($i=0; $i<$cpt; $i++) {
+		    $_FILES['files']['name']= $files['file']['name'][$i];
+		    $_FILES['files']['type']= $files['file']['type'][$i];
+		    $_FILES['files']['tmp_name']= $files['file']['tmp_name'][$i];
+		    $_FILES['files']['error']= $files['file']['error'][$i];
+		    $_FILES['files']['size']= $files['file']['size'][$i];
+		    // $this->upload->initialize($this->set_upload_options());
+		    $this->load->library('upload', $this->set_upload_options());
+		    $this->upload->do_upload('files');
+		    $fileName = $_FILES['files']['name'];
+
+		    // Save to database
+		    $data_id = $this->files->create(
+		    	array(
+		    		'filename' 		=> $fileName,
+		    		'parameter_id'	=> $parameter_id
+		    	)
+		    );
+
+		    $filedata[] = $fileName;
+		}
+		echo json_encode($filedata);
+
+	}
+
+	public function set_upload_options()
+	{
+		$config = array();
+        $config['upload_path'] = 'uploads/'; //give the path to upload the image in folder
+        $config['allowed_types'] = '*';
+        $config['max_size'] = '0';
+        $config['overwrite'] = FALSE;
+  		return $config;
+	}
+
+	public function search_file()
+	{
+		$obj = json_decode(file_get_contents('php://input'));
+		echo json_encode( [ 'response' => $this->files->search($obj) ] );
+	}
+
 }

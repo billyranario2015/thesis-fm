@@ -139,4 +139,5 @@ $autoload['model'] = array(
 	'course'		 => 'course',
 	'area'		 	 => 'area',
 	'area_parameters'=> 'area_params',
+	'uploads'		 => 'files',
 );
