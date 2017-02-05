@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_Add_Area_Table extends CI_Migration {
+class Migration_Add_Uploads_Table extends CI_Migration {
 
     public function __construct()
     {
@@ -19,20 +19,30 @@ class Migration_Add_Area_Table extends CI_Migration {
                 'unsigned' => TRUE,
                 'auto_increment' => TRUE
             ),
-            'area_name' => array(
+            'parameter_id' => array(
                 'type' => 'VARCHAR',
                 'constraint' => 255,
                 'null' => true
             ),
-            'assignee_id' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'default' => 3 // for unassigned value
-            ),
-            'course_id' => array(
-                'type' => 'INT',
-                'constraint' => 11,
+            'filename' => array(
+                'type' => 'VARCHAR',
+                'constraint' => 255,
                 'null' => true
+            ),
+            'description' => array(
+                'type' => 'TEXT',
+                'null' => true
+            ),
+            /*
+            | Sharing Status Codes
+            | 1 = SHARE TO OTHER ORGANIZATIONS 
+            | 2 = SHARE TO CURRENT ORGANIZATION ONLY 
+            | 3 = ONLY YOUR COURSE CAN VIEW
+            */ 
+            'shared_status' => array(
+                'type' => 'INT',
+                'constraint' => 11,
+                'default' => 1
             ),
             'created_at' => array(
                 'type' => 'TIMESTAMP',
@@ -43,12 +53,12 @@ class Migration_Add_Area_Table extends CI_Migration {
         );
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key('id',TRUE);
-        // $this->dbforge->create_table('area',TRUE); 
+        $this->dbforge->create_table('uploads',TRUE); 
 
     }
 
-  public function down()
-  {
-    // $this->dbforge->drop_table('area', TRUE);
-  }
+    public function down()
+    {
+        $this->dbforge->drop_table('uploads', TRUE);
+    }
 }

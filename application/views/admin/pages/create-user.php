@@ -73,7 +73,7 @@
                                                 <option value="1" disabled>Superadmin</option>
                                                 <option value="2" <?php if ( $this->session->flashdata('user_level') == 2 ) echo 'selected' ?>>Admin</option>
                                                 <option value="3" <?php if ( $this->session->flashdata('user_level') == 3 ) echo 'selected' ?>>User</option>
-                                                <option value="4" <?php if ( $this->session->flashdata('user_level') == 4 ) echo 'selected' ?>>Guest</option>
+                                                <option value="4" <?php if ( $this->session->flashdata('user_level') == 4 ) echo 'selected' ?>>In-house Evaluator</option>
                                             </select>
                                         </div>
                                     </div>

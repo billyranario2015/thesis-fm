@@ -48,6 +48,10 @@ class Area extends CI_Model {
 
 	public function check_if_assigned($data)
 	{
+		if( isset($data['check_area']) && $data['check_area'] == 1 ) {
+			$this->db->where( 'area.id' , $data['id'] );
+		}
+
 		$this->db->where( 'assignee_id', $data['assignee_id'] )
 			     ->join( 'users', 'users.id = area.assignee_id' );
 		$query = $this->db->get($this->table);
@@ -62,6 +66,8 @@ class Area extends CI_Model {
 	{
 		$this->db->where('id',$data['id']);
 		$query = $this->db->update( $this->table, $data );
+
+
 		
 		if ( $query )
 			return true;

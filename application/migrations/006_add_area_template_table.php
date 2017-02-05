@@ -24,30 +24,6 @@ class Migration_Add_Area_Template_Table extends CI_Migration {
                 'constraint' => 255,
                 'null' => true
             ),
-            'program' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 255,
-                'null' => true
-            ),
-            'level' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 255,
-                'null' => true
-            ),
-            'suc' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 255,
-                'null' => true
-            ),
-            'campus' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 255,
-                'null' => true
-            ),
-            'data_of_actual_survey' => array(
-                'type' => 'DATE',
-                'null' => true
-            ),
             'created_at' => array(
                 'type' => 'TIMESTAMP',
             ),
@@ -57,12 +33,12 @@ class Migration_Add_Area_Template_Table extends CI_Migration {
         );
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key('id',TRUE);
-        $this->dbforge->create_table('area_template',TRUE); 
+        // $this->dbforge->create_table('area_template',TRUE); 
 
     }
 
     public function down()
     {
-        $this->dbforge->drop_table('area_template', TRUE);
+        // $this->dbforge->drop_table('area_template', TRUE);
     }
 }

@@ -104,6 +104,8 @@ $route['user/area/(:num)']['GET']						= 'UsersController/edit_area/$1';
 $route['area/update']['POST']							= 'UsersController/update_area';
 // TEMPLATE
 $route['user/area/(:num)/(:any)']['GET']				= 'UsersController/area_view/$1/$2';
+// UPLOADS
+$route['user/area/(:num)/parameter/(:num)']['GET']		= 'UsersController/area_view_entries/$1/$2';
 // Parameters
 $route['api/create/parameter']['POST']					= 'UsersController/create_param';
 $route['api/get/parameters/(:num)']['GET']				= 'UsersController/get_parameters/$1';
