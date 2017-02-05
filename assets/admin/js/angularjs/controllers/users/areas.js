@@ -77,4 +77,26 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		}
 	}
 
+	$scope.fileUpload = function fileUpload() {
+		//Dropzone
+		// Dropzone.options.frmFileUpload = {
+		//   	paramName: "file", // The name that will be used to transfer the file
+		//   	maxFilesize: 2, // MB
+		//   	method: 'post',
+		//  	accept: function(file, done) {
+		//     	console.log(file);
+		//     	// done("Naha, you don't.");
+		//   	}
+		// };
+		$( "#input-702" ).fileinput({  
+	    	uploadUrl: window.location.origin + '/api/upload/' ,
+	        uploadAsync: true,
+		    maxFileCount: 15,
+		    overwriteInitial: false,
+
+	    })
+	}
+
+	$scope.fileUpload();
+
 });

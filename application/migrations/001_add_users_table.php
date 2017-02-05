@@ -76,7 +76,7 @@ class Migration_Add_Users_Table extends CI_Migration {
         );
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key('id',TRUE);
-        $this->dbforge->create_table('users',TRUE); 
+        // $this->dbforge->create_table('users',TRUE); 
 
         // Default Account
         $data = array(
@@ -90,33 +90,33 @@ class Migration_Add_Users_Table extends CI_Migration {
                 'email'             => 'billy.ranario@must.edu.ph',
                 'password'          => sha1( '123' ),
             ),
-            array(
-                'id'                => 2,
-                'fname'             => 'Jane',
-                'mname'             => 'Smith',
-                'lname'             => 'Doe',
-                'user_level'        => 2,
-                'role'              => 'Chairman',
-                'email'             => 'jane@gmail.com',
-                'password'          => sha1( '123' ),
-            ),
-            array(
-                'id'                => 3,
-                'fname'             => 'Elizabeth',
-                'mname'             => '',
-                'lname'             => 'Swang',
-                'user_level'        => 2,
-                'role'              => '',
-                'email'             => 'test@gmail.com',
-                'password'          => sha1( '123' ),
-            ),
+            // array(
+            //     'id'                => 2,
+            //     'fname'             => 'Jane',
+            //     'mname'             => 'Smith',
+            //     'lname'             => 'Doe',
+            //     'user_level'        => 2,
+            //     'role'              => 'Chairman',
+            //     'email'             => 'jane@gmail.com',
+            //     'password'          => sha1( '123' ),
+            // ),
+            // array(
+            //     'id'                => 3,
+            //     'fname'             => 'Elizabeth',
+            //     'mname'             => '',
+            //     'lname'             => 'Swang',
+            //     'user_level'        => 2,
+            //     'role'              => '',
+            //     'email'             => 'test@gmail.com',
+            //     'password'          => sha1( '123' ),
+            // ),
         );
-        $this->db->insert_batch('users', $data);
+        // $this->db->insert_batch('users', $data);
 
     }
 
   public function down()
   {
-    $this->dbforge->drop_table('users', TRUE);
+    // $this->dbforge->drop_table('users', TRUE);
   }
 }

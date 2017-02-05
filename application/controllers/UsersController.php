@@ -139,6 +139,7 @@ class UsersController extends CI_Controller {
 			'users' => $this->users->get_all_users_by_course($this->session->userdata('course_id')),
 			'tab'	=> 'templates',
 			'action' => 'templates',
+			'scripts'=> '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>',
 		);
 
 		$this->load->view('users/pages/edit-area',$data);
@@ -149,10 +150,46 @@ class UsersController extends CI_Controller {
 		$data = array(
 			'tpl' => 'area',
 		);
-		if ( $this->area->update($_POST) ) {
-			$this->session->set_flashdata( 'message' , 'Area successfully updated.' );
+
+		// Check if user is already assigned to other area
+		$_POST['check_area'] = 1;
+		$is_assigned = $this->area->check_if_assigned($_POST);
+
+
+		if ( !empty($is_assigned) ) {
+			if ( $is_assigned['assignee_id'] == $_POST['assignee_id'] ) {
+				#unset $_POST['check_area']
+				unset($_POST['check_area']);
+				if ( $this->area->update($_POST) ) {
+					$this->session->set_flashdata( 'message' , 'Area successfully updated.' );
+				} else {
+					$this->session->set_flashdata( 'err_message' , 'Error on update.' );
+				}
+				redirect( base_url( 'user/area/'.$_POST['id'] . '/settings' ) );
+			} else {
+				$this->session->set_flashdata( 'err_message' , $is_assigned['fname'] . ' ' . $is_assigned['lname'] . ' is already assigned to ' . $is_assigned['area_name'] );
+				redirect( base_url( 'user/area/'.$_POST['id'] . '/settings' ) );
+			}
+		} else {
+			echo "///";
+			// Check if user is already assigned to other area
+			$_POST['check_area'] = 0;
+			$is_assigned = $this->area->check_if_assigned($_POST);
+
+			if ( !empty($is_assigned) ) {
+				$this->session->set_flashdata( 'err_message' , $is_assigned['fname'] . ' ' . $is_assigned['lname'] . ' is already assigned to ' . $is_assigned['area_name'] );
+			} else {
+				unset($_POST['check_area']);
+				if ( $this->area->update($_POST) ) {
+					$this->session->set_flashdata( 'message' , 'Area successfully updated.' );
+				} else {
+					$this->session->set_flashdata( 'err_message' , 'Error on update.' );
+				}
+			}
+
 			redirect( base_url( 'user/area/'.$_POST['id'] . '/settings' ) );
 		}
+
 	}
 
 	public function delete_area()
@@ -184,10 +221,30 @@ class UsersController extends CI_Controller {
 			$data['tab'] = 'settings';
 			$data['action'] = $tpl;
 			$data['scripts'] .= '<br><script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
+		} elseif ( $tpl == 'entries' ) {
+			$data['tab'] = 'entries';
+			$data['action'] = $tpl;
 		}
 		$this->load->view('users/pages/edit-area',$data);
-
 	}	
+
+	public function area_view_entries( $area_id, $parameter_id )
+	{
+		$data = array(
+			'tpl' => 'area',
+			'data' => $this->area->get_by_id($area_id),
+			'users' => $this->users->get_all_users_by_course($this->session->userdata('course_id')),
+			'tab'	=> 'entries',
+			'action' => 'entries',
+			// 'styles' => '<link rel="stylesheet" type="text/css" href="'.base_url('assets/admin/plugins/dropzone/dropzone.css').'">',
+			// 'scripts' => '<script type="text/javascript" src="'.base_url('assets/admin/plugins/dropzone/dropzone.js').'"></script>',
+			'styles' => '<link rel="stylesheet" type="text/css" href="'.base_url('assets/admin/css/fileinput.min.css').'">',
+			'scripts' => '<script type="text/javascript" src="'.base_url('assets/admin/js/fileinput.min.js').'"></script>',
+		);
+		$data['scripts'] .= '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>';
+		$this->load->view('users/pages/edit-area',$data);
+	}
+
 
 	// Parameters
 	public function create_param()

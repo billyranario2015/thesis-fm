@@ -9,6 +9,12 @@
                     <strong>Success!</strong>  <?php echo $this->session->flashdata('message'); ?>
                 </div>
                 <?php } ?> 
+                <?php if ( $this->session->userdata('err_message') ) { ?>
+                <br>
+                <div class="alert alert-danger">
+                    <?php echo $this->session->flashdata('err_message'); ?>
+                </div>
+                <?php } ?>
             </div>
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -34,7 +40,7 @@
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs tab-nav-right" role="tablist">
                                 <li role="presentation" class="<?php if( $tab == 'templates' ) echo 'active'; ?>">
-                                    <a href="<?php echo base_url('user/area/'.$data['id'].'/templates') ?>">TEMPLATES</a>
+                                    <a href="<?php echo base_url('user/area/'.$data['id']) ?>">TEMPLATES</a>
                                 </li>
                                 <!-- <li role="presentation" class="">
                                     <a href="#profile" data-toggle="tab">PROFILE</a>
@@ -42,13 +48,16 @@
                                 <li role="presentation" class="">
                                     <a href="#messages" data-toggle="tab">MESSAGES</a>
                                 </li> -->
+                                <!-- <li role="presentation" class="<?php if( $tab == 'entries' ) echo 'active'; ?>">
+                                    <a href="<?php echo base_url('user/area/'.$data['id'].'/entries') ?>">ENTRIES</a>
+                                </li> -->
                                 <li role="presentation" class="<?php if( $tab == 'settings' ) echo 'active'; ?>">
                                     <a href="<?php echo base_url('user/area/'.$data['id'].'/settings') ?>">SETTINGS</a>
                                 </li>
                             </ul>
 
                             <!-- Tab panes -->
-                            <div class="tab-content">
+                            <div class="tab-content " style="overflow:hidden">
                                 <div role="tabpanel" class="tab-pane <?php if( $tab == 'templates' ) echo 'active'; ?> fade in" id="templates">
                                     <div class="body table-responsive">
                                         <?php 
@@ -56,20 +65,16 @@
                                             $this->load->view( 'users/pages/area/templates' );
                                         } elseif( $tab == 'templates' && $action == 'template-create' ) {
                                             $this->load->view( 'users/pages/area/template-create' );
+                                         } elseif( $tab == 'entries' && $action == 'entries' ) {
+                                            $this->load->view( 'users/pages/area/entries' );
                                         }
                                         ?>
                                     </div>                                    
                                 </div>
-                               <!--  <div role="tabpanel" class="tab-pane fade" id="profile">
-                                    <b>Profile Content</b>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, ut duo atqui exerci dicunt, ius impedit mediocritatem an. Pri ut tation electram moderatius.
-                                        Per te suavitate democritum. Duis nemore probatus ne quo, ad liber essent aliquid
-                                        pro. Et eos nusquam accumsan, vide mentitum fabellas ne est, eu munere gubergren
-                                        sadipscing mel.
-                                    </p>
+                                <div role="tabpanel" class="tab-pane <?php if( $tab == 'entries' ) echo 'active'; ?> fade in" id="entries">
+                                    <?php $this->load->view( 'users/pages/area/entries' ); ?>
                                 </div>
-                                <div role="tabpanel" class="tab-pane  fade" id="messages">
+                                 <!--  <div role="tabpanel" class="tab-pane  fade" id="messages">
                                     <b>Message Content</b>
                                     <p>
                                         Lorem ipsum dolor sit amet, ut duo atqui exerci dicunt, ius impedit mediocritatem an. Pri ut tation electram moderatius.
