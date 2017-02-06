@@ -24,6 +24,7 @@ class Uploads extends CI_Model {
 	public function search($data)
 	{
 		$this->db->like('filename', $data->data)
+				 ->or_like('description',$data->data)
 				 ->where( 'shared_status',1 );
 		$query = $this->db->get($this->table);
 

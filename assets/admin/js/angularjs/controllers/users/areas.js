@@ -81,23 +81,38 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 
 	$scope.parameter_id = 0;
 	$scope.uploadFile = function(files,parameter_id) {
+		var related_files = [];
 		$scope.related_files = [];
 	    $scope.files = files;
+	    $scope.related_file_count = 0;
 
-	    angular.forEach( files, function (value,key) {
-
+	    var search_request = angular.forEach( files, function (value,key) {
 	    	var file = value.name;
 			var name = file.substring(file.lastIndexOf('/')+1, file.lastIndexOf('.'));
-
 	    	$http.post( settings.base_url + 'api/search_for_file/', { data : name, parameter_id : parameter_id } )
     		.success( function (response) {
-    			$scope.related_files.push(response.response);
-    			console.log( response )
+    			// $scope.related_files.push(response.response);
+    			$scope.$applyAsync(function () {
+    				angular.forEach( response.response, function (value2,key2) {
+    					related_files.push(value2);
+    				} );
+    			} );
     		} );
 	    } );
-	    console.log( $scope.related_files );
+
+	    setTimeout(function() {
+	    	$scope.related_files = related_files;
+	    	$scope.related_file_count = related_files.length;
+	    	$scope.$apply();
+	    	console.log( $scope.related_files );
+	    }, 1000);
+
 	};
 
+
+	$scope.search_request = function search_request(argument) {
+		// body...
+	}
 	$scope.submitFileUpload = function submitFileUpload(parameter_id) {
 		var fd = new FormData();
 
@@ -121,13 +136,14 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		} else {
 			console.log( 'empty' );
 		}
+		angular.element("input[name='file_data']").val(null);
 	}
 
 	$scope.parameter_files = {};
 	$scope.getParameterFiles = function getParameterFiles(parameter_id) {
 		$http.get(  settings.base_url + 'api/get_uploads/' + parameter_id )
 		.success(function(response) {
-			console.log(response);
+			// console.log(response);
 			$scope.parameter_files = response.response;
 		});
 	}
