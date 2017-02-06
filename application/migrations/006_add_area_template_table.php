@@ -33,12 +33,12 @@ class Migration_Add_Area_Template_Table extends CI_Migration {
         );
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key('id',TRUE);
-        // $this->dbforge->create_table('area_template',TRUE); 
+        $this->dbforge->create_table('area_template',TRUE); 
 
     }
 
     public function down()
     {
-        // $this->dbforge->drop_table('area_template', TRUE);
+        $this->dbforge->drop_table('area_template', TRUE);
     }
 }

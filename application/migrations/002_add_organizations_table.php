@@ -32,28 +32,7 @@ class Migration_Add_Organizations_Table extends CI_Migration {
         );
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key('id',TRUE);
-        // $this->dbforge->create_table('organization',TRUE); 
-
-        // Defaults
-        $data = array(
-            array(
-                'id'                => 1,
-                'organization_name' => 'CIIT',
-            ),
-            array(
-                'id'                => 2,
-                'organization_name' => 'CEA',
-            ),
-            array(
-                'id'                => 3,
-                'organization_name' => 'CPSEM',
-            ),
-            array(
-                'id'                => 4,
-                'organization_name' => 'CAS',
-            ),
-        );
-        // $this->db->insert_batch('organization', $data);
+        $this->dbforge->create_table('organization',TRUE); 
 
         // Defaults
         $data = array(
@@ -80,6 +59,6 @@ class Migration_Add_Organizations_Table extends CI_Migration {
 
   public function down()
   {
-    // $this->dbforge->drop_table('organization', TRUE);
+    $this->dbforge->drop_table('organization', TRUE);
   }
 }
