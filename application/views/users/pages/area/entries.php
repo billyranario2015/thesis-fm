@@ -9,6 +9,22 @@
                                         <div class="text-left">
                                             <button ng-click="submitFileUpload(<?php echo isset($param_id)?$param_id:0; ?>)" class="btn btn-primary">UPLOAD</button>
                                         </div>
+
+                                        <hr>
+
+                                        <!-- SUGGESTED FILES -->
+                                        <div ng-init="getParameterFiles(<?php echo isset($param_id)?$param_id:0; ?>)">
+                                            <div class="header"><h2>RELATIVE UPLOADS</h2></div>
+                                           
+                                        </div>
+                                        <!-- ALL FILES -->
+                                        <div ng-init="getParameterFiles(<?php echo isset($param_id)?$param_id:0; ?>)">
+                                            <div class="header"><h2>UPLOADED FILES</h2></div>
+                                            <div ng-repeat="file in parameter_files  track by $index">
+                                                {{ file.filename }}
+                                            </div>
+                                        </div>
+
                                         <!-- </form> -->
                                         <!-- <div class="form-group">
                                             <input id="input-702" name="file_data" type="file" multiple=true class="file-loading">

@@ -1,4 +1,4 @@
-fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, $timeout ) {
+fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, $timeout, $rootScope ) {
 	$scope.deleteArea = function deleteArea(id) {
 		if ( confirm( 'Are you sure you want to delete this area?' ) ) {
 			$http.post( settings.base_url + 'api/area/delete' , { id:id } )
@@ -83,20 +83,18 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 	$scope.uploadFile = function(files,parameter_id) {
 		$scope.related_files = [];
 	    $scope.files = files;
-	    // Check for similar file uploads
-	    if ( files.length > 0 ) {
-	    	for( x in files ) {
-	    		if ( files[x].name != null ) {
-		    		var file = files[x].name;
-					var name = file.substring(file.lastIndexOf('/')+1, file.lastIndexOf('.'));
-		    		$http.post( settings.base_url + 'api/search_for_file/', { data : name, parameter_id : parameter_id } )
-		    		.success( function (response) {
-		    			$scope.related_files.push(response.response);
-		    		} )	
-	    		}
 
-		    }
-	    }
+	    angular.forEach( files, function (value,key) {
+
+	    	var file = value.name;
+			var name = file.substring(file.lastIndexOf('/')+1, file.lastIndexOf('.'));
+
+	    	$http.post( settings.base_url + 'api/search_for_file/', { data : name, parameter_id : parameter_id } )
+    		.success( function (response) {
+    			$scope.related_files.push(response.response);
+    			console.log( response )
+    		} );
+	    } );
 	    console.log( $scope.related_files );
 	};
 
@@ -117,11 +115,21 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 				transformRequest: angular.identity
 		  	}).success( function(data) {
 				console.log( data );
+				$scope.getParameterFiles(parameter_id);
 			});
 
 		} else {
 			console.log( 'empty' );
 		}
+	}
+
+	$scope.parameter_files = {};
+	$scope.getParameterFiles = function getParameterFiles(parameter_id) {
+		$http.get(  settings.base_url + 'api/get_uploads/' + parameter_id )
+		.success(function(response) {
+			console.log(response);
+			$scope.parameter_files = response.response;
+		});
 	}
 
 });

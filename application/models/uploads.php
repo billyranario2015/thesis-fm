@@ -10,8 +10,9 @@ class Uploads extends CI_Model {
 			return false; // error, fail on create
 	}
 
-	public function get()
+	public function get($data)
 	{
+		$this->db->where( 'parameter_id', $data );
 		$query = $this->db->get($this->table);
 
 		if ($query->num_rows() > 0)

@@ -112,7 +112,7 @@ $route['user/file_upload/(:num)']['POST']				= 'UsersController/file_upload/$1';
 // SEARCH FOR RELATED FILES
 $route['api/search_for_file']['POST']					= 'UsersController/search_file';
 // -------CREATE GET FUNCTION FOR UPLOADS
-
+$route['api/get_uploads/(:num)']['GET']					= 'UsersController/get_uploads/$1';
 
 // Parameters
 $route['api/create/parameter']['POST']					= 'UsersController/create_param';

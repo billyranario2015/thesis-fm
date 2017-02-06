@@ -367,9 +367,9 @@ class UsersController extends CI_Controller {
   		return $config;
 	}
 
-	public function get_uploads()
+	public function get_uploads($parameter_id)
 	{
-		echo json_encode( ['response'=>$this->files->get()] );
+		echo json_encode( ['response'=>$this->files->get($parameter_id)] );
 	}
 
 	public function search_file()
