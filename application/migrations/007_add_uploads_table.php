@@ -20,8 +20,13 @@ class Migration_Add_Uploads_Table extends CI_Migration {
                 'auto_increment' => TRUE
             ),
             'parameter_id' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 255,
+                'type' => 'INT',
+                'constraint' => 11,
+                'null' => true
+            ),
+            'author_id' => array(
+                'type' => 'INT',
+                'constraint' => 11,
                 'null' => true
             ),
             'filename' => array(

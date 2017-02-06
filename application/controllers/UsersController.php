@@ -340,14 +340,17 @@ class UsersController extends CI_Controller {
 		    $_FILES['files']['size']= $files['file']['size'][$i];
 		    // $this->upload->initialize($this->set_upload_options());
 		    $this->load->library('upload', $this->set_upload_options());
-		    $this->upload->do_upload('files');
-		    $fileName = $_FILES['files']['name'];
+
+	    	$this->upload->do_upload('files');
+	    	$fileName = $this->upload->data('file_name');
+
 
 		    // Save to database
 		    $data_id = $this->files->create(
 		    	array(
 		    		'filename' 		=> $fileName,
-		    		'parameter_id'	=> $parameter_id
+		    		'parameter_id'	=> $parameter_id,
+		    		'author_id' 	=> $this->session->userdata('id')
 		    	)
 		    );
 
@@ -376,6 +379,24 @@ class UsersController extends CI_Controller {
 	{
 		$obj = json_decode(file_get_contents('php://input'));
 		echo json_encode( [ 'response' => $this->files->search($obj) ] );
+	}
+
+	public function update_file()
+	{
+		$obj = json_decode(file_get_contents('php://input'));
+		echo json_encode( [ 'response' => $this->files->update($obj) ] );
+	}
+
+	public function delete_file()
+	{
+		$obj = json_decode(file_get_contents('php://input'));
+		echo json_encode( [ 'response' => $this->files->delete($obj) ] );
+	}
+
+	public function copy_file($parameter_id)
+	{
+		$obj = json_decode(file_get_contents('php://input'));
+		echo json_encode( [ 'response' => $this->files->copy($obj,$parameter_id) ] );
 	}
 
 }

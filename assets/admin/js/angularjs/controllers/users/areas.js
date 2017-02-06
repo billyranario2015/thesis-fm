@@ -80,18 +80,23 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 	$scope.files = [];
 
 	$scope.parameter_id = 0;
+	$scope.loader_search = false;
 	$scope.uploadFile = function(files,parameter_id) {
+		$scope.loader_search = true;
 		var related_files = [];
 		$scope.related_files = [];
 	    $scope.files = files;
 	    $scope.related_file_count = 0;
 
+	    var current_file = {
+	    	id       : 0,
+	    	filename : ''
+	    };
 	    var search_request = angular.forEach( files, function (value,key) {
 	    	var file = value.name;
 			var name = file.substring(file.lastIndexOf('/')+1, file.lastIndexOf('.'));
 	    	$http.post( settings.base_url + 'api/search_for_file/', { data : name, parameter_id : parameter_id } )
     		.success( function (response) {
-    			// $scope.related_files.push(response.response);
     			$scope.$applyAsync(function () {
     				angular.forEach( response.response, function (value2,key2) {
     					related_files.push(value2);
@@ -101,17 +106,19 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 	    } );
 
 	    setTimeout(function() {
+			$scope.related_file_count = related_files.length;
 	    	$scope.related_files = related_files;
-	    	$scope.related_file_count = related_files.length;
+	    	$scope.loader_search = false;
 	    	$scope.$apply();
 	    	console.log( $scope.related_files );
 	    }, 1000);
 
 	};
 
-
-	$scope.search_request = function search_request(argument) {
-		// body...
+	// CLEAR SEARCHED
+	$scope.clearSearch = function clearSearch() {
+		$scope.related_files = [];
+		angular.element("input[name='file_data']").val(null);
 	}
 	$scope.submitFileUpload = function submitFileUpload(parameter_id) {
 		var fd = new FormData();
@@ -148,4 +155,51 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		});
 	}
 
+
+	$scope.edit_options = {};
+	$scope.editFile = function editFile(file) {
+		console.log( file );
+		$scope.edit_options = file;
+		setTimeout(function() {
+			$( '#modal-edit-file' ).modal('show');
+		}, 500);
+	}
+
+	$scope.is_success = false;
+	$scope.updateFile = function updateFile() {
+		$http.post( settings.base_url + 'api/file/update', $scope.edit_options )
+		.success( function (response) {
+			$scope.is_success = true;
+			setTimeout(function() {
+				// $( '#modal-edit-file' ).modal('hide');
+				$scope.is_success = false;
+				$scope.getParameterFiles($scope.edit_options.parameter_id);
+			}, 1300);
+		} );
+	}
+
+	$scope.close_modal_file = function close_modal_file(parameter_id) {
+		$( '#modal-edit-file' ).modal('hide');
+		$scope.edit_options = {};
+		$scope.getParameterFiles(parameter_id);
+	}
+
+	$scope.deleteFile = function deleteFile(file) {
+		if (confirm('Are you sure you want to remove this file?')) {
+			$http.post( settings.base_url + 'api/file/delete', file )
+			.success( function (response) {
+				$( '.row-file-' + file.id ).fadeOut();
+			} );
+		}
+	}
+
+	$scope.copyFile = function copyFile(file,parameter_id) {
+		if (confirm( 'Do you want to copy this file to your current Area?' )) {
+			$http.post( settings.base_url + 'api/file/copy/' + parameter_id, file )
+			.success( function (response) {
+				alert('File successfully copied!');
+				$scope.getParameterFiles(parameter_id);
+			} );
+		}
+	}
 });

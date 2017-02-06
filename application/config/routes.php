@@ -111,8 +111,12 @@ $route['user/file_upload/(:num)']['POST']				= 'UsersController/file_upload/$1';
 // UPLOADS
 // SEARCH FOR RELATED FILES
 $route['api/search_for_file']['POST']					= 'UsersController/search_file';
-// -------CREATE GET FUNCTION FOR UPLOADS
+// -------GET FILES
 $route['api/get_uploads/(:num)']['GET']					= 'UsersController/get_uploads/$1';
+// -------EDIT FILE
+$route['api/file/update']['POST']						= 'UsersController/update_file';
+$route['api/file/delete']['POST']						= 'UsersController/delete_file';
+$route['api/file/copy/(:num)']['POST']					= 'UsersController/copy_file/$1';
 
 // Parameters
 $route['api/create/parameter']['POST']					= 'UsersController/create_param';

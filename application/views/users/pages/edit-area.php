@@ -122,5 +122,44 @@
                 </div>
             </div>
         </div>
+
+        <!-- MODAL EDIT FILE INFO -->
+        <div class="modal fade" id="modal-edit-file" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title" id="defaultModalLabel">{{ edit_options.filename }}</h4>
+                    </div>
+                    <div class="modal-body">
+                        <br>
+                        <br>
+                        <div class="form-group form-float form-group-md">
+                            <label>File Restrictions</label>
+                            <div class="form-line">
+                                <select class="form-control" ng-model="edit_options.shared_status">
+                                    <option value="1">Everyone can view this file</option>
+                                    <option value="2">Only my organization can view this file</option>
+                                    <option value="3">Only my course can view this file</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group form-float form-group-md">
+                            <label>File Description</label>
+                            <div class="form-line">
+                                <textarea class="form-control" ng-model="edit_options.description"></textarea>
+                            </div>
+                        </div>
+                        <p class="alert alert-info" ng-if="is_success">
+                            File successfully updated.
+                        </p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-link waves-effect" ng-click="updateFile()">SAVE CHANGES</button>
+                        <button type="button" class="btn btn-link waves-effect" ng-click="close_modal_file(<?php echo $data['id'] ?>)">CLOSE</button>
+                    </div>
+                </div>
+            </div>
+        </div>    
     </section>
+
 <?php $this->load->view('footer'); ?>
