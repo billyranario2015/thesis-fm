@@ -20,6 +20,17 @@ class Area extends CI_Model {
 			return array();
 	}
 
+	public function my_area($id)
+	{
+		$this->db->where( 'assignee_id' , $id );
+		$query = $this->db->get($this->table);
+
+		if ($query->num_rows() > 0)
+			return $query->row_array();
+		else
+			return array();
+	}
+
 	public function get_by_course_id($id)
 	{
 		$this->db->select('area.area_name,area.id as area_id,users.fname,users.mname,users.lname,users.id as user_id')

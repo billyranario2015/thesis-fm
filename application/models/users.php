@@ -18,8 +18,11 @@ class Users extends CI_Model {
 
 	public function get_user($data)
 	{
-		$this->db->where('email',$data['email'])
-				 ->where('password',sha1($data['password']));
+		$this->db->select( 'users.id as id, users.course_id, users.fname, users.mname, users.lname, users.email, users.user_level, users.role, courses.id as course_id, courses.course_name, organization.organization_name, organization.id as organization_id' )
+				 ->where('email',$data['email'])
+				 ->where('password',sha1($data['password']))
+				 ->join( 'courses', 'courses.id = users.course_id' )
+				 ->join( 'organization', 'organization.id = courses.organization_id' );
 		$query = $this->db->get($this->table);
 
 		if ($query->num_rows() == 1)

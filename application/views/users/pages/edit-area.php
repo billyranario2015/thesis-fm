@@ -22,26 +22,29 @@
                         <div class="header">
                             <h2>
                                 <?php echo $data['area_name'] ?>
+                                <?php if ($this->session->userdata('user_level') == 3 ) { ?>
+                                <button class="btn bg-deep-purple waves-effect btn-lg pull-right" style="position: relative;top: -8px;">
+                                    Submit Entries
+                                </button>
+                                <?php } ?>
                             </h2>
-                            <ul class="header-dropdown m-r--5">
-                                <li class="dropdown">
-                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                        <i class="material-icons">more_vert</i>
-                                    </a>
-                                    <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);" class=" waves-effect waves-block">Action</a></li>
-                                        <li><a href="javascript:void(0);" class=" waves-effect waves-block">Another action</a></li>
-                                        <li><a href="javascript:void(0);" class=" waves-effect waves-block">Something else here</a></li>
-                                    </ul>
-                                </li>
-                            </ul>
                         </div>
                         <div class="body">
                             <!-- Nav tabs -->
                             <ul class="nav nav-tabs tab-nav-right" role="tablist">
+                                <?php if( $this->session->userdata('user_level') != 3 ) { ?>
                                 <li role="presentation" class="<?php if( $tab == 'templates' ) echo 'active'; ?>">
                                     <a href="<?php echo base_url('user/area/'.$data['id']) ?>">TEMPLATES</a>
                                 </li>
+                                <li role="presentation" class="<?php if( $tab == 'settings' ) echo 'active'; ?>">
+                                    <a href="<?php echo base_url('user/area/'.$data['id'].'/settings') ?>">SETTINGS</a>
+                                </li>
+                                <?php } else { ?>
+                                <li role="presentation" class="active">
+                                    <a href="<?php echo base_url('user/my-area/') ?>">TEMPLATES</a>
+                                </li>
+                                <?php } ?>
+                                
                                 <!-- <li role="presentation" class="">
                                     <a href="#profile" data-toggle="tab">PROFILE</a>
                                 </li>
@@ -51,9 +54,6 @@
                                 <!-- <li role="presentation" class="<?php if( $tab == 'entries' ) echo 'active'; ?>">
                                     <a href="<?php echo base_url('user/area/'.$data['id'].'/entries') ?>">ENTRIES</a>
                                 </li> -->
-                                <li role="presentation" class="<?php if( $tab == 'settings' ) echo 'active'; ?>">
-                                    <a href="<?php echo base_url('user/area/'.$data['id'].'/settings') ?>">SETTINGS</a>
-                                </li>
                             </ul>
 
                             <!-- Tab panes -->
@@ -138,7 +138,7 @@
                             <div class="form-line">
                                 <select class="form-control" ng-model="edit_options.shared_status">
                                     <option value="1">Everyone can view this file</option>
-                                    <option value="2">Only my organization can view this file</option>
+                                    <!-- <option value="2">Only my organization can view this file</option> -->
                                     <option value="3">Only my course can view this file</option>
                                 </select>
                             </div>
@@ -155,7 +155,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-link waves-effect" ng-click="updateFile()">SAVE CHANGES</button>
-                        <button type="button" class="btn btn-link waves-effect" ng-click="close_modal_file(<?php echo $data['id'] ?>)">CLOSE</button>
+                        <button type="button" class="btn btn-link waves-effect" ng-click="close_modal_file(edit_options.parameter_id)">CLOSE</button>
                     </div>
                 </div>
             </div>

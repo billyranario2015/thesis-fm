@@ -182,6 +182,7 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		$( '#modal-edit-file' ).modal('hide');
 		$scope.edit_options = {};
 		$scope.getParameterFiles(parameter_id);
+		console.log(parameter_id)
 	}
 
 	$scope.deleteFile = function deleteFile(file) {
@@ -197,8 +198,11 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		if (confirm( 'Do you want to copy this file to your current Area?' )) {
 			$http.post( settings.base_url + 'api/file/copy/' + parameter_id, file )
 			.success( function (response) {
-				alert('File successfully copied!');
-				$scope.getParameterFiles(parameter_id);
+				// alert('File successfully copied!');/
+				console.log(response);
+				setTimeout(function() {
+					$scope.getParameterFiles(parameter_id);
+				}, 1000);
 			} );
 		}
 	}

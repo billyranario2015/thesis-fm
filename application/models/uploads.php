@@ -23,7 +23,7 @@ class Uploads extends CI_Model {
 
 	public function search($data)
 	{
-		$this->db->select( 'uploads.id as upload_id, uploads.filename, uploads.parameter_id, uploads.description, uploads.shared_status, area_parameters.parameter_name,courses.course_name' )
+		$this->db->select( 'uploads.id as upload_id, uploads.filename, uploads.parameter_id, uploads.description, uploads.shared_status, area_parameters.parameter_name,courses.course_name, courses.id as course_id' )
 				 ->like('filename', $data->data, 'both')
 				 ->or_like('description', $data->data, 'both')
 				 ->where( 'shared_status', 1 )
@@ -76,18 +76,31 @@ class Uploads extends CI_Model {
 	public function copy($data,$parameter_id)
 	{
 		$file_part = pathinfo('uploads/' . $data->filename);
+
+		if (strpos($file_part['filename'], 'copy') !== false) {
+			$get_original_filename =  substr($file_part['filename'], 0, -10) . '-copy' . $this->generateRandomString(5)	;
+		} elseif( file_exists('uploads/'.$data->filename) ) {
+			$get_original_filename =  $file_part['filename'] . '-copy' . $this->generateRandomString(5)	;
+		} else {
+			$get_original_filename = $file_part['filename'];
+		}
+
+
 		// Insert copied file data first to get the id
 		$copy_id = $this->create([
-			'filename'		=>	$file_part['filename']  . $this->generateRandomString(2) .'.'.$file_part['extension'], 
+			'filename'		=>	$get_original_filename .'.'.$file_part['extension'], 
 			'parameter_id' 	=>  $parameter_id,
+			'author_id'		=>  $this->session->userdata('id'),
 			'description'	=>  $data->description,
 		]);
 
 		if ( $copy_id > 0 ) {
-			copy( 'uploads/'.$data->filename , 'uploads/' . $file_part['filename']  . $this->generateRandomString(2) .'.'.$file_part['extension'] );
-			return true;
+			if( copy( 'uploads/'.$data->filename , 'uploads/' . $get_original_filename .'.'.$file_part['extension'] ) )
+				return 'true-1';
+			else 
+				return 'false-0';
 		} else {
-			return false;
+			return 'false-00';
 		}
 	}
 
