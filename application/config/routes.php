@@ -56,6 +56,13 @@ $route['translate_uri_dashes'] = FALSE;
 
 /*
 | -------------------------------------------------------------------------
+| USER DATA - API
+| -------------------------------------------------------------------------
+*/
+$route['get/userdata']['GET']							= 'UsersController/userdata';
+
+/*
+| -------------------------------------------------------------------------
 | AUTHENTICATION
 | -------------------------------------------------------------------------
 */
@@ -126,3 +133,19 @@ $route['api/get/clean_parameters/(:num)']['GET']		= 'UsersController/get_paramet
 $route['api/edit/parameter/(:num)']['GET']				= 'UsersController/get_parameters_by_id/$1';
 $route['api/update/parameter']['POST']					= 'UsersController/update_parameter';
 $route['api/delete/parameter']['POST']					= 'UsersController/delete_parameter';
+
+/*
+| -------------------------------------------------------------------------
+| SUBMISSIONS
+| -------------------------------------------------------------------------
+*/
+$route['api/submission/area']['POST']					= 'SubmissionController/addSubmissionArea';
+
+/*
+| -------------------------------------------------------------------------
+| COMMENTS
+| -------------------------------------------------------------------------
+*/
+$route['api/comment/create']['POST']					= 'CommentsController/addComment';
+$route['api/comments/area/(:num)']['GET']				= 'CommentsController/getAreaComments/$1';
+

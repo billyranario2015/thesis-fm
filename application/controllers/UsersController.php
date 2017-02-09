@@ -3,7 +3,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class UsersController extends CI_Controller {
 
-
+	public function userdata()
+	{
+		echo json_encode( [
+			'userdata'			=>	$this->session->userdata(),
+			'belongsToArea'  	=> 	$this->area->my_area( $this->session->userdata('id') ),
+			'notifications'  	=>  $this->notification->get_by_id( $this->session->userdata('id') ),
+			'submission'		=>  $this->submission->get_by_id( $this->session->userdata('id') ),
+		] );
+	}
 	public function user_page($tpl)
 	{
 		/*
@@ -149,6 +157,17 @@ class UsersController extends CI_Controller {
 			'scripts'=> '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>',
 		);
 
+		if ( @$_GET['notification'] ) {
+			// UPDATE NOTIFICATION STATUS
+			$this->notification->update( [
+				'id'=> $_GET['id'],
+				'notification_status' => 1 // Seened
+			] );
+		}
+
+		$data['comments'] = $this->comments->get_comment_by_area_id($id);
+
+
 		$this->load->view('users/pages/edit-area',$data);
 	}
 
@@ -217,6 +236,7 @@ class UsersController extends CI_Controller {
 			'scripts'=> '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>',
 		);
 		
+		$data['comments'] = $this->comments->get_comment_by_area_id($id);
 		
 		if ( $tpl == 'templates' ) {
 			$data['tab'] = 'templates';

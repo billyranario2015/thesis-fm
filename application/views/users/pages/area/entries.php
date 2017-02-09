@@ -1,4 +1,4 @@
-                                        <?php if( $this->session->userdata('user_level') != 3 ) { ?>
+                                            <?php if( $this->session->userdata('user_level') != 3 ) { ?>
                                         <div class="text-right">
                                             <a href="<?php echo base_url( 'user/area/' . $data['id']  ); ?>" class="btn btn-primary">BACK</a>
                                         </div>

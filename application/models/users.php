@@ -53,6 +53,29 @@ class Users extends CI_Model {
 			return array();
 	}
 
+	public function get_chairman_by_course_id($id)
+	{
+		$this->db->where('course_id',$id);
+		$query = $this->db->get($this->table);
+
+		if ($query->num_rows() > 0 )
+			return $query->result_array();
+		else
+			return array();
+	}
+
+	public function get_users_by_course_with_level($course_id,$user_level)
+	{
+		$this->db->where('course_id',$course_id,$user_level)
+				 ->where('user_level' , $user_level);
+		$query = $this->db->get($this->table);
+
+		if ($query->num_rows() > 0 )
+			return $query->row_array();
+		else
+			return array();
+	}
+
 	public function create($data)
 	{
 		// Check if email exists

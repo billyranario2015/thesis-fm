@@ -206,4 +206,36 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 			} );
 		}
 	}
+
+	$scope.submitToChairman = function submitToChairman() {
+		var userdata = settings.userdata();
+		userdata.success( function (response) {
+			$http.post( settings.base_url + 'api/submission/area', response )
+			.success(function (data_response) {
+				console.log(data_response);
+			})
+		} );
+	}
+	// ADD COMMENT 
+	$scope.commentFields = {};
+	$scope.addComment = function addComment(comment_type,area_id) {
+		$scope.commentFields.target_id = area_id;
+		$scope.commentFields.comment_type = comment_type;
+		console.log( $scope.commentFields );
+		$http.post( settings.base_url + 'api/comment/create', $scope.commentFields )
+		.success( function (response) {
+			console.log(response);
+			$scope.getComments(area_id);
+			$scope.commentFields.comment = null;
+		} )
+	}
+
+	$scope.comments = {};
+	$scope.getComments = function getComments(area_id) {
+		$http.get( settings.base_url + 'api/comments/area/' + area_id )
+		.success( function (response) {
+			console.log( response );
+			$scope.comments = response.comments;
+		} );
+	}
 });

@@ -46,7 +46,7 @@
     <script src="<?php echo base_url( '/assets/admin/plugins/jquery/jquery.min.js' ); ?>"></script>
 </head>
 
-<body class="theme-red" ng-app="MUSTFM">
+<body class="theme-red" ng-app="MUSTFM" ng-controller="MainController">
     <!-- Page Loader -->
     <div class="page-loader-wrapper">
         <div class="loader">
@@ -95,102 +95,38 @@
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">notifications</i>
-                            <span class="label-count">7</span>
+                            <span class="label-count" ng-if="notifications.length > 0" ng-bind="notifications.length"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="header">NOTIFICATIONS</li>
                             <li class="body">
                                 <ul class="menu">
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <div class="icon-circle bg-light-green">
-                                                <i class="material-icons">person_add</i>
-                                            </div>
-                                            <div class="menu-info">
-                                                <h4>12 new members joined</h4>
-                                                <p>
-                                                    <i class="material-icons">access_time</i> 14 mins ago
-                                                </p>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <div class="icon-circle bg-cyan">
-                                                <i class="material-icons">add_shopping_cart</i>
-                                            </div>
-                                            <div class="menu-info">
-                                                <h4>4 sales made</h4>
-                                                <p>
-                                                    <i class="material-icons">access_time</i> 22 mins ago
-                                                </p>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <div class="icon-circle bg-red">
-                                                <i class="material-icons">delete_forever</i>
-                                            </div>
-                                            <div class="menu-info">
-                                                <h4><b>Nancy Doe</b> deleted account</h4>
-                                                <p>
-                                                    <i class="material-icons">access_time</i> 3 hours ago
-                                                </p>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <div class="icon-circle bg-orange">
+
+                                    <li ng-repeat="notif in notifications">
+                                        <a href="/user/area/{{ notif.area_id }}?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 2">
+                                            <div class="icon-circle bg-light-green" ng-if="notif.notification_type == 2">
                                                 <i class="material-icons">mode_edit</i>
                                             </div>
                                             <div class="menu-info">
-                                                <h4><b>Nancy</b> changed name</h4>
+                                                <h4 ng-if="notif.notification_type == 2">{{ notif.fname }} submitted an entry</h4>
                                                 <p>
-                                                    <i class="material-icons">access_time</i> 2 hours ago
+                                                    <i class="material-icons">access_time</i> {{ dateParser(notif.created_at) | date: "MMM dd, yyyy ' ' hh:mma" : '+08' }}
                                                 </p>
                                             </div>
                                         </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <div class="icon-circle bg-blue-grey">
+
+                                        <a href="/user/area/{{ notif.area_id }}?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 1">
+                                            <div class="icon-circle bg-blue-grey" ng-if="notif.notification_type == 1">
                                                 <i class="material-icons">comment</i>
                                             </div>
                                             <div class="menu-info">
-                                                <h4><b>John</b> commented your post</h4>
+                                                <h4 ng-if="notif.notification_type == 1">{{ notif.fname }} commented on an entry</h4>
                                                 <p>
-                                                    <i class="material-icons">access_time</i> 4 hours ago
+                                                    <i class="material-icons">access_time</i> {{ dateParser(notif.created_at) | date: "MMM dd, yyyy ' ' hh:mma" : '+08' }}
                                                 </p>
                                             </div>
                                         </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <div class="icon-circle bg-light-green">
-                                                <i class="material-icons">cached</i>
-                                            </div>
-                                            <div class="menu-info">
-                                                <h4><b>John</b> updated status</h4>
-                                                <p>
-                                                    <i class="material-icons">access_time</i> 3 hours ago
-                                                </p>
-                                            </div>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="javascript:void(0);">
-                                            <div class="icon-circle bg-purple">
-                                                <i class="material-icons">settings</i>
-                                            </div>
-                                            <div class="menu-info">
-                                                <h4>Settings updated</h4>
-                                                <p>
-                                                    <i class="material-icons">access_time</i> Yesterday
-                                                </p>
-                                            </div>
-                                        </a>
+
                                     </li>
                                 </ul>
                             </li>

@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_Add_Uploads_Table extends CI_Migration {
+class Migration_Add_Submission_Table extends CI_Migration {
 
     public function __construct()
     {
@@ -19,35 +19,41 @@ class Migration_Add_Uploads_Table extends CI_Migration {
                 'unsigned' => TRUE,
                 'auto_increment' => TRUE
             ),
-            'parameter_id' => array(
+            'user_id' => array(
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => true
             ),
-            'author_id' => array(
+            'organization_id' => array(
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => true
             ),
-            'filename' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 255,
-                'null' => true
-            ),
-            'description' => array(
-                'type' => 'TEXT',
+            'course_id' => array(
+                'type' => 'INT',
+                'constraint' => 11,
                 'null' => true
             ),
             /*
-            | Sharing Status Codes
-            | 1 = SHARE TO OTHER ORGANIZATIONS 
-            | 2 = SHARE TO CURRENT ORGANIZATION ONLY 
-            | 3 = ONLY YOUR COURSE CAN VIEW
-            */ 
-            'shared_status' => array(
+            | SUBMISSION TYPES
+            | 1 = SUBMIT AREA TO CHAIRMAN 
+            | 2 = SUBMIT TO IN-HOUSE EVALUATOR 
+            */
+            'submission_type' => array(
                 'type' => 'INT',
                 'constraint' => 11,
-                'default' => 1
+                'null' => true
+            ),
+            /*
+            | SUBMISSION STATUS
+            | 1 = APPROVED 
+            | 2 = NEED TO REVISE
+            | 3 = UNAPPROVED 
+            */  
+            'submission_status' => array(
+                'type' => 'INT',
+                'constraint' => 11,
+                'default' => 3
             ),
             'created_at' => array(
                 'type' => 'TIMESTAMP',
@@ -58,12 +64,12 @@ class Migration_Add_Uploads_Table extends CI_Migration {
         );
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key('id',TRUE);
-        // $this->dbforge->create_table('uploads',TRUE); 
+        $this->dbforge->create_table('submission',TRUE); 
 
     }
 
     public function down()
     {
-        // $this->dbforge->drop_table('uploads', TRUE);
+        $this->dbforge->drop_table('submission', TRUE);
     }
 }

@@ -52,10 +52,19 @@
                         <div class="header">
                             <h2>
                                 <?php echo $data['area_name'] ?>
-
-                                <button class="btn bg-deep-purple waves-effect btn-lg pull-right" style="position: relative;top: -8px;">
-                                	Submit Entries
+                                <?php if ($this->session->userdata('user_level') == 3 ) { ?>
+                                <!-- NOT YET SUBMITTED -->
+                                <button class="btn bg-deep-purple waves-effect btn-lg pull-right" style="position: relative;top: -8px;" 
+                                    ng-click="submitToChairman()" ng-if="!submission_data">
+                                        Submit Entries
                                 </button>
+
+                                <button class="btn bg-deep-purple waves-effect btn-lg pull-right" style="position: relative;top: -8px;" ng-if="submission_data">
+                                        <span ng-if="submission_data.submission_status != 1">Entry Submitted on {{ dateParser(submission_data.created_at) | date: "MMM dd, yyyy ' ' hh:mma" : '+08' }}</span>
+                                        <span ng-if="submission_data.submission_status == 1">ENTRY APPROVED</span>
+                                </button>
+                                <!-- SUBMITTED -->
+                                <?php } ?>
                             </h2>
                         </div>
                         <div class="body">
@@ -169,6 +178,49 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>
+                                COMMENTS                                
+                            </h2>
+                        </div>
+                        <div class="body">  
+                            <div class="comment-form-section">
+                                <form ng-submit="addComment(1,<?php echo $data['id'] ?>)">
+                                    <div class="form-group">
+                                        <div class="form-line">
+                                            <!-- Comment Type: Area -->
+                                            <textarea rows="3" class="form-control no-resize" ng-model="commentFields.comment" placeholder="Add comment..."></textarea>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-default btn-lg">SUBMIT</button>
+                                </form>
+                            </div>
+                            <br>
+                            <br>
+                            <br>
+                            <div class="comments-section" ng-init="getComments(<?php echo $data['id'] ?>)">
+                                <div class="media" ng-repeat="comment in comments">
+                                    <div class="media-left">
+                                        <a href="javascript:void(0);">
+                                            <img class="media-object" ng-src="<?php echo base_url('assets/admin/images/user.png') ?>" width="64" height="64">
+                                        </a>
+                                    </div>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">{{ comment.fname }} {{ comment.lname }}</h4>
+                                        <p>
+                                            {{ comment.comment }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
         </div>
 
         <!-- MODAL EDIT FILE INFO -->

@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_Add_Area_Table extends CI_Migration {
+class Migration_Add_Comments_Table extends CI_Migration {
 
     public function __construct()
     {
@@ -19,19 +19,32 @@ class Migration_Add_Area_Table extends CI_Migration {
                 'unsigned' => TRUE,
                 'auto_increment' => TRUE
             ),
-            'area_name' => array(
-                'type' => 'VARCHAR',
-                'constraint' => 255,
+            'user_id' => array(
+                'type' => 'INT',
+                'constraint' => 11,
                 'null' => true
             ),
-            'assignee_id' => array(
+            /*
+            | COMMENT TYPES
+            | 1 = AREA      - ADD COMMENT TO AN AREA 
+            | 2 = PARAMETER - ADD COMMENT TO A PARAMETER 
+            | 3 = FILE      - ADD COMMENT TO A FILE
+            */  
+            'comment_type' => array(
                 'type' => 'INT',
                 'constraint' => 11,
-                'default' => 3 // for unassigned value
+                'null' => true
             ),
-            'course_id' => array(
+            /*
+            | ID of a file | parameter | area
+            */  
+            'target_id' => array( 
                 'type' => 'INT',
                 'constraint' => 11,
+                'null' => true
+            ),
+            'comment' => array(
+                'type' => 'TEXT',
                 'null' => true
             ),
             'created_at' => array(
@@ -43,12 +56,12 @@ class Migration_Add_Area_Table extends CI_Migration {
         );
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key('id',TRUE);
-        // $this->dbforge->create_table('area',TRUE); 
+        $this->dbforge->create_table('comments',TRUE); 
 
     }
 
-  public function down()
-  {
-    // $this->dbforge->drop_table('area', TRUE);
-  }
+    public function down()
+    {
+        $this->dbforge->drop_table('comments', TRUE);
+    }
 }

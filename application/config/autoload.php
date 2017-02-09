@@ -140,4 +140,8 @@ $autoload['model'] = array(
 	'area'		 	 => 'area',
 	'area_parameters'=> 'area_params',
 	'uploads'		 => 'files',
+	
+	'comments'		 => 'comments',
+	'notification'	 => 'notification',
+	'submission'	 => 'submission',
 );
