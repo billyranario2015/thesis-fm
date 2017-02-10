@@ -17,7 +17,7 @@ class AuthController extends CI_Controller {
 		$response = $this->auth->postLogin( $_POST );
 		if ( $response ) {
 			// Retrieve User Info and Make SESSION for user
-			$user_info = $this->users->get_user( $_POST );
+			$user_info = $this->users->get_user_auth( $_POST );
 
 			// Session User Info 
 			$this->session->set_userdata($user_info);

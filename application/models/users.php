@@ -31,6 +31,18 @@ class Users extends CI_Model {
 			return array();
 	}
 
+	public function get_user_auth($data)
+	{
+		$this->db->where('email',$data['email'])
+				 ->where('password',sha1($data['password']));
+		$query = $this->db->get($this->table);
+
+		if ($query->num_rows() == 1)
+			return $query->row_array();
+		else
+			return array();
+	}
+
 	public function get_user_by_id($data)
 	{
 		$this->db->where('id',$data);
@@ -55,6 +67,7 @@ class Users extends CI_Model {
 
 	public function get_chairman_by_course_id($id)
 	{
+		
 		$this->db->where('course_id',$id);
 		$query = $this->db->get($this->table);
 

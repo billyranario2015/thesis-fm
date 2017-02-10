@@ -11,12 +11,19 @@
                                         <br>
                                         <!-- <form action="" ng-submit="submitFileUpload()" method="post" enctype="multipart/form-data"> -->
                                         <div class="form-group">
-                                            <input type="file" name="file_data" ng-model="file_data" class="form-control" onchange="angular.element(this).scope().uploadFile(this.files, <?php echo isset($param_id) ? $param_id : '' ?>)" multiple/>
+                                            <div class="form-line">
+                                                <input type="file" name="file_data" ng-model="file_data" class="form-control" onchange="angular.element(this).scope().uploadFile(this.files, <?php echo isset($param_id) ? $param_id : '' ?>)" multiple/>
+                                            </div>
                                         </div>
                                         
 
                                         <div class="text-left">
                                             <button ng-click="submitFileUpload(<?php echo isset($param_id)?$param_id:0; ?>)" class="btn btn-primary">UPLOAD</button>
+                                            <span class="pull-right" style="position: relative;">
+                                                <a style="cursor:pointer" ng-click="clearSearch()" class="btn bg-red waves-effect btn-sm" id="btn-copy">
+                                                    Clear
+                                                </a>
+                                            </span>
                                         </div>
 
                                         <hr>
@@ -34,18 +41,32 @@
                                                 </div>
                                             </div>
 
-                                            <div ng-if="related_file_count > 0">
+                                            <div>
                                                 <div class="header">
-                                                    <h2 class="col-pink">
-                                                        RELATED UPLOADS 
-                                                        <span class="pull-right" style="position: relative;top: -15px;">
-                                                            <a style="cursor:pointer" ng-click="clearSearch()" class="btn bg-blue waves-effect btn-lg" id="btn-copy">
-                                                                Clear
-                                                            </a>
-                                                        </span>
-                                                    </h2>
+                                                    <div class="row">
+                                                        <div class="col-sm-5" style="margin: 0;">
+                                                            <h2 class="col-pink" style=" position: relative;top: 30px;">
+                                                                RELATED UPLOADS 
+                                                            </h2>
+                                                        </div>
+                                                        <div class="col-sm-7 text-right" style="margin: 0;">
+                                                            <div class="input-group" style="margin: 0;position: relative;top: 20px;">
+                                                                <div class="form-line">
+                                                                    <input type="text" class="form-control date" ng-model="parameter.parameter_name" placeholder="Search Related files" required>
+                                                                </div>
+                                                               <span class="input-group-addon">
+                                                                    <button style="cursor:pointer" class="btn btn-default">
+                                                                        <div class="demo-google-material-icon"> 
+                                                                            <i class="material-icons">add</i> 
+                                                                            <span class="icon-name" style="position: relative;top: -3px">ADD</span>
+                                                                        </div>
+                                                                    </button>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
-                                                <div class="body table-responsive">
+                                                <div class="body table-responsive" ng-if="related_file_count > 0">
                                                     <table class="table table-condensed table-hovered">
                                                         <thead>
                                                             <tr>
@@ -83,6 +104,9 @@
                                                         </tbody>
                                                     </table>
                                                 </div>
+                                                <br>
+                                                <br>
+                                                <br>
                                             </div>
                                         </div>
 

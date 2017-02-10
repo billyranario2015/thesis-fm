@@ -55,11 +55,11 @@
                                 <?php if ($this->session->userdata('user_level') == 3 ) { ?>
                                 <!-- NOT YET SUBMITTED -->
                                 <button class="btn bg-deep-purple waves-effect btn-lg pull-right" style="position: relative;top: -8px;" 
-                                    ng-click="submitToChairman()" ng-if="!submission_data">
+                                    ng-click="submitToChairman()" ng-if="!submission_data == 0">
                                         Submit Entries
                                 </button>
 
-                                <button class="btn bg-deep-purple waves-effect btn-lg pull-right" style="position: relative;top: -8px;" ng-if="submission_data">
+                                <button class="btn bg-deep-purple waves-effect btn-lg pull-right" style="position: relative;top: -8px;" ng-if="submission_data > 0">
                                         <span ng-if="submission_data.submission_status != 1">Entry Submitted on {{ dateParser(submission_data.created_at) | date: "MMM dd, yyyy ' ' hh:mma" : '+08' }}</span>
                                         <span ng-if="submission_data.submission_status == 1">ENTRY APPROVED</span>
                                 </button>

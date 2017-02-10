@@ -25,7 +25,7 @@ class SubmissionController extends CI_Controller {
 			'target_id'				=> $course_data['id'],
 			'notification_status'	=> 0, // UNSEENED 
 			'course_id'				=> $obj->userdata->course_id,
-			'submission_type'		=> 1, // SUBMIT AREA TO CHAIRMAN
+			// 'submission_type'		=> 1, // SUBMIT AREA TO CHAIRMAN
 		];
 
 		echo json_encode( [ 

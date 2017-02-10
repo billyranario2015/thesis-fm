@@ -58,12 +58,12 @@ class Migration_Add_Uploads_Table extends CI_Migration {
         );
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key('id',TRUE);
-        // $this->dbforge->create_table('uploads',TRUE); 
+        $this->dbforge->create_table('uploads',TRUE); 
 
     }
 
     public function down()
     {
-        // $this->dbforge->drop_table('uploads', TRUE);
+        $this->dbforge->drop_table('uploads', TRUE);
     }
 }

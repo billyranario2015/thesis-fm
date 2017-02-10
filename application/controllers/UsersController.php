@@ -392,7 +392,7 @@ class UsersController extends CI_Controller {
 		$config = array();
         $config['upload_path'] = 'uploads/'; //give the path to upload the image in folder
         $config['allowed_types'] = '*';
-        $config['max_size'] = '10000';
+        $config['max_size'] = '0';
         $config['overwrite'] = FALSE;
   		return $config;
 	}
