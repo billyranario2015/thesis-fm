@@ -55,7 +55,7 @@
                                 <?php if ($this->session->userdata('user_level') == 3 ) { ?>
                                 <!-- NOT YET SUBMITTED -->
                                 <button class="btn bg-deep-purple waves-effect btn-lg pull-right" style="position: relative;top: -8px;" 
-                                    ng-click="submitToChairman()" ng-if="!submission_data == 0">
+                                    ng-click="submitToChairman()" ng-if="submission_data == 0">
                                         Submit Entries
                                 </button>
 

@@ -209,12 +209,20 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 
 	$scope.submitToChairman = function submitToChairman() {
 		var userdata = settings.userdata();
-		userdata.success( function (response) {
-			$http.post( settings.base_url + 'api/submission/area', response )
-			.success(function (data_response) {
-				console.log(data_response);
-			})
-		} );
+		if ( confirm( 'Are you sure you want to send your submission?' ) ) {
+			userdata.success( function (response) {
+				$http.post( settings.base_url + 'api/submission/area', response )
+				.success(function (data_response) {
+					console.log(data_response);
+					if ( data_response.submission > 0 ) {
+						alert( 'Successfull submitted. ' );
+						location.reload();
+					} else {
+						alert( 'Error on submission. Please try again later' );
+					}
+				})
+			} );			
+		}
 	}
 	// ADD COMMENT 
 	$scope.commentFields = {};
@@ -236,6 +244,22 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		.success( function (response) {
 			console.log( response );
 			$scope.comments = response.comments;
+		} );
+	}
+
+	$scope.searchQuery = '';
+	$scope.searchRelatedFiles = function searchRelatedFiles() {
+		$scope.loader_search = true;
+		var related_files = [];
+		$scope.related_files = [];
+	    $scope.related_file_count = 0;
+
+		$http.post( settings.base_url + 'api/search_for_file/', { data : $scope.searchQuery } )
+		.success( function (response) {
+			console.log( response.response )
+			$scope.related_files = response.response;
+	    	$scope.loader_search = false;
+	    	$scope.related_file_count = response.response.length;
 		} );
 	}
 });

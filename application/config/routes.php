@@ -118,7 +118,11 @@ $route['user/file_upload/(:num)']['POST']				= 'UsersController/file_upload/$1';
 
 // UPLOADS
 // SEARCH FOR RELATED FILES
+// -- Seach Via upload
 $route['api/search_for_file']['POST']					= 'UsersController/search_file';
+// Search Via Input Field in a form
+// $route['api/search/files']['POST']						= 'UsersController/form_search_file';
+
 // -------GET FILES
 $route['api/get_uploads/(:num)']['GET']					= 'UsersController/get_uploads/$1';
 // -------EDIT FILE

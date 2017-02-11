@@ -16,24 +16,26 @@ fm.factory( 'settings' , function($http){
 
 
 fm.controller( "MainController" , function( $scope, $http, $timeout, settings, $timeout, $rootScope ) {
-	console.log( 'running' );
-
 	$scope.notifications = {};
 	$scope.submission_data = {};
-
-
+	$scope.submission_count = 0;
 
 	var userdata = settings.userdata();
 	var userInfo = {};
 
 	userdata.success( function (response) {
 		userInfo = response;
-		console.log(response);
 	} );
 
 	setTimeout(function() {
 		$scope.notifications = userInfo.notifications;
 		$scope.submission_data = userInfo.submission;
+		if ( typeof userInfo.submission['id'] !== 'undefined' && userInfo.submission['id'] !== null ) {
+			$scope.submission_count = 1;
+		} else {
+			$scope.submission_count = 0;
+		}
+		console.log( $scope.submission_data )
 		$scope.$apply();
 	}, 700);
 

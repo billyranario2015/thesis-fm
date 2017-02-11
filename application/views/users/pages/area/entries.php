@@ -30,17 +30,6 @@
 
                                         <!-- SUGGESTED FILES -->
                                         <div ng-init="getParameterFiles(<?php echo isset($param_id)?$param_id:0; ?>)">
-                                            <div class="preloader pl-size-xl" ng-if="loader_search">
-                                                <div class="spinner-layer">
-                                                    <div class="circle-clipper left">
-                                                        <div class="circle"></div>
-                                                    </div>
-                                                    <div class="circle-clipper right">
-                                                        <div class="circle"></div>
-                                                    </div>
-                                                </div>
-                                            </div>
-
                                             <div>
                                                 <div class="header">
                                                     <div class="row">
@@ -50,23 +39,38 @@
                                                             </h2>
                                                         </div>
                                                         <div class="col-sm-7 text-right" style="margin: 0;">
-                                                            <div class="input-group" style="margin: 0;position: relative;top: 20px;">
-                                                                <div class="form-line">
-                                                                    <input type="text" class="form-control date" ng-model="parameter.parameter_name" placeholder="Search Related files" required>
+                                                            <form ng-submit="searchRelatedFiles()">
+                                                                <div class="input-group" style="margin: 0;position: relative;top: 20px;">
+                                                                    <div class="form-line">
+                                                                        <input type="text" class="form-control date" ng-model="searchQuery" placeholder="Search Related files" required>
+                                                                    </div>
+                                                                   <span class="input-group-addon">
+                                                                        <button type="submit" style="cursor:pointer" class="btn btn-default">
+                                                                            <div class="demo-google-material-icon"> 
+                                                                                <i class="material-icons">search</i> 
+                                                                                <span class="icon-name" style="position: relative;top: -3px">SEARCH</span>
+                                                                            </div>
+                                                                        </button>
+                                                                    </span>
                                                                 </div>
-                                                               <span class="input-group-addon">
-                                                                    <button style="cursor:pointer" class="btn btn-default">
-                                                                        <div class="demo-google-material-icon"> 
-                                                                            <i class="material-icons">add</i> 
-                                                                            <span class="icon-name" style="position: relative;top: -3px">ADD</span>
-                                                                        </div>
-                                                                    </button>
-                                                                </span>
-                                                            </div>
+                                                            </form>
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <div class="preloader pl-size-xl" ng-if="loader_search">
+                                                    <div class="spinner-layer">
+                                                        <div class="circle-clipper left">
+                                                            <div class="circle"></div>
+                                                        </div>
+                                                        <div class="circle-clipper right">
+                                                            <div class="circle"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
                                                 <div class="body table-responsive" ng-if="related_file_count > 0">
+
                                                     <table class="table table-condensed table-hovered">
                                                         <thead>
                                                             <tr>
