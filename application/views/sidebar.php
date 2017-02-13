@@ -93,7 +93,7 @@
                         </ul>
                     </li>
 
-
+                     <!-- USER_LEVEL == 2 -->
                     <?php } elseif( $this->session->userdata( 'user_level' ) == 2 ) { ?>
                     <li class="<?php if( isset( $tpl ) && $tpl == 'dashboard' ) echo 'active'; ?>">
                         <a href="<?php echo base_url( 'user/dashboard' ); ?>">
@@ -137,7 +137,18 @@
                             </li>
                         </ul>
                     </li>
+
+                     <!-- USER_LEVEL == 3 -->
                     <?php } elseif( $this->session->userdata( 'user_level' ) == 3 ) { ?>
+                    <li class="active">
+                        <a href="<?php echo base_url( 'user/my-area' ); ?>">
+                            <i class="material-icons">home</i>
+                            <span>Assigned Area</span>
+                        </a>
+                    </li>
+
+                     <!-- USER_LEVEL == 4 -->
+                    <?php } elseif( $this->session->userdata( 'user_level' ) == 4 ) { ?>
                     <li class="active">
                         <a href="<?php echo base_url( 'user/my-area' ); ?>">
                             <i class="material-icons">home</i>

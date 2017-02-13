@@ -21,7 +21,7 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                <?php echo $data['area_name'] ?> {{ submission_count }}
+                                <?php echo $data['area_name'] ?>
                                 <?php if ($this->session->userdata('user_level') == 3 ) { ?>
                                 <!-- NOT YET SUBMITTED -->
                                 <button class="btn bg-deep-purple waves-effect btn-lg pull-right" style="position: relative;top: -8px;" 
@@ -131,7 +131,7 @@
             </div>
 
 
-            <div class="row clearfix">
+            <div class="row clearfix" id="comments">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">

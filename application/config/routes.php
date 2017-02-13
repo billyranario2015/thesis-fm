@@ -120,8 +120,9 @@ $route['user/file_upload/(:num)']['POST']				= 'UsersController/file_upload/$1';
 // SEARCH FOR RELATED FILES
 // -- Seach Via upload
 $route['api/search_for_file']['POST']					= 'UsersController/search_file';
-// Search Via Input Field in a form
-// $route['api/search/files']['POST']						= 'UsersController/form_search_file';
+
+// EVALUATOR 
+$route['evaluator/(:any)']['GET']						= 'UsersController/evaluator_page/$1';
 
 // -------GET FILES
 $route['api/get_uploads/(:num)']['GET']					= 'UsersController/get_uploads/$1';

@@ -22,7 +22,7 @@ class Notification extends CI_Model {
 
 	public function get_by_id($id)
 	{
-		$this->db->select( 'notification.*, notification.id as notification_id, users.*, users.id as u_user_id, area.*, area.id as area_id' )
+		$this->db->select( 'notification.*, notification.id as notification_id, notification.created_at as notification_created_at, users.*, users.id as u_user_id, area.*, area.id as area_area_id' )
 				 ->where('target_id',$id)
 				 ->where('notification.notification_status',0)
 				 ->join( 'users', 'notification.user_id = users.id' )

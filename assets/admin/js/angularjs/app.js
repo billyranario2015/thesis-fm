@@ -16,6 +16,8 @@ fm.factory( 'settings' , function($http){
 
 
 fm.controller( "MainController" , function( $scope, $http, $timeout, settings, $timeout, $rootScope ) {
+	$scope.userdata = {};
+	$scope.belongsToArea = {};
 	$scope.notifications = {};
 	$scope.submission_data = {};
 	$scope.submission_count = 0;
@@ -25,11 +27,14 @@ fm.controller( "MainController" , function( $scope, $http, $timeout, settings, $
 
 	userdata.success( function (response) {
 		userInfo = response;
+		console.log(response)
 	} );
 
 	setTimeout(function() {
+		$scope.userdata = userInfo.userdata;
 		$scope.notifications = userInfo.notifications;
 		$scope.submission_data = userInfo.submission;
+		$scope.belongsToArea = userInfo.belongsToArea;
 		if ( typeof userInfo.submission['id'] !== 'undefined' && userInfo.submission['id'] !== null ) {
 			$scope.submission_count = 1;
 		} else {

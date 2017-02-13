@@ -34,6 +34,8 @@ class AuthController extends CI_Controller {
 				redirect( base_url('user/dashboard') );
 			elseif( $user_info['user_level'] == 3 )
 				redirect( base_url('user/my-area') );
+			elseif( $user_info['user_level'] == 4 )
+				redirect( base_url('evaluator/dashboard/') );
 
 		} else {
 			$this->session->set_flashdata( 'old_email', $_POST['email']);

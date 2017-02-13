@@ -60,6 +60,7 @@ class UsersController extends CI_Controller {
 			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
 			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>';
 		}
+		// USER LEVEL == 4
 		$this->load->view('users/pages/'.$tpl, $data);
 	}
 
@@ -425,5 +426,54 @@ class UsersController extends CI_Controller {
 		$obj = json_decode(file_get_contents('php://input'));
 		echo json_encode( [ 'response' => $this->files->copy($obj,$parameter_id) ] );
 	}
+
+	/*
+	| -------------------------------------------------------------------------
+	| EVALUATOR
+	| -------------------------------------------------------------------------
+	*/
+	public function evaluator_page($tpl)
+	{
+
+		$data = array(
+			'tpl' => $tpl,
+		);
+
+		if ( $tpl == 'dashboard' ) {
+			$data['tpl'] = 'users';
+			$data['tpl2'] = 'create-user';
+			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
+			$data['courses'] = $this->course->get();
+		} elseif ( $tpl == 'users' ) {
+			$data['tpl'] = 'users';
+			$data['tpl2'] = 'users';
+			$data['users'] = $this->users->get_all_users_by_course($this->session->userdata('course_id'));
+			// Load Custom Scripts in footer
+			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
+			$data['scripts'] .= '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/admin/users.js').'"></script>';
+		} elseif ( $tpl == 'area' ) {
+			$data['tpl'] = 'area';
+			$data['tpl2'] = 'area';
+			$data['areas'] = $this->area->get_by_course_id($this->session->userdata('course_id'));
+			// Load Custom Scripts in footer
+			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
+
+			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>';
+		} elseif ( $tpl == 'create-area' ) {
+			$data['tpl'] = 'area';
+			$data['tpl2'] = 'create-area';
+			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
+			$data['users'] = $this->users->get_all_users_by_course($this->session->userdata('course_id'));
+		} 
+		// USER_LEVEL == 3
+		elseif ( $tpl == 'my-area' ) {
+			$data['tpl'] = 'my-area';
+			$data['data'] = $this->area->my_area($this->session->userdata('id'));
+			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
+			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>';
+		}
+		$this->load->view('users/pages/evaluator/'.$tpl, $data);
+	}
+ 
 
 }

@@ -101,32 +101,59 @@
                             <li class="header">NOTIFICATIONS</li>
                             <li class="body">
                                 <ul class="menu">
-
-                                    <li ng-repeat="notif in notifications">
-                                        <a href="/user/area/{{ notif.area_id }}?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 2">
+                                    <!-- IF CHAIRMAN -->
+                                    <li ng-repeat="notif in notifications" ng-if="userdata.user_level == 2">
+                                        <a href="/user/area/{{ notif.area_area_id }}?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 2">
                                             <div class="icon-circle bg-light-green" ng-if="notif.notification_type == 2">
                                                 <i class="material-icons">mode_edit</i>
                                             </div>
                                             <div class="menu-info">
                                                 <h4 ng-if="notif.notification_type == 2">{{ notif.fname }} submitted an entry</h4>
                                                 <p>
-                                                    <i class="material-icons">access_time</i> {{ dateParser(notif.created_at) | date: "MMM dd, yyyy ' ' hh:mma" : '+08' }}
+                                                    <i class="material-icons">access_time</i> {{ dateParser(notif.notification_created_at) | date: "MMM dd, yyyy ' ' hh:mma" : '+08' }}
                                                 </p>
                                             </div>
                                         </a>
 
-                                        <a href="/user/area/{{ notif.area_id }}?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 1">
+                                        <a href="/user/area/{{ notif.area_area_id }}?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 1">
                                             <div class="icon-circle bg-blue-grey" ng-if="notif.notification_type == 1">
                                                 <i class="material-icons">comment</i>
                                             </div>
                                             <div class="menu-info">
                                                 <h4 ng-if="notif.notification_type == 1">{{ notif.fname }} commented on an entry</h4>
                                                 <p>
-                                                    <i class="material-icons">access_time</i> {{ dateParser(notif.created_at) | date: "MMM dd, yyyy ' ' hh:mma" : '+08' }}
+                                                    <i class="material-icons">access_time</i> {{ dateParser(notif.notification_created_at) | date: "MMM dd, yyyy ' ' hh:mma" : '+08' }}
+                                                </p>
+                                            </div>
+                                        </a>
+                                    </li>
+
+
+                                    <!-- IF SUB-CHAIRMAN -->
+                                    <li ng-repeat="notif in notifications" ng-if="userdata.user_level == 3">
+                                        <a href="/user/area/{{ belongsToArea.id }}?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 2">
+                                            <div class="icon-circle bg-light-green" ng-if="notif.notification_type == 2">
+                                                <i class="material-icons">mode_edit</i>
+                                            </div>
+                                            <div class="menu-info">
+                                                <h4 ng-if="notif.notification_type == 2">{{ notif.fname }} submitted an entry</h4>
+                                                <p>
+                                                    <i class="material-icons">access_time</i> {{ dateParser(notif.notification_created_at) | date: "MMM dd, yyyy ' ' hh:mma" : '+08' }}
                                                 </p>
                                             </div>
                                         </a>
 
+                                        <a href="/user/area/{{ belongsToArea.id }}?notification=seened&id={{notif.notification_id}}#comments" ng-if="notif.notification_type == 1">
+                                            <div class="icon-circle bg-blue-grey" ng-if="notif.notification_type == 1">
+                                                <i class="material-icons">comment</i>
+                                            </div>
+                                            <div class="menu-info">
+                                                <h4 ng-if="notif.notification_type == 1">{{ notif.fname }} commented on an entry</h4>
+                                                <p>
+                                                    <i class="material-icons">access_time</i> {{ dateParser(notif.notification_created_at) | date: "MMM dd, yyyy ' ' hh:mma" : '+08' }}
+                                                </p>
+                                            </div>
+                                        </a>
                                     </li>
                                 </ul>
                             </li>
