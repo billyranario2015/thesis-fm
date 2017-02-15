@@ -224,6 +224,26 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 			} );			
 		}
 	}
+
+	// ADD SUBMISSION TO IN-HOUSE EVALUATOR
+	$scope.submitToEvaluator = function submitToEvaluator() {
+		var userdata = settings.userdata();
+		if ( confirm( 'Are you sure you want to send entry to In-House Evaluator?' ) ) {
+			userdata.success( function (response) {
+				$http.post( settings.base_url + 'api/submission/evaluate', response )
+				.success(function (data_response) {
+					console.log(data_response);
+					if ( data_response.submission > 0 ) {
+						alert( 'Successfull submitted. ' );
+						location.reload();
+					} else {
+						alert( 'Error on submission. Please try again later' );
+					}
+				})
+			} );			
+		}
+	}
+
 	// ADD COMMENT 
 	$scope.commentFields = {};
 	$scope.addComment = function addComment(comment_type,area_id) {
@@ -261,5 +281,16 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 	    	$scope.loader_search = false;
 	    	$scope.related_file_count = response.response.length;
 		} );
+	}
+
+	$scope.submission_status = 0;
+	$scope.updateEntryStatus = function updateEntryStatus(submission_id , user_id) {
+		console.log( $scope.submission_status, submission_id );
+		$http.post( settings.base_url + 'api/submission/status_update/', { submission_status : $scope.submission_status, id : submission_id , user_id : user_id } )
+		.success( function (response) {
+			console.log( response.response );
+			location.reload();
+		} );
+
 	}
 });

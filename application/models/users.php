@@ -31,6 +31,19 @@ class Users extends CI_Model {
 			return array();
 	}
 
+	public function get_course_chairman($course_id)
+	{
+		$this->db->where('course_id',$course_id)
+				 ->where('user_level',2);
+		$query = $this->db->get($this->table);
+
+
+		if ($query->num_rows() > 0)
+			return $query->row_array();
+		else
+			return array();
+	}
+
 	public function get_user_auth($data)
 	{
 		$this->db->where('email',$data['email'])

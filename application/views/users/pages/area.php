@@ -15,8 +15,21 @@
                         <div class="header">
                             <h2>
                                 LISTS OF AREAS
+                                <?php if ($this->session->userdata('user_level') == 2 ) { ?>
+                                <!-- NOT YET SUBMITTED -->
+                                <button class="btn btn-success waves-effect btn-lg pull-right" style="position: relative;top: -8px;" 
+                                    ng-click="submitToEvaluator()" ng-if="submission_count == 0">
+                                        Submit Entries to In-house Evaluator
+                                </button>
+
+                                <button class="btn bg-deep-purple waves-effect btn-lg pull-right" style="position: relative;top: -8px;" ng-if="submission_count > 0">
+                                        <span ng-if="submission_data.submission_status != 1">Entry Submitted on {{ dateParser(submission_data.created_at) | date: "MMM dd, yyyy ' ' hh:mma" : '+08' }}</span>
+                                        <span ng-if="submission_data.submission_status == 1">ENTRY APPROVED</span>
+                                </button>
+                                <!-- SUBMITTED -->
+                                <?php } ?>
                             </h2>
-                            <ul class="header-dropdown m-r--5">
+                            <!-- <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         <i class="material-icons">more_vert</i>
@@ -25,7 +38,7 @@
                                         <li><a href="<?php echo base_url( 'user/create-area' ); ?>" class=" waves-effect waves-block">Add Area</a></li>
                                     </ul>
                                 </li>
-                            </ul>
+                            </ul> -->
                         </div>
                         <div class="body table-responsive">
                             <table class="table table-hover">

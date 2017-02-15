@@ -123,6 +123,10 @@ $route['api/search_for_file']['POST']					= 'UsersController/search_file';
 
 // EVALUATOR 
 $route['evaluator/(:any)']['GET']						= 'UsersController/evaluator_page/$1';
+$route['evaluator/user/(:num)/area']['GET']				= 'UsersController/evaluate_area/$1';
+$route['evaluator/user/(:num)/area/(:num)']['GET']		= 'UsersController/evaluate_area_content/$1/$2';
+$route['evaluator/user/(:num)/area/(:num)/parameter/(:num)']['GET']		= 'UsersController/evaluate_parameter_content/$1/$2/$3';
+
 
 // -------GET FILES
 $route['api/get_uploads/(:num)']['GET']					= 'UsersController/get_uploads/$1';
@@ -145,6 +149,8 @@ $route['api/delete/parameter']['POST']					= 'UsersController/delete_parameter';
 | -------------------------------------------------------------------------
 */
 $route['api/submission/area']['POST']					= 'SubmissionController/addSubmissionArea';
+$route['api/submission/evaluate']['POST']				= 'SubmissionController/addSubmissionEvaluator';
+$route['api/submission/status_update']['POST']			= 'SubmissionController/status_update';
 
 /*
 | -------------------------------------------------------------------------

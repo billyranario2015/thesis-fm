@@ -442,38 +442,111 @@ class UsersController extends CI_Controller {
 		if ( $tpl == 'dashboard' ) {
 			$data['tpl'] = 'users';
 			$data['tpl2'] = 'create-user';
-			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
+			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>';
 			$data['courses'] = $this->course->get();
-		} elseif ( $tpl == 'users' ) {
-			$data['tpl'] = 'users';
-			$data['tpl2'] = 'users';
-			$data['users'] = $this->users->get_all_users_by_course($this->session->userdata('course_id'));
-			// Load Custom Scripts in footer
-			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
-			$data['scripts'] .= '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/admin/users.js').'"></script>';
-		} elseif ( $tpl == 'area' ) {
-			$data['tpl'] = 'area';
-			$data['tpl2'] = 'area';
-			$data['areas'] = $this->area->get_by_course_id($this->session->userdata('course_id'));
-			// Load Custom Scripts in footer
-			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
 
-			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>';
-		} elseif ( $tpl == 'create-area' ) {
-			$data['tpl'] = 'area';
-			$data['tpl2'] = 'create-area';
-			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
-			$data['users'] = $this->users->get_all_users_by_course($this->session->userdata('course_id'));
-		} 
-		// USER_LEVEL == 3
-		elseif ( $tpl == 'my-area' ) {
-			$data['tpl'] = 'my-area';
-			$data['data'] = $this->area->my_area($this->session->userdata('id'));
-			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
-			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>';
+
+			// GET CHAIRMAN OF THE COURSE
+			$data['chairman_info'] = $this->users->get_course_chairman($this->session->userdata('course_id'));
+
+			// CHECK IF ALREADY SUBMITTED AN ENTRY FOR IN-HOUSE EVALUATOR
+			$data['submitted_entry'] = $this->submission->submitted_entry( 
+				array(
+					'course_id' 		=> $this->session->userdata('course_id'),
+					'user_id'			=> $data['chairman_info']['id'], // Submitted by 
+					'submission_type'	=> 2 // 2 = SUBMIT TO IN-HOUSE EVALUATOR 
+				) 
+			);
+
 		}
 		$this->load->view('users/pages/evaluator/'.$tpl, $data);
 	}
- 
+ 	
+
+ 	public function evaluate_area($user_id)
+ 	{
+
+ 		// get user's course_id
+ 		$chairman_info = $this->users->get_user_by_id($user_id);
+
+
+ 		$data = array(
+ 			'areas'			=> $this->area->get_by_course_id($chairman_info['course_id']),
+ 			'chairman_info' => $chairman_info,
+ 		);
+
+	
+		if ( @$_GET['notification'] ) {
+			// UPDATE NOTIFICATION STATUS
+			$this->notification->update( [
+				'id'=> $_GET['id'],
+				'notification_status' => 1 // Seened
+			] );
+		}
+
+
+
+		$this->load->view('users/pages/evaluator/evaluatee', $data);
+ 	}
+
+ 	public function evaluate_area_content($user_id,$area_id)
+ 	{
+
+ 		// get user's course_id
+ 		$chairman_info = $this->users->get_user_by_id($user_id);
+
+
+		$data = array(
+			'tpl' => 'area',
+			'data' => $this->area->get_by_id($area_id),
+			'users' => $this->users->get_user_by_id($user_id),
+			'tab'	=> 'templates',
+			'action' => 'templates',
+			'chairman_info' => $chairman_info,
+			'area_id' => $area_id,
+			'user_id' => $user_id,
+			'scripts'=> '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>',
+		);
+
+		if ( @$_GET['notification'] ) {
+			// UPDATE NOTIFICATION STATUS
+			$this->notification->update( [
+				'id'=> $_GET['id'],
+				'notification_status' => 1 // Seened
+			] );
+		}
+
+		$this->load->view('users/pages/evaluator/evaluate-area-content',$data);
+ 	}
+
+ 	public function evaluate_parameter_content($user_id,$area_id,$parameter_id)
+ 	{
+		// get user's course_id
+ 		$chairman_info = $this->users->get_user_by_id($user_id);
+
+		$data = array(
+			'tpl' => 'area',
+			'data' => $this->area->get_by_id($area_id),
+			'users' => $this->users->get_user_by_id($user_id),
+			'tab'	=> 'templates',
+			'action' => 'templates',
+			'chairman_info' => $chairman_info,
+			'area_id' => $area_id,
+			'param_id' => $parameter_id,
+			'param_info' => $this->area_params->get_by_id($parameter_id),
+			'user_id' => $user_id,
+			'scripts'=> '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>',
+		);
+
+		if ( @$_GET['notification'] ) {
+			// UPDATE NOTIFICATION STATUS
+			$this->notification->update( [
+				'id'=> $_GET['id'],
+				'notification_status' => 1 // Seened
+			] );
+		}
+
+		$this->load->view('users/pages/evaluator/evaluate-parameter-content',$data);
+ 	}
 
 }

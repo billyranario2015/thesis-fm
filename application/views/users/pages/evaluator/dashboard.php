@@ -1,48 +1,60 @@
 <?php $this->load->view('header'); ?>
-    <section class="content">
+    <section class="content" ng-controller="AreasController">
         <div class="container-fluid">
-            <div class="block-header">
-                <h2>DASHBOARD</h2>
-            </div>
             <div class="row clearfix">
-                <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
+                <div class="col-md-12">
                     <div class="card">
                         <div class="header">
                             <h2>
-                                Activity Feeds
-                                <small>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</small>
+                                ENTRIES
                             </h2>
                         </div>
                         <div class="body">
-                            <p class="lead">
-                                Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo.
-                            </p>
-                            <p>
-                                Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget
-                            </p>
-                            <p>
-                                Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
-                    <div class="card">
-                        <div class="header">
-                            <h2>
-                                Activity Feeds
-                            </h2>
-                        </div>
-                        <div class="body">
-                            <p class="lead">
-                                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
-                            </p>
-                            <p>
-                                Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget
-                            </p>
-                            <p>
-                                Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.
-                            </p>
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>NAME</th>
+                                            <th>ROLE</th>
+                                            <th>STATUS</th>
+                                            <th>CONTENT</th>
+                                            <th>ACTION</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <?php foreach ($submitted_entry as $key => $entry) { ?>
+                                        <tr>
+                                            <th scope="row"><?php echo $key + 1; ?></th>
+                                            <td><?php echo $entry['fname'].' '.$entry['lname']; ?></td>
+                                            <td><?php echo $entry['role']; ?></td>
+                                            <td>
+                                                <?php if ( $entry['submission_status'] == 1 ) { // APPROVED ?>
+                                                <label class="label label-success">APPROVED</label>
+                                                <?php } elseif (  $entry['submission_status'] == 2 ) { // NEEDs TO REVISE ?>
+                                                <label class="label label-warning">NEEDs REVISIONS</label>
+                                                <?php } elseif (  $entry['submission_status'] == 3 ) { // UNAPPROVED ?> 
+                                                <label class="label label-default">UNAPPROVED</label>
+                                                <?php } ?>
+                                            </td>
+                                            <td>
+                                                <a href="/evaluator/user/<?php echo $entry['u_user_id']; ?>/area/">
+                                                    VIEW
+                                                </a>
+                                            </td>
+                                            <td>
+                                                
+                                                <select class="form-control" ng-model="submission_status" ng-change="updateEntryStatus(<?php echo $entry['submission_id'] ?> , <?php echo $entry['u_user_id']; ?>)">
+                                                    <option value="">Choose Action</option>
+                                                    <option value="1">Approve Entry</option>
+                                                    <option value="3">Mark as Unapproved</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

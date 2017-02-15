@@ -31,6 +31,21 @@ class submission extends CI_Model {
 			return array();
 	}
 
+	public function submitted_entry($data)
+	{
+		$this->db->select( 'users.*, users.id as u_user_id, submission.*, submission.id as submission_id' )
+				 ->where('submission.course_id',$data['course_id'])
+				 ->where('submission.user_id',$data['user_id'])
+				 ->where('submission.submission_type',$data['submission_type'])
+				 ->join( 'users', 'users.id = submission.user_id' );
+		$query = $this->db->get($this->table);
+
+		if ($query->num_rows() > 0)
+			return $query->result_array();
+		else
+			return array();
+	}
+
 	public function update($data)
 	{
 		$this->db->where('id',$data->id);

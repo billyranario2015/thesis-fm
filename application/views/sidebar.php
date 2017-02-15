@@ -95,12 +95,13 @@
 
                      <!-- USER_LEVEL == 2 -->
                     <?php } elseif( $this->session->userdata( 'user_level' ) == 2 ) { ?>
-                    <li class="<?php if( isset( $tpl ) && $tpl == 'dashboard' ) echo 'active'; ?>">
+                    <!--li class="<?php if( isset( $tpl ) && $tpl == 'dashboard' ) echo 'active'; ?>">
                         <a href="<?php echo base_url( 'user/dashboard' ); ?>">
                             <i class="material-icons">home</i>
                             <span>Dashboard</span>
                         </a>
-                    </li>
+                    </li -->
+
                     <li class="<?php if( isset( $tpl ) && $tpl == 'area' ) echo 'active'; ?>">
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">poll</i>
@@ -150,7 +151,7 @@
                      <!-- USER_LEVEL == 4 -->
                     <?php } elseif( $this->session->userdata( 'user_level' ) == 4 ) { ?>
                     <li class="active">
-                        <a href="<?php echo base_url( 'user/my-area' ); ?>">
+                        <a href="<?php echo base_url( 'evaluator/dashboard/' ); ?>">
                             <i class="material-icons">home</i>
                             <span>Entries</span>
                         </a>
