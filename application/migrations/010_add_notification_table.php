@@ -57,6 +57,13 @@ class Migration_Add_Notification_Table extends CI_Migration {
                 'constraint' => 11,
                 'null' => true
             ),
+            // FOR COMMENTS
+            // * IF notification_type == 1 || NOTIFICATION TYPE == COMMENT
+            'area_id' => array(
+                'type' => 'INT',
+                'constraint' => 11,
+                'null' => true
+            ),
             /*
             | SUBMISSION TYPES
             | 1 = SUBMIT AREA TO CHAIRMAN 

@@ -103,7 +103,10 @@
                                 <ul class="menu">
                                     <!-- IF CHAIRMAN -->
                                     <li ng-repeat="notif in notifications" ng-if="userdata.user_level == 2">
-                                        <a href="/user/area/{{ notif.area_area_id }}?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 2">
+                                        <!-- 
+                                            ===== SUBMISSION
+                                         -->
+                                        <a href="/goto/user/{{ notif.u_user_id }}/area?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 2">
                                             <div class="icon-circle bg-light-green" ng-if="notif.notification_type == 2">
                                                 <i class="material-icons">mode_edit</i>
                                             </div>
@@ -114,8 +117,10 @@
                                                 </p>
                                             </div>
                                         </a>
-
-                                        <a href="/user/area/{{ notif.area_area_id }}?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 1">
+                                        <!-- 
+                                            ===== COMMENTS
+                                         -->
+                                        <a href="/goto/user/{{ notif.u_user_id }}/area?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 1">
                                             <div class="icon-circle bg-blue-grey" ng-if="notif.notification_type == 1">
                                                 <i class="material-icons">comment</i>
                                             </div>
@@ -127,12 +132,15 @@
                                             </div>
                                         </a>
 
-                                        <a href="/user/area/{{ notif.area_area_id }}?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 3">
-                                            <div class="icon-circle bg-blue-grey" ng-if="notif.notification_type == 1">
+                                        <!-- 
+                                            ===== ENTRY STATUS
+                                         -->
+                                        <a href="/user/area?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 3">
+                                            <div class="icon-circle bg-green">
                                                 <i class="material-icons">thumb_up</i>
                                             </div>
                                             <div class="menu-info">
-                                                <h4 ng-if="notif.notification_type == 1">{{ notif.fname }} approved your entry</h4>
+                                                <h4>{{ notif.fname }} updated your entry status</h4>
                                                 <p>
                                                     <i class="material-icons">access_time</i> {{ dateParser(notif.notification_created_at) | date: "MMM dd, yyyy ' ' hh:mma" : '+08' }}
                                                 </p>

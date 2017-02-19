@@ -61,8 +61,8 @@
                                         <div class="form-line">
                                             <select class="form-control show-tick selectpicker" name="user_level" required>
                                                 <option value="2" disabled>Admin</option>
-                                                <option value="3" <?php if ( $this->session->flashdata('user_level') == 3 ) echo 'selected' ?>>User</option>
-                                                <option value="4" <?php if ( $this->session->flashdata('user_level') == 4 ) echo 'selected' ?>>Guest</option>
+                                                <option value="3" <?php if ( $this->session->flashdata('user_level') == 3 ) echo 'selected' ?>>Sub-Chairman</option>
+                                                <!--option value="4" <?php if ( $this->session->flashdata('user_level') == 4 ) echo 'selected' ?>>Guest</option-->
                                             </select>
                                         </div>
                                     </div>

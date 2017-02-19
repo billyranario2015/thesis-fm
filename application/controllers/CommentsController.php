@@ -22,6 +22,7 @@ class CommentsController extends CI_Controller {
 			'notification_type'		=> 1,
 			// TARGET -> AREA ID
 			'target_id' 			=> $target_id,
+			'area_id' 				=> $obj->target_id,
 			'notification_status' 	=> 0,
 		];
 

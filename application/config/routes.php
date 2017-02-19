@@ -83,7 +83,10 @@ $route['organization/update']['POST']					= 'AdminController/update_organization
 // USER
 $route['user/create']['POST']							= 'AdminController/create_user';
 $route['admin/user/(:num)/edit']['GET']					= 'AdminController/edit_user/$1';
+// -- profile
+$route['profile/(:num)/edit']['GET']					= 'AdminController/edit_user_profile/$1';
 $route['user/update']['POST']							= 'AdminController/update_user';
+$route['user/update_profile']['POST']					= 'AdminController/update_user_profile';
 // COURSE
 $route['course/create']['POST']							= 'AdminController/create_course';
 $route['admin/course/(:num)/edit']['GET']				= 'AdminController/edit_course/$1';
@@ -160,3 +163,9 @@ $route['api/submission/status_update']['POST']			= 'SubmissionController/status_
 $route['api/comment/create']['POST']					= 'CommentsController/addComment';
 $route['api/comments/area/(:num)']['GET']				= 'CommentsController/getAreaComments/$1';
 
+/*
+| -------------------------------------------------------------------------
+| NOTIFICATION
+| -------------------------------------------------------------------------
+*/
+$route['goto/user/(:num)/area']['GET']					= 'UsersController/redirectToNotificationContent/$1';

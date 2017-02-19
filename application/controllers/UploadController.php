@@ -9,7 +9,7 @@ class UploadController extends CI_Controller {
 	public function upload()
 	{
 		$config = array ( 
-			'upload_path' 	=> 'uploads/' ,
+			'upload_path' 	=> 'profile/' ,
 			'allowed_types'	=> '*' ,
 		);
 

@@ -10,6 +10,31 @@ class Area extends CI_Model {
 			return false; // error, fail on create
 	}
 
+	// Area Update
+	public function insert_sub_assignees($sub_assignees)
+	{
+		// Delete first the old lists of sub users of the area if exists
+		$deleteQuery = $this->db->delete('area_sub_users', array('area_id' => $sub_assignees[0]['area_id']) );	
+
+		if ( $this->db->insert_batch( 'area_sub_users' , $sub_assignees ) )
+			return $this->get_sub_assignees($sub_assignees[0]['area_id']);	// retrieve all assignees
+		else 
+			return false; // error, fail on create
+	}
+
+	public function get_sub_assignees($area_id)
+	{
+		$this->db->select('area_sub_users.*, area_sub_users.id as area_sub_users_id, users.*, users.id as user_id')
+				 ->where( 'area_id', $area_id )
+		         ->join( 'users', 'users.id = area_sub_users.assignee_id' );
+		$query = $this->db->get('area_sub_users');
+
+		if ($query->num_rows() > 0)
+			return $query->result_array();
+		else
+			return array();
+	}
+
 	public function get()
 	{
 		$query = $this->db->get($this->table);

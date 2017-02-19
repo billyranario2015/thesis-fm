@@ -40,12 +40,16 @@
                                         <td><b><?php echo $user['role']; ?></b></td>
                                         <td class="text-right">
                                             <?php if( $this->session->userdata('id') != $user['id'] ) { ?>
-                                                <a href="<?php echo base_url('user/'.$user['id'].'/edit') ?>" class="btn bg-blue waves-effect">
-                                                    <i class="material-icons">edit</i>
-                                                </a>
-                                                <a href="#" ng-click="deleteUser(<?php echo $user['id']; ?>)" class="btn bg-pink waves-effect">
-                                                    <i class="material-icons">delete_sweep</i>
-                                                </a> &nbsp;
+                                                <?php if ( $user['user_level'] != 4 ) { ?>
+                                                    <a href="<?php echo base_url('user/'.$user['id'].'/edit') ?>" class="btn bg-blue waves-effect">
+                                                        <i class="material-icons">edit</i>
+                                                    </a>
+                                                    <a href="#" ng-click="deleteUser(<?php echo $user['id']; ?>)" class="btn bg-pink waves-effect">
+                                                        <i class="material-icons">delete_sweep</i>
+                                                    </a> &nbsp;
+                                                <?php } else { ?>
+                                                    <b>It's the In-House Evaluator!</b>
+                                                <?php } ?>
                                             <?php } else { ?>
                                                 <b>It's you!</b>
                                             <?php } ?>

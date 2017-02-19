@@ -21,22 +21,29 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                UPDATE USER
+                                UPDATE PROFILE
                             </h2>
                         </div>
                         <div class="body table-responsive">
-                            <form method="POST" action="<?php echo base_url('user/user/update') ?>">
-                                <div class="col-sm-4">
+                            <form method="POST" action="<?php echo base_url('user/update_profile') ?>" enctype="multipart/form-data">
+                                <div class="col-sm-3">
+                                    <h2 class="card-inside-title">Change Profile Picture</h2>
+                                    <div class="form-group form-float form-group-md">
+                                        <div class="form-line">
+                                            <input type="file" name="fileupload" class="form-control">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-3">
                                     <h2 class="card-inside-title">First Name</h2>
                                     <div class="form-group form-float form-group-md">
                                         <div class="form-line">
                                             <input type="hidden" name="id" value="<?php echo $data['id'] ?>" class="form-control">
-                                            <input type="hidden" name="course_id" value="<?php echo $this->session->userdata('course_id') ?>" class="form-control">
                                             <input type="text" name="fname" value="<?php echo $data['fname'] ?>" class="form-control">
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
                                     <h2 class="card-inside-title">Middle Name</h2>
                                     <div class="form-group form-float form-group-md">
                                         <div class="form-line">
@@ -44,7 +51,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-sm-4">
+                                <div class="col-sm-3">
                                     <h2 class="card-inside-title">Last Name</h2>
                                     <div class="form-group form-float form-group-md">
                                         <div class="form-line">
@@ -52,28 +59,6 @@
                                         </div>
                                     </div>
                                 </div>
-                                <?php if ( ($this->session->userdata('user_level') != 3)  || ($this->session->userdata('user_level') == 4) ) { ?>
-                                <div class="col-sm-6">
-                                    <h2 class="card-inside-title">Role/Position</h2>
-                                    <div class="form-group form-float form-group-md">
-                                        <div class="form-line">
-                                            <input type="text" name="role" value="<?php echo $data['role'] ?>" class="form-control">
-                                        </div>
-                                    </div>
-                                </div> 
-                                <div class="col-sm-6">
-                                    <h2 class="card-inside-title">User Level</h2>
-                                    <div class="form-group form-float form-group-md">
-                                        <div class="form-line">
-                                            <select class="form-control show-tick selectpicker" name="user_level" required>
-                                                <option value="2" disabled>Admin</option>
-                                                <option value="3" <?php if ( $data['user_level'] == 3 ) echo 'selected' ?>>Sub-Chairman</option>
-                                                <!-- <option value="4" <?php if ( $data['user_level'] == 4 ) echo 'selected' ?>>Guest</option> -->
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div> 
-                                <?php } ?>
                                 <div class="col-sm-12">
                                     <h2 class="card-inside-title">Email</h2>
                                     <div class="form-group form-float form-group-md">

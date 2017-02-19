@@ -2,7 +2,6 @@
     <section class="content">
         <div class="container-fluid">
             <div class="block-header">
-                <h2>USER</h2>
                 <?php if ( $this->session->userdata('err_message') ) { ?>
                 <br>
                 <div class="alert alert-danger">
@@ -52,6 +51,7 @@
                                         </div>
                                     </div>
                                 </div>
+                                <?php if ( ($this->session->userdata('user_level') == 1)  || ($this->session->userdata('user_level') == 2) && $hide_fields == 0 ) { ?>
                                 <div class="col-sm-12">
                                     <h2 class="card-inside-title">Select Course</h2>
                                     <div class="form-group form-float form-group-md">
@@ -64,6 +64,7 @@
                                         </select>
                                     </div>
                                 </div>
+                                <?php if ( ($this->session->userdata('user_level') == 1)  || ($this->session->userdata('user_level') == 2) && $hide_fields == 0 ) { ?>
                                 <div class="col-sm-6">
                                     <h2 class="card-inside-title">Role/Position</h2>
                                     <div class="form-group form-float form-group-md">
@@ -72,6 +73,8 @@
                                         </div>
                                     </div>
                                 </div> 
+                                <?php } ?>
+
                                 <div class="col-sm-6">
                                     <h2 class="card-inside-title">User Level</h2>
                                     <div class="form-group form-float form-group-md">
@@ -79,12 +82,13 @@
                                             <select class="form-control show-tick selectpicker" name="user_level" required>
                                                 <option value="1" disabled>Superadmin</option>
                                                 <option value="2" <?php if ( $data['user_level'] == 2 ) echo 'selected' ?>>Admin</option>
-                                                <option value="3" <?php if ( $data['user_level'] == 3 ) echo 'selected' ?>>User</option>
+                                                <!--option value="3" <?php if ( $data['user_level'] == 3 ) echo 'selected' ?>>User</option-->
                                                 <option value="4" <?php if ( $data['user_level'] == 4 ) echo 'selected' ?>>In-house Evaluator</option>
                                             </select>
                                         </div>
                                     </div>
-                                </div> 
+                                </div>
+                                <?php } ?>
                                 <div class="col-sm-12">
                                     <h2 class="card-inside-title">Email</h2>
                                     <div class="form-group form-float form-group-md">
@@ -110,7 +114,7 @@
                                     </div>
                                 </div>
                                 <div class="col-sm-12">
-                                    <button type="submit" class="btn bg-cyan btn-lg waves-effect">CREATE</button>
+                                    <button type="submit" class="btn bg-cyan btn-lg waves-effect">UPDATE</button>
                                 </div>
                             </form>
                         </div>

@@ -123,15 +123,27 @@ class AdminController extends CI_Controller {
 			redirect( base_url( 'admin/create-user/' ) );
 		}
 	}
-	public function edit_user($id)
+	public function edit_user($id,$hide_fields = 0)
 	{
 		$data = array(
 			'tpl' => 'users',
 			'data' => $this->users->get_user_by_id($id),
 			'courses' => $this->course->get(),
+			'hide_fields' => $hide_fields,
 			'scripts' => '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>'
 		);
 		$this->load->view('admin/pages/edit-user',$data);
+	}
+	public function edit_user_profile($id,$hide_fields = 1)
+	{
+		$data = array(
+			'tpl' => 'profile',
+			'data' => $this->users->get_user_by_id($id),
+			'courses' => $this->course->get(),
+			'hide_fields' => $hide_fields,
+			'scripts' => '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>'
+		);
+		$this->load->view('admin/pages/edit-user-profile',$data);
 	}
 	public function update_user()
 	{
@@ -155,6 +167,59 @@ class AdminController extends CI_Controller {
 			} else {
 				$this->session->set_flashdata( 'err_message' , $response['message'] );
 				redirect( base_url( 'admin/create-user/' ) );
+			}
+		}
+	}
+	public function update_user_profile()
+	{
+		if ( $_POST['password'] != $_POST['confirm_password'] ) {
+			$this->session->set_flashdata( 'err_message' , 'Password did not match.' );
+			redirect( base_url( 'admin/user/'.$_POST['id'].'/edit/' ) );
+		} else {
+
+			unset( $_POST['confirm_password'] );
+
+			if ( !empty($_POST['password']) ) {
+				$_POST['password'] = sha1($_POST['password']);
+			} else {
+				unset( $_POST['password'] );
+			}
+
+			$response = $this->users->update($_POST);
+
+			// New User Info
+			$user_info = $this->users->get_user_by_id( $_POST['id'] );
+
+			// Session User Info 
+			$this->session->set_userdata($user_info);
+
+			if ( $response['status'] == 'success' ) {
+				// Upload Profile Picture
+                $this->load->library('upload', $this->set_upload_options());
+                if ( ! $this->upload->do_upload('fileupload'))
+                {
+                    // $error = array('error' => $this->upload->display_errors());
+                }
+                else
+                {
+                	// Delete Old Image in the profile/ folder
+					if ( file_exists( 'profile/' . $user_info['profile_image'] ) ) {
+						unlink( 'profile/' . $user_info['profile_image'] );
+					}
+
+                   	$user_data_arr = [
+                   		'profile_image' => $this->upload->data('file_name'),
+                   		'id'			=> $_POST['id']
+                   	];
+                   	$this->session->set_userdata($user_data_arr);
+                   	$this->users->update($user_data_arr);
+                }
+
+				$this->session->set_flashdata( 'message' , $response['message'] );
+				redirect( base_url( 'profile/'.$_POST['id'].'/edit' ) );
+			} else {
+				$this->session->set_flashdata( 'err_message' , $response['message'] );
+				redirect( base_url( 'profile/'.$_POST['id'].'/edit' ) );
 			}
 		}
 	}
@@ -204,5 +269,14 @@ class AdminController extends CI_Controller {
 		echo json_encode( [ 'response' => $this->course->delete($obj) ] );
 	}
 
+	public function set_upload_options()
+	{
+		$config = array();
+        $config['upload_path'] = 'profile/'; //give the path to upload the image in folder
+        $config['allowed_types'] = '*';
+        $config['max_size'] = '0';
+        $config['overwrite'] = FALSE;
+  		return $config;
+	}
 }
 

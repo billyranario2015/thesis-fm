@@ -35,12 +35,29 @@
                                             <select class="form-control show-tick selectpicker" name="assignee_id" required>
                                                 <option value="">---- Select user to assign area ----</option>
                                                 <?php foreach ($users as $key => $user) { ?>
-                                                <option value="<?php echo $user['id']; ?>"><?php echo $user['fname'] . ' ' . $user['mname']; ?></option>
+                                                    <?php if ( $user['user_level'] != 4 ) { ?>
+                                                        <option value="<?php echo $user['id']; ?>"><?php echo $user['fname'] . ' ' . $user['mname']; ?></option>
+                                                    <?php } ?>
                                                 <?php } ?>
                                             </select>
                                         </div>
                                     </div>
                                 </div>
+                                <!-- <div class="col-sm-12">
+                                    <h2 class="card-inside-title">Select Sub Users:</h2>
+                                    <div class="form-group form-float form-group-md">
+                                        <div class="form-line">
+                                            <select class="form-control show-tick selectpicker" name="assignee_id" multiple>
+                                                <option value="">---- Select sub-users to assign area ----</option>
+                                                <?php foreach ($users as $key => $user) { ?>
+                                                    <?php if ( $user['user_level'] != 4 ) { ?>
+                                                        <option value="<?php echo $user['id']; ?>"><?php echo $user['fname'] . ' ' . $user['mname']; ?></option>
+                                                    <?php } ?>
+                                                <?php } ?>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div> -->
                                 <div class="col-sm-12">
                                     <button type="submit" class="btn bg-cyan btn-lg waves-effect">CREATE</button>
                                 </div>

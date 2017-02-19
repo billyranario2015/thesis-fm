@@ -22,16 +22,27 @@ class Notification extends CI_Model {
 
 	public function get_by_id($id)
 	{
-		$this->db->select( 'notification.*, notification.id as notification_id, notification.created_at as notification_created_at, users.*, users.id as u_user_id, area.*, area.id as area_area_id' )
-				 ->where('target_id',$id)
+		$this->db->select( 'notification.*, notification.id as notification_id, notification.created_at as notification_created_at, users.*, users.id as u_user_id' )
+				 ->where('target_id', $id)
 				 ->where('notification.notification_status',0)
 				 ->join( 'users', 'notification.user_id = users.id' )
-				 ->join( 'area', 'area.assignee_id = users.id' )
+				 // ->join( 'area', 'area.assignee_id = users.id' )
 				 ->order_by( 'notification.created_at', 'desc' );
 		$query = $this->db->get($this->table);
 
 		if ($query->num_rows() > 0)
 			return $query->result_array();
+		else
+			return array();
+	}
+
+	public function get_notification_by_id($notification_id)
+	{
+		$this->db->where( 'id', $notification_id );
+		$query = $this->db->get($this->table);
+
+		if ($query->num_rows() > 0)
+			return $query->row_array();
 		else
 			return array();
 	}

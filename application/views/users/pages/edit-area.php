@@ -82,15 +82,7 @@
                                 <div role="tabpanel" class="tab-pane <?php if( $tab == 'entries' ) echo 'active'; ?> fade in" id="entries">
                                     <?php $this->load->view( 'users/pages/area/entries' ); ?>
                                 </div>
-                                 <!--  <div role="tabpanel" class="tab-pane  fade" id="messages">
-                                    <b>Message Content</b>
-                                    <p>
-                                        Lorem ipsum dolor sit amet, ut duo atqui exerci dicunt, ius impedit mediocritatem an. Pri ut tation electram moderatius.
-                                        Per te suavitate democritum. Duis nemore probatus ne quo, ad liber essent aliquid
-                                        pro. Et eos nusquam accumsan, vide mentitum fabellas ne est, eu munere gubergren
-                                        sadipscing mel.
-                                    </p>
-                                </div> -->
+
                                 <div role="tabpanel" class="tab-pane <?php if( $tab == 'settings' ) echo 'active'; ?> fade in" id="settings">
                                     <br>
                                     <form method="POST" action="<?php echo base_url('area/update') ?>">
@@ -104,15 +96,48 @@
                                             </div>
                                         </div>
                                         <div class="col-sm-12">
-                                            <h2 class="card-inside-title">Assign Area to:</h2>
+                                            <h2 class="card-inside-title">Assign Area to: (Main User)</h2>
                                             <div class="form-group form-float form-group-md">
                                                 <div class="form-line">
                                                     <select class="form-control show-tick selectpicker" name="assignee_id" required>
                                                         <option value="">---- Select user to assign area ----</option>
                                                         <?php foreach ($users as $key => $user) { ?>
-                                                        <option value="<?php echo $user['id']; ?>" <?php if( $data['assignee_id'] == $user['id'] ) echo "selected"; ?>>
-                                                            <?php echo $user['fname'] . ' ' . $user['mname']; ?>
-                                                        </option>
+                                                            <?php if( $user['user_level'] != 4 ) { ?>
+                                                            <option value="<?php echo $user['id']; ?>" <?php if( $data['assignee_id'] == $user['id'] ) echo "selected"; ?>>
+                                                                <?php echo $user['fname'] . ' ' . $user['mname']; ?>
+                                                            </option>
+                                                            <?php } ?>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-12">
+                                            <h2 class="card-inside-title">Select Sub-Users to manage this area: (Optional)</h2>
+                                            <div class="form-group form-float form-group-md">
+                                                <div class="form-line">
+                                                    <select class="form-control show-tick selectpicker" name="sub_assignee_id[]" multiple>
+                                                        <option value="">---- Select user to assign area ----</option>
+                                                        <?php foreach ($users as $key => $user) { ?>
+                                                            <?php if( $user['user_level'] != 4 ) { 
+                                                                    if( $data['assignee_id'] != $user['id'] ) {
+                                                                ?>
+
+                                                                    <option value="<?php echo $user['id']; ?>" <?php 
+
+                                                                        foreach ($sub_users as $key2 => $sub) {
+                                                                            if ($sub['user_id'] == $user['id']) {
+                                                                                echo 'selected';
+                                                                            }
+                                                                         } 
+
+                                                                    ?>>
+                                                                        <?php echo $user['fname'] . ' ' . $user['mname']; ?> 
+                                                                        <?php if ( $data['assignee_id'] == $user['id'] ) echo '<b>(Main Area User)</b>'; ?>
+                                                                    </option>
+                                                                    <?php
+                                                                    } 
+                                                                  } ?>
                                                         <?php } ?>
                                                     </select>
                                                 </div>
@@ -158,7 +183,7 @@
                                 <div class="media" ng-repeat="comment in comments">
                                     <div class="media-left">
                                         <a href="javascript:void(0);">
-                                            <img class="media-object" ng-src="<?php echo base_url('assets/admin/images/user.png') ?>" width="64" height="64">
+                                            <img class="media-object" ng-src="<?php echo base_url('profile') ?>/{{ comment.profile_image }}" width="64" height="64">
                                         </a>
                                     </div>
                                     <div class="media-body">

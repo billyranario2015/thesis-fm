@@ -83,7 +83,7 @@
                                 <div class="media" ng-repeat="comment in comments">
                                     <div class="media-left">
                                         <a href="javascript:void(0);">
-                                            <img class="media-object" ng-src="<?php echo base_url('assets/admin/images/user.png') ?>" width="64" height="64">
+                                            <img class="media-object" ng-src="<?php echo base_url('profile') ?>/{{ comment.profile_image }}" width="64" height="64">
                                         </a>
                                     </div>
                                     <div class="media-body">

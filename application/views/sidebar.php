@@ -4,18 +4,24 @@
             <!-- User Info -->
             <div class="user-info">
                 <div class="image">
-                    <img src="<?php echo base_url('assets/admin/images/user.png') ?>" width="48" height="48" alt="User" />
+                    <img src="<?php echo base_url('profile/'.$this->session->userdata('profile_image')) ?>" width="48" height="48" alt="User" />
                 </div>
                 <div class="info-container">
-                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php echo $this->session->userdata( 'fname' ) . ' ' . $this->session->userdata( 'lname' ); ?></div>
-                    <div class="email"><?php echo $this->session->userdata( 'role' ) . ' - ' .$this->session->userdata( 'email' ); ?></div>
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span ng-bind="userdata.fname"></span>&nbsp;
+                        <span ng-bind="userdata.lname"></span>
+                    </div>
+                    <div class="email">
+                        <span ng-bind="userdata.role"></span>&nbsp; - &nbsp;
+                        <span ng-bind="userdata.email"></span>
+                    </div>
                     <div class="btn-group user-helper-dropdown">
                         <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
                         <ul class="dropdown-menu pull-right">
                             <?php if ( $this->session->userdata( 'user_level' ) != 1 ) { ?>
-                            <li><a href="<?php echo base_url('/user/profile'); ?>"><i class="material-icons">person</i>Profile</a></li>    
+                            <li><a href="<?php echo base_url('/profile/'.$this->session->userdata('id').'/edit'); ?>"><i class="material-icons">person</i>Profile</a></li>    
                             <?php } else { ?>
-                            <li><a href="<?php echo base_url('/admin/profile'); ?>"><i class="material-icons">person</i>Profile</a></li>
+                            <li><a href="<?php echo base_url('/profile/'.$this->session->userdata('id').'/edit'); ?>"><i class="material-icons">person</i>Profile</a></li>
                             <?php } ?>
                             <li role="seperator" class="divider"></li>
                             <li><a href="<?php echo base_url('/logout'); ?>"><i class="material-icons">input</i>Sign Out</a></li>

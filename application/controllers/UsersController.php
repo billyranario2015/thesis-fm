@@ -43,6 +43,16 @@ class UsersController extends CI_Controller {
 			$data['tpl'] = 'area';
 			$data['tpl2'] = 'area';
 			$data['areas'] = $this->area->get_by_course_id($this->session->userdata('course_id'));
+
+			// For chairman_info
+			if ( @$_GET['notification'] ) {
+				// UPDATE NOTIFICATION STATUS
+				$this->notification->update( [
+					'id'=> $_GET['id'],
+					'notification_status' => 1 // Seened
+				] );
+			}
+
 			// Load Custom Scripts in footer
 			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
 
@@ -92,11 +102,13 @@ class UsersController extends CI_Controller {
 		}
 	}
 
-	public function edit_user($id)
+	public function edit_user($id,$hide_fields = 0)
 	{
 		$data = array(
 			'tpl' => 'users',
 			'data' => $this->users->get_user_by_id($id),
+			'hide_fields' => $hide_fields,
+			'scripts' => '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>'
 		);
 		$this->load->view('users/pages/edit-user',$data);
 	}
@@ -153,6 +165,7 @@ class UsersController extends CI_Controller {
 			'tpl' => 'area',
 			'data' => $this->area->get_by_id($id),
 			'users' => $this->users->get_all_users_by_course($this->session->userdata('course_id')),
+			'sub_users' => $this->area->get_sub_assignees($id),
 			'tab'	=> 'templates',
 			'action' => 'templates',
 			'scripts'=> '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>',
@@ -182,6 +195,22 @@ class UsersController extends CI_Controller {
 		$_POST['check_area'] = 1;
 		$is_assigned = $this->area->check_if_assigned($_POST);
 
+		// Insert Sub Assignee IDs
+		$sub_assignees = [];
+
+		if (isset($_POST['sub_assignee_id']) && (count($_POST['sub_assignee_id']) > 0) ) {
+			foreach ($_POST['sub_assignee_id'] as $key => $sub) {
+				$sub_assignees[] = [
+					'area_id'		=> $_POST['id'],
+					'assignee_id'	=> $sub,
+					'course_id'		=> $this->session->userdata('course_id'),
+				];
+			}
+			$sub_assignees_status = $this->area->insert_sub_assignees($sub_assignees);
+
+			// UNSET $_POST['sub_assignee_id']
+			unset( $_POST['sub_assignee_id'] );
+		}
 
 		if ( !empty($is_assigned) ) {
 			if ( $is_assigned['assignee_id'] == $_POST['assignee_id'] ) {
@@ -246,6 +275,7 @@ class UsersController extends CI_Controller {
 			$data['tab'] = 'templates';
 			$data['action'] = $tpl;
 		} elseif ( $tpl == 'settings' ) {
+			$data['sub_users'] = $this->area->get_sub_assignees($id);
 			$data['tab'] = 'settings';
 			$data['action'] = $tpl;
 			$data['scripts'] .= '<br><script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
@@ -547,6 +577,36 @@ class UsersController extends CI_Controller {
 		}
 
 		$this->load->view('users/pages/evaluator/evaluate-parameter-content',$data);
+ 	}
+
+ 	public function redirectToNotificationContent($user_id)
+ 	{	
+ 		// Get User Info - USER
+ 		$user = $this->users->get_user_by_id($user_id);
+
+ 		// Get User Info - AREA
+ 		$user_area = $this->area->my_area($user_id);
+
+ 		// Get Notification
+ 		$notification = $this->notification->get_notification_by_id($_GET['id']);
+
+ 		// Update Notification Status
+		if ( @$_GET['notification'] ) {
+			// UPDATE NOTIFICATION STATUS
+			$this->notification->update( [
+				'id'=> $_GET['id'],
+				'notification_status' => 1 // Seened
+			] );
+		}
+ 		// Redirect to Notification Content
+ 		if ( $notification['notification_type'] == 1 ) { // if notification_type is a 1 
+ 			redirect( base_url( 'user/area/'.$notification['area_id']) );
+ 		} else {
+ 			redirect( base_url( 'user/area/'.$user_area['id']) );
+ 		}
+
+ 		var_dump($notification);
+
  	}
 
 }

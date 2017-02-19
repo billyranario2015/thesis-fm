@@ -248,6 +248,7 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 	$scope.commentFields = {};
 	$scope.addComment = function addComment(comment_type,area_id) {
 		$scope.commentFields.target_id = area_id;
+		// $scope.commentFields.area_id   = area_id;
 		$scope.commentFields.comment_type = comment_type;
 		console.log( $scope.commentFields );
 		$http.post( settings.base_url + 'api/comment/create', $scope.commentFields )
