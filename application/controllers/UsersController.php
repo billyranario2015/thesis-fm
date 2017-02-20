@@ -66,7 +66,16 @@ class UsersController extends CI_Controller {
 		// USER_LEVEL == 3
 		elseif ( $tpl == 'my-area' ) {
 			$data['tpl'] = 'my-area';
+			/*
+			|  GET MAIN AREA ASSIGNED TO CURRENT  SUB CHAIRMAN
+			*/
 			$data['data'] = $this->area->my_area($this->session->userdata('id'));
+
+			/*
+			|  LIST ALL LINKED AREAS ASSIGNED TO CURRENT SUB CHAIRMAN
+			*/
+			$data['linked_areas'] = $this->area->get_linked_areas($this->session->userdata('id'));
+
 			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
 			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>';
 		}

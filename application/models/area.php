@@ -35,6 +35,19 @@ class Area extends CI_Model {
 			return array();
 	}
 
+	public function get_linked_areas($user_id)
+	{
+		$this->db->select('area_sub_users.*,area_sub_users.id as area_sub_users_id, area.*, area.id as area_area_id')
+				 ->where( 'area_sub_users.assignee_id', $user_id )
+				 ->join( 'area', 'area_sub_users.area_id = area.id' );
+		$query = $this->db->get('area_sub_users');
+
+		if ($query->num_rows() > 0)
+			return $query->result_array();
+		else
+			return array();
+	}
+
 	public function get()
 	{
 		$query = $this->db->get($this->table);

@@ -150,7 +150,7 @@
                     <li class="active">
                         <a href="<?php echo base_url( 'user/my-area' ); ?>">
                             <i class="material-icons">home</i>
-                            <span>Assigned Area</span>
+                            <span>Assigned Areas</span>
                         </a>
                     </li>
 
