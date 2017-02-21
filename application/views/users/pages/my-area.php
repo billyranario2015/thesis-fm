@@ -66,10 +66,10 @@
                                     <!-- FOR MAIN AREA ASSIGNED TO CURRENT SUB CHAIRMAN -->
                                     <?php if( count($data) > 0 ) { ?>
                                     <tr id="main-area">
-                                        <th scope="row">1</th>
-                                        <td><?php echo $data['area_name'] ?></td>
-                                        <td>MAIN</td>
-                                        <td class="text-right">
+                                        <th scope="row" style="vertical-align: middle;">1</th>
+                                        <td  style="vertical-align: middle;"><?php echo $data['area_name'] ?></td>
+                                        <td  style="vertical-align: middle;"><b>MAIN AREA</b></td>
+                                        <td  style="vertical-align: middle;" class="text-right">
                                             <a href="<?php echo base_url('user/area/'.$data['id']) ?>" class="btn bg-blue waves-effect">
                                                 <i class="material-icons">edit</i>
                                             </a>
@@ -78,12 +78,23 @@
                                     <?php } ?>
 
                                     <!-- FOR ALL LINKED AREAS ASSIGNED TO CURRENT SUB CHAIRMAN -->
-                                    <?php foreach ($linked_areas as $key => $area) { ?>
-                                    <tr id="area">
-                                        <th scope="row"><?php echo (++$key + 1); ?></th>
-                                        <td><?php echo $area['area_name'] ?></td>
-                                        <td>SUB AREA</td>
-                                        <td class="text-right">
+                                    <?php 
+                                    $has_main_area = count($data);
+
+
+                                    foreach ($linked_areas as $key => $area) { 
+                                        $count = 1;
+                                        if ( $has_main_area != 0 ) {
+                                            $count = (++$key + 1);
+                                        } else {
+                                            $count = (++$key);
+                                        }
+                                    ?>
+                                    <tr id="area" valign="middle">
+                                        <th scope="row"><?php echo $count; ?></th>
+                                        <td  style="vertical-align: middle;"><?php echo $area['area_name'] ?></td>
+                                        <td  style="vertical-align: middle;"><b>SUB AREA</b></td>
+                                        <td  style="vertical-align: middle;" class="text-right">
                                             <a href="<?php echo base_url('user/area/'.$area['area_area_id']) ?>" class="btn bg-blue waves-effect">
                                                 <i class="material-icons">edit</i>
                                             </a>

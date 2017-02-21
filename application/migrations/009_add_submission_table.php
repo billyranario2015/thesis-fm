@@ -55,6 +55,15 @@ class Migration_Add_Submission_Table extends CI_Migration {
                 'constraint' => 11,
                 'default' => 3
             ),
+            /*
+            | AREA SUBMISSION
+            | ONLY IF SUBMISSION TYPE == 1
+            */   
+            'area_id' => array(
+                'type' => 'INT',
+                'constraint' => 11,
+                'null' => true
+            ),
             'created_at' => array(
                 'type' => 'TIMESTAMP',
             ),

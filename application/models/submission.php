@@ -46,6 +46,17 @@ class submission extends CI_Model {
 			return array();
 	}
 
+	public function get_submission_by_areaID($area_id)
+	{
+		$this->db->where('area_id',$area_id);
+		$query = $this->db->get($this->table);	
+		
+		if ($query->num_rows() == 1)
+			return $query->row_array();
+		else
+			return array();		
+	}
+
 	public function update($data)
 	{
 		$this->db->where('id',$data->id);

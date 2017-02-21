@@ -1,6 +1,6 @@
 <?php $this->load->view('header'); ?>
 
-    <section class="content" ng-controller="AreasController" ng-init="getParameters(<?php echo $data['id'] ?>);getCleanParameters(<?php echo $data['id'] ?>)">
+    <section class="content" ng-controller="AreasController" ng-init="getParameters(<?php echo $data['id'] ?>);getCleanParameters(<?php echo $data['id'] ?>);getSubmissionStatus(<?php echo $data['id'] ?>)">
         <div class="container-fluid">
             <div class="block-header">
                 <?php if ( $this->session->flashdata('message') ) { ?>
@@ -25,7 +25,7 @@
                                 <?php if ($this->session->userdata('user_level') == 3 ) { ?>
                                 <!-- NOT YET SUBMITTED -->
                                 <button class="btn bg-deep-purple waves-effect btn-lg pull-right" style="position: relative;top: -8px;" 
-                                    ng-click="submitToChairman()" ng-if="submission_count == 0">
+                                    ng-click="submitToChairman(<?php echo $data['id'] ?>)" ng-if="submission_count == 0">
                                         Submit Entries
                                 </button>
 

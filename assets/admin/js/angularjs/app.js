@@ -33,16 +33,31 @@ fm.controller( "MainController" , function( $scope, $http, $timeout, settings, $
 	setTimeout(function() {
 		$scope.userdata = userInfo.userdata;
 		$scope.notifications = userInfo.notifications;
-		$scope.submission_data = userInfo.submission;
+		// $scope.submission_data = userInfo.submission;
 		$scope.belongsToArea = userInfo.belongsToArea;
-		if ( typeof userInfo.submission['id'] !== 'undefined' && userInfo.submission['id'] !== null ) {
-			$scope.submission_count = 1;
-		} else {
-			$scope.submission_count = 0;
-		}
-		console.log( $scope.submission_data )
+		// if ( typeof userInfo.submission['id'] !== 'undefined' && userInfo.submission['id'] !== null ) {
+		// 	$scope.submission_count = 1;
+		// } else {
+		// 	$scope.submission_count = 0;
+		// }
+		// console.log( $scope.submission_data )
 		$scope.$apply();
 	}, 700);
+
+
+	// GET SUBMISSION STATUS OF THE CURRENT AREA
+	$scope.getSubmissionStatus = function getSubmissionStatus(area_id) {
+		$http.get( settings.base_url + 'api/submission/status/area/' + area_id )
+		.success( function (response) {
+			if ( typeof response.submission_status.id !== 'undefined' && response.submission_status.id !== null ) {
+				$scope.submission_count = 1;
+				$scope.submission_data = response.submission_status;
+			} else {
+				$scope.submission_count = 0;
+			}
+			console.log(response.submission_status);
+		} );
+	}
 
 	// ADD COMMENT 
 	$scope.commentFields = {};

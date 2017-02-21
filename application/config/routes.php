@@ -154,7 +154,7 @@ $route['api/delete/parameter']['POST']					= 'UsersController/delete_parameter';
 $route['api/submission/area']['POST']					= 'SubmissionController/addSubmissionArea';
 $route['api/submission/evaluate']['POST']				= 'SubmissionController/addSubmissionEvaluator';
 $route['api/submission/status_update']['POST']			= 'SubmissionController/status_update';
-
+$route['api/submission/status/area/(:num)']['GET']		= 'SubmissionController/get_submission_status/$1';
 /*
 | -------------------------------------------------------------------------
 | COMMENTS

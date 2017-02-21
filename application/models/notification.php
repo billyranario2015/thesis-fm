@@ -10,6 +10,14 @@ class Notification extends CI_Model {
 			return false; // error, fail on create
 	}
 
+	public function create_batch($data)
+	{
+		if ( $this->db->insert_batch( $this->table , $data ) )
+			return true;	// true
+		else 
+			return false; // error, fail on create
+	}
+
 	public function get()
 	{
 		$query = $this->db->get($this->table);

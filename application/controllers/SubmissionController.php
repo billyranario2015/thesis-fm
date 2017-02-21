@@ -17,6 +17,7 @@ class SubmissionController extends CI_Controller {
 			'course_id'			=> $obj->userdata->course_id,
 			'submission_type'	=> 1, // SUBMIT AREA TO CHAIRMAN 
 			'submission_status'	=> 3, // UNAPPROVED
+			'area_id'			=> $obj->userdata->area_id,
 		];
 
 		// GET Chairman's ID
@@ -34,6 +35,13 @@ class SubmissionController extends CI_Controller {
 		echo json_encode( [ 
 			'submission' => $this->submission->create($submission_arr),
 			'notification' => $this->notification->create($notification_arr),
+		] );
+	}
+
+	public function get_submission_status($area_id)
+	{
+		echo json_encode( [ 
+			'submission_status' => $this->submission->get_submission_by_areaID($area_id),
 		] );
 	}
 

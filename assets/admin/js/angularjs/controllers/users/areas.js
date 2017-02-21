@@ -207,10 +207,12 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		}
 	}
 
-	$scope.submitToChairman = function submitToChairman() {
+	$scope.submitToChairman = function submitToChairman(area_id) {
 		var userdata = settings.userdata();
 		if ( confirm( 'Are you sure you want to send your submission?' ) ) {
 			userdata.success( function (response) {
+				response.userdata.area_id = area_id;
+				console.log(response);
 				$http.post( settings.base_url + 'api/submission/area', response )
 				.success(function (data_response) {
 					console.log(data_response);
