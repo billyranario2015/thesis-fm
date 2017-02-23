@@ -33,6 +33,12 @@ class UsersController extends CI_Controller {
 			$data['tpl2'] = 'create-user';
 			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
 			$data['courses'] = $this->course->get();
+		} elseif ( $tpl == 'dashboard' ) {
+			$data['tpl'] = 'dashboard';
+			$data['tpl2'] = 'dashboard';
+			$data['logs'] = $this->logs->get();
+			// Load Custom Scripts in footer
+			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/admin/dashboard.js').'"></script>';
 		} elseif ( $tpl == 'users' ) {
 			$data['tpl'] = 'users';
 			$data['tpl2'] = 'users';
@@ -306,6 +312,14 @@ class UsersController extends CI_Controller {
 	public function delete_area()
 	{
 		$obj = json_decode(file_get_contents('php://input'));
+
+		// Log current activity
+		$log_arr = array(
+			'author_id' => $this->session->userdata('id'),
+			'message'   => $this->session->userdata('fname') . ' deleted an area.',
+		);
+		$this->logs->create($log_arr);
+
 		echo json_encode( [ 'response' => $this->area->delete($obj) ] );
 	}
 
@@ -364,6 +378,15 @@ class UsersController extends CI_Controller {
 	public function create_param()
 	{
 		$obj = json_decode(file_get_contents('php://input'));
+
+		// Log current activity
+		$log_arr = array(
+			'author_id' => $this->session->userdata('id'),
+			'message'   => $this->session->userdata('fname') . ' created parameter ' . $obj->parameter_name,
+			'link'		=> base_url( 'user/area/'.$obj->area_id )
+		);
+		$this->logs->create($log_arr);
+
 		echo json_encode( [ 'response' => $this->area_params->create($obj) ] );
 	}
 
@@ -434,12 +457,28 @@ class UsersController extends CI_Controller {
 	public function update_parameter()
 	{
 		$obj = json_decode(file_get_contents('php://input'));
+		// Log current activity
+		$log_arr = array(
+			'author_id' => $this->session->userdata('id'),
+			'message'   => $this->session->userdata('fname') . ' updated parameter ' . $obj->parameter_name,
+			'link'		=> base_url( 'user/area/'.$obj->area_id )
+		);
+		$this->logs->create($log_arr);
+
 		echo json_encode( [ 'response' => $this->area_params->update($obj) ] );
 	}
 
 	public function delete_parameter()
 	{
 		$obj = json_decode(file_get_contents('php://input'));
+
+		// Log current activity
+		$log_arr = array(
+			'author_id' => $this->session->userdata('id'),
+			'message'   => $this->session->userdata('fname') . ' deleted a parameter.',
+		);
+		$this->logs->create($log_arr);
+
 		echo json_encode( [ 'response' => $this->area_params->delete($obj) ] );
 	}
 
@@ -485,6 +524,13 @@ class UsersController extends CI_Controller {
 		    		'author_id' 	=> $this->session->userdata('id')
 		    	)
 		    );
+
+			// Log current activity
+			$log_arr = array(
+				'author_id' => $this->session->userdata('id'),
+				'message'   => $this->session->userdata('fname') . ' uploaded a file '.$fileName,
+			);
+			$this->logs->create($log_arr);
 
 		    $filedata[] = $fileName;
 		}

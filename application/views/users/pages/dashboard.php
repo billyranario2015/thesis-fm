@@ -11,7 +11,25 @@
                             </h2>
                         </div>
                         <div class="body">
-
+                            <ul class="list-group">
+                                <?php foreach ($logs as $key => $log) { ?>
+                                    <li class="list-group-item">   
+                                        <?php if( isset($log['link']) && $log['link'] != null ) { ?> 
+                                        <a href="<?php echo $log['link']; ?>">
+                                            <?php echo $log['message']; ?>
+                                        </a>
+                                        <?php } else { ?>
+                                        <div>
+                                            <?php echo $log['message']; ?>
+                                        </div>
+                                        <?php } ?>
+                                        
+                                        <p style="margin:0">
+                                            <small><?php echo date("M d, Y h:ma", strtotime($log['created_at'])); ?></small>
+                                        </p>
+                                    </li>
+                                <?php } ?>
+                            </ul>
                         </div>
                     </div>
                 </div>
