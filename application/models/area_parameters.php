@@ -46,6 +46,14 @@ class Area_Parameters extends CI_Model {
 			return array();
 	}
 
+	public function count_child_params($parameter_id)
+	{
+		$this->db->where( 'parent_id' , $parameter_id );
+		$query = $this->db->get($this->table);
+
+		return $query->num_rows();
+	}
+
 	public function get_by_id($data)
 	{
 		$this->db->where('id',$data);

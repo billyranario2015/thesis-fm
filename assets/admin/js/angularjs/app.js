@@ -85,4 +85,15 @@ fm.controller( "MainController" , function( $scope, $http, $timeout, settings, $
     	return new Date(date);
 	}
 
+	// Filter Notification
+	$scope.filterNotification = function filterNotification(notification,user_id) {
+		var notifs = [];
+		for( x in notification ) {
+			if ( notification[x].id != user_id ) {
+				notifs.push(notification[x]);	
+			}
+		}
+		return notifs.length;
+	}
+
 } );

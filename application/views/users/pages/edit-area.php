@@ -21,7 +21,8 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                <?php echo $data['area_name'] ?>
+                                <?php echo $data['area_name']; ?>
+                                
                                 <?php if ($this->session->userdata('user_level') == 3 ) { ?>
                                 <!-- NOT YET SUBMITTED -->
                                 <button class="btn bg-deep-purple waves-effect btn-lg pull-right" style="position: relative;top: -8px;" 

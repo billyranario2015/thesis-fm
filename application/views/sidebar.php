@@ -38,12 +38,13 @@
 
                     <!-- USER_LEVEL == 1 -->
                     <?php if( $this->session->userdata( 'user_level' ) == 1 ) { ?>
-                    <li class="<?php if( isset( $tpl ) && $tpl == 'dashboard' ) echo 'active'; ?>">
+                    <!--li class="<?php if( isset( $tpl ) && $tpl == 'dashboard' ) echo 'active'; ?>">
                         <a href="<?php echo base_url( 'admin/dashboard' ); ?>">
                             <i class="material-icons">home</i>
                             <span>Dashboard</span>
                         </a>
-                    </li>
+                    </li -->
+                    
                     <li class="<?php if( isset( $tpl ) && $tpl == 'organizations' ) echo 'active'; ?>">
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">widgets</i>
@@ -101,12 +102,12 @@
 
                      <!-- USER_LEVEL == 2 -->
                     <?php } elseif( $this->session->userdata( 'user_level' ) == 2 ) { ?>
-                    <!--li class="<?php if( isset( $tpl ) && $tpl == 'dashboard' ) echo 'active'; ?>">
+                    <li class="<?php if( isset( $tpl ) && $tpl == 'dashboard' ) echo 'active'; ?>">
                         <a href="<?php echo base_url( 'user/dashboard' ); ?>">
                             <i class="material-icons">home</i>
                             <span>Dashboard</span>
                         </a>
-                    </li -->
+                    </li>
 
                     <li class="<?php if( isset( $tpl ) && $tpl == 'area' ) echo 'active'; ?>">
                         <a href="javascript:void(0);" class="menu-toggle">

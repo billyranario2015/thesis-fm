@@ -37,6 +37,11 @@
                                             .action-icons > span {
                                                 cursor: pointer;
                                             }
+                                            span.pull-right.action-icons {
+                                                float: none !important;
+                                                display: block;
+                                                text-align: right;
+                                            }
                                        </style>
 
                                         <div class="text-right">
@@ -71,12 +76,21 @@
                                             </form>
                                         </div>
                                         <div class="col-sm-8">
-                                            <h2 class="card-inside-title">Parameters</h2>
+                                            <h2 class="card-inside-title">
+                                                <span class="pull-left">Parameters</span>
+                                                <span class="pull-right">
+                                                   No. of Completed Parameters <span class="text-success" ng-bind="completedParentParameters"></span> / <span class="text-success" ng-bind="totalParentParameters"></span>
+                                                </span>
+                                                <div style="clear:both"></div>
+                                            </h2>
                                             <ul class="list-group">
-                                                <li ng-repeat="list in cleanParameters" class="list-group-item item-paramater-{{list.id}} item-paramater-parent-{{list.parent_id}}" >
+                                                <li ng-repeat="list in cleanParameters" class="list-group-item item-paramater-{{list.id}} item-paramater-parent-{{list.parent_id}}">
                                                     <span ng-bind-html="list.parameter_name"></span>
                                                     <span class="pull-right action-icons">
-                                                        
+                                                        <span class="label bg-green" style="position: relative;bottom: 9px;cursor:default;margin-right: 5px;" ng-if="list.parameter_status == 'complete'">Complete</span>
+
+                                                        <span class="label bg-red" style="position: relative;bottom: 9px;cursor:default;margin-right: 5px;" ng-if="list.parameter_status == 'incomplete'">In-complete</span>
+
                                                         <a href="<?php  echo base_url( 'user/area/' .$data['id'] . '/parameter/{{list.id}}' ) ?>" class="col-green" style="text-decoration: none;">
                                                            <i class="material-icons">folder_shared</i>
                                                         </a>
@@ -86,6 +100,15 @@
                                                         <span class="col-pink" ng-click="delete_parameter(list)">
                                                            <i class="material-icons">delete_forever</i>
                                                         </span>
+
+                                                        <!-- parameter status -->
+
+                                                        <!-- <span class="" ng-if="checkIfHasFiles(list) > 0" style="cursor:default">
+                                                            <i class="material-icons text-success">check_circle</i> 
+                                                        </span>
+                                                        <span class="" title="In-completed" ng-if="checkIfHasFiles(list) == 0" style="cursor:default">
+                                                            <i class="material-icons text-danger">not_interested</i> 
+                                                        </span> -->
                                                     </span>
                                                 </li>
                                             </ul>

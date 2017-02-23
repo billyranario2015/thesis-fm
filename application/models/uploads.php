@@ -21,6 +21,67 @@ class Uploads extends CI_Model {
 			return array();
 	}
 
+	public function get_file_count($parameter_id,$child_count)
+	{
+		$this->db->where( 'parameter_id' , $parameter_id );
+		$query = $this->db->get($this->table);
+
+		/* 
+		| If paramater has no child, then count the files inside this parameter and mark as complete
+		| if empty, mark this parameter as incomplete
+		*/
+		$status = '';
+		if ( $child_count == 0 ) {
+			if ( $query->num_rows() > 0 ) { // if HAS files, mark as complete
+				$status = 'complete';
+			} else {
+				$status = 'incomplete';
+			}
+		} else {
+			// Store sub parameter's status
+			$sub_paramater_status_arr = [];
+
+			// Get sub parameters
+			$sub_params = $this->get_sub_params($parameter_id);
+			
+			// Check sub parameters if HAS files
+			foreach ($sub_params as $key => $sub) {
+				// Get Child Parameter Count 
+				$sub_child_count = $this->count_child_params($sub['id']);
+				if ( $sub_child_count > 0 ) { // if HAS files, 
+					array_push( $sub_paramater_status_arr, $this->get_file_count($sub['id'],$sub_child_count) );
+				} else {
+					array_push( $sub_paramater_status_arr, $this->get_file_count($sub['id'],$sub_child_count) );
+				}
+			}
+			// $status = $sub_paramater_status_arr;
+			if ( in_array('incomplete', $sub_paramater_status_arr) ) {
+				$status = 'incomplete';
+			} else {
+				$status = 'complete';
+			}
+
+		}
+
+		return $status;
+	}
+
+	public function get_sub_params($parameter_id)
+	{
+		$this->db->where( 'parent_id' , $parameter_id );
+		$query = $this->db->get('area_parameters');
+
+		return $query->result_array();
+	}
+
+	public function count_child_params($parameter_id)
+	{
+		$this->db->where( 'parent_id' , $parameter_id );
+		$query = $this->db->get('area_parameters');
+
+		return $query->num_rows();
+	}
+
 	public function search($data)
 	{
 		$this->db->select( 'uploads.id as upload_id, uploads.filename, uploads.parameter_id, uploads.description, uploads.shared_status, area_parameters.parameter_name,courses.course_name, courses.id as course_id' )

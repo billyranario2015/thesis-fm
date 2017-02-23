@@ -101,6 +101,15 @@ class UsersController extends CI_Controller {
 				redirect( base_url( 'user/create-user/' ) );
 			} elseif ( $response['status'] == 'success' ) {
 				$this->session->set_flashdata( 'message' , $response['message'] );
+
+				// Log current activity
+				$log_arr = array(
+					'author_id' => $this->session->userdata('id'),
+					'message'   => $this->session->userdata('fname') . ' created new user.',
+					'link'		=> base_url( 'user/'.$response['data'].'/edit' )
+				);
+				$this->logs->create($log_arr);
+
 				redirect( base_url( 'user/'.$response['data'].'/edit' ) );
 			} else {
 				$this->session->set_flashdata( 'err_message' , $response['message'] );
@@ -141,6 +150,15 @@ class UsersController extends CI_Controller {
 			$response = $this->users->update($_POST);
 			if ( $response['status'] == 'success' ) {
 				$this->session->set_flashdata( 'message' , $response['message'] );
+
+				// Log current activity
+				$log_arr = array(
+					'author_id' => $this->session->userdata('id'),
+					'message'   => $this->session->userdata('fname') . ' updated a user.',
+					'link'		=> base_url( 'user/'.$_POST['id'].'/edit' )
+				);
+				$this->logs->create($log_arr);
+
 				redirect( base_url( 'user/'.$_POST['id'].'/edit' ) );
 			} else {
 				$this->session->set_flashdata( 'err_message' , $response['message'] );
@@ -162,6 +180,15 @@ class UsersController extends CI_Controller {
 		} else {
 			$id = $this->area->create($_POST);
 			if ( $id ) {
+
+				// Log current activity
+				$log_arr = array(
+					'author_id' => $this->session->userdata('id'),
+					'message'   => $this->session->userdata('fname') . ' created an area.',
+					'link'		=> base_url( 'user/area/'.$id.'/edit' )
+				);
+				$this->logs->create($log_arr);
+
 				$this->session->set_flashdata( 'message' , 'Area successfully created.' );
 				redirect( base_url( 'user/area/'.$id.'/edit' ) );
 			}
@@ -216,6 +243,15 @@ class UsersController extends CI_Controller {
 					'course_id'		=> $this->session->userdata('course_id'),
 				];
 			}
+
+			// Log current activity
+			$log_arr = array(
+				'author_id' => $this->session->userdata('id'),
+				'message'   => $this->session->userdata('fname') . ' added new users on area ' . $_POST['area_name'] . '.',
+				'link'		=> base_url( 'user/area/'.$_POST['id'] . '/settings' )
+			);
+			$this->logs->create($log_arr);
+
 			$sub_assignees_status = $this->area->insert_sub_assignees($sub_assignees);
 
 			// UNSET $_POST['sub_assignee_id']
@@ -228,6 +264,15 @@ class UsersController extends CI_Controller {
 				unset($_POST['check_area']);
 				if ( $this->area->update($_POST) ) {
 					$this->session->set_flashdata( 'message' , 'Area successfully updated.' );
+					
+					// Log current activity
+					$log_arr = array(
+						'author_id' => $this->session->userdata('id'),
+						'message'   => $this->session->userdata('fname') . ' updated area ' . $_POST['area_name'] . '.',
+						'link'		=> base_url( 'user/area/'.$_POST['id'] . '/settings' )
+					);
+					$this->logs->create($log_arr);					
+
 				} else {
 					$this->session->set_flashdata( 'err_message' , 'Error on update.' );
 				}
@@ -237,7 +282,7 @@ class UsersController extends CI_Controller {
 				redirect( base_url( 'user/area/'.$_POST['id'] . '/settings' ) );
 			}
 		} else {
-			echo "///";
+			// echo "///";
 			// Check if user is already assigned to other area
 			$_POST['check_area'] = 0;
 			$is_assigned = $this->area->check_if_assigned($_POST);
@@ -367,13 +412,17 @@ class UsersController extends CI_Controller {
 					'area_id'			=> $param['area_id'],
 					"parameter_name"	=> '<span class="spacer">' . $spacing . ++$num .'.) </span> <span class="param_name"> ' . $param['parameter_name'] . '</span>',
 					"clean_parameter"	=> $param['parameter_name'],
-					"parent_id" 		=> $param['parent_id']
+					"parent_id" 		=> $param['parent_id'],
+					"child_param_count" => $this->area_params->count_child_params($param['id']),
+					"parameter_status"	=> $this->files->get_file_count(
+												$param['id'],
+												$this->area_params->count_child_params($param['id'])
+										   ),
 				);
 
 				$category_tree_array = $this->categoryParentChildTreeClean($param['id'], '::::: '.$spacing, $category_tree_array, $area_id);
 			}
 		}
-		return $category_tree_array;
 		return $category_tree_array;
 	}
 
@@ -394,6 +443,21 @@ class UsersController extends CI_Controller {
 		echo json_encode( [ 'response' => $this->area_params->delete($obj) ] );
 	}
 
+	public function get_child_params_count($parameter_id,$child_count)
+	{	
+		/* 
+		| If paramater has no child, then count the files inside this parameter
+		| if empty, mark this parameter as incomplete
+		*/ 
+		$file_count = 0;
+		if ( $child_count == 0 ) {
+			// Get the numbers of files of this parameter
+			$file_count = $this->files->get_file_count($parameter_id);
+		}
+
+		echo json_encode(['file_count'=>$file_count]);
+	}
+
 	// File Upload
 	public function file_upload($parameter_id)
 	{
@@ -401,11 +465,11 @@ class UsersController extends CI_Controller {
 		$filedata = [];
 		$cpt = count($_FILES['file']['name']);
 		for($i=0; $i<$cpt; $i++) {
-		    $_FILES['files']['name']= $files['file']['name'][$i];
-		    $_FILES['files']['type']= $files['file']['type'][$i];
-		    $_FILES['files']['tmp_name']= $files['file']['tmp_name'][$i];
-		    $_FILES['files']['error']= $files['file']['error'][$i];
-		    $_FILES['files']['size']= $files['file']['size'][$i];
+		    $_FILES['files']['name']		= $files['file']['name'][$i];
+		    $_FILES['files']['type']		= $files['file']['type'][$i];
+		    $_FILES['files']['tmp_name']	= $files['file']['tmp_name'][$i];
+		    $_FILES['files']['error']		= $files['file']['error'][$i];
+		    $_FILES['files']['size']		= $files['file']['size'][$i];
 		    // $this->upload->initialize($this->set_upload_options());
 		    $this->load->library('upload', $this->set_upload_options());
 

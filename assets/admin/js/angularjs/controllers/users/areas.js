@@ -19,11 +19,26 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 	}
 
 	$scope.cleanParameters = {};
+	$scope.totalParentParameters = 0;
+	$scope.completedParentParameters = 0;
 	$scope.getCleanParameters = function getCleanParameters(area_id) {
 		$http.get( settings.base_url + 'api/get/clean_parameters/'+area_id )
 		.success(function (response) {
 			console.log(response.response);
 			$scope.cleanParameters = response.response;
+
+			var count_parents = 0;
+			var count_completed_parents = 0;
+			for( x in response.response ) {
+				if ( response.response[x].parent_id == 0 ) {
+					count_parents = count_parents + 1;
+					if ( response.response[x].parameter_status == 'complete' ) {
+						count_completed_parents = count_completed_parents + 1;
+					}
+				}
+			}
+			$scope.totalParentParameters = count_parents;
+			$scope.completedParentParameters = count_completed_parents;
 		})
 	}
 
@@ -239,7 +254,7 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 						alert( 'Successfull submitted. ' );
 						location.reload();
 					} else {
-						alert( 'Error on submission. Please try again later' );
+						alert( 'Error on submission. Check if there is an In house evaluator account. Please try again later' );
 					}
 				})
 			} );			
@@ -295,5 +310,13 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 			location.reload();
 		} );
 
+	}
+
+	$scope.checkIfHasFiles = function checkIfHasFiles(parameter) {
+		// console.log(parameter);
+		$http.get( settings.base_url + 'api/parameter/'+parameter.id+'/child_count/'+parameter.child_param_count )
+		.success( function (response) {
+			console.log( response );
+		} );
 	}
 });

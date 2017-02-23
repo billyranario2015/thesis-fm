@@ -144,4 +144,5 @@ $autoload['model'] = array(
 	'comments'		 => 'comments',
 	'notification'	 => 'notification',
 	'submission'	 => 'submission',
+	'logs'	 		 => 'logs',
 );

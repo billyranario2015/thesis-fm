@@ -95,14 +95,14 @@
                     <li class="dropdown">
                         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button">
                             <i class="material-icons">notifications</i>
-                            <span class="label-count" ng-if="notifications.length > 0" ng-bind="notifications.length"></span>
+                            <span class="label-count" ng-if="filterNotification(notifications,<?php echo $this->session->userdata('id') ?>) > 0" ng-bind="filterNotification(notifications,<?php echo $this->session->userdata('id') ?>)"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <li class="header">NOTIFICATIONS</li>
                             <li class="body">
                                 <ul class="menu">
                                     <!-- IF CHAIRMAN -->
-                                    <li ng-repeat="notif in notifications" ng-if="userdata.user_level == 2">
+                                    <li ng-repeat="notif in notifications" ng-if="userdata.user_level == 2;notif.id != <?php echo $this->session->userdata('id') ?>">
                                         <!-- 
                                             ===== SUBMISSION
                                          -->

@@ -92,7 +92,7 @@ $route['course/create']['POST']							= 'AdminController/create_course';
 $route['admin/course/(:num)/edit']['GET']				= 'AdminController/edit_course/$1';
 $route['course/update']['POST']							= 'AdminController/update_course';
 
-// ANGULARJS API ROUTES
+// API ROUTES
 $route['api/user/delete']['POST']						= 'AdminController/delete_user';
 $route['api/course/delete']['POST']						= 'AdminController/delete_course';
 $route['api/organization/delete']['POST']				= 'AdminController/delete_organization';
@@ -145,7 +145,7 @@ $route['api/get/clean_parameters/(:num)']['GET']		= 'UsersController/get_paramet
 $route['api/edit/parameter/(:num)']['GET']				= 'UsersController/get_parameters_by_id/$1';
 $route['api/update/parameter']['POST']					= 'UsersController/update_parameter';
 $route['api/delete/parameter']['POST']					= 'UsersController/delete_parameter';
-
+$route['api/parameter/(:num)/child_count/(:num)']['GET']= 'UsersController/get_child_params_count/$1/$2';
 /*
 | -------------------------------------------------------------------------
 | SUBMISSIONS

@@ -226,6 +226,14 @@ class AdminController extends CI_Controller {
 	public function delete_user()
 	{
 		$obj = json_decode(file_get_contents('php://input'));
+		
+		// Log current activity
+		$log_arr = array(
+			'author_id' => $this->session->userdata('id'),
+			'message'   => $this->session->userdata('fname') . ' deleted a user.',
+		);
+		$this->logs->create($log_arr);
+
 		echo json_encode( [ 'response' => $this->users->delete($obj) ] );
 
 	}
