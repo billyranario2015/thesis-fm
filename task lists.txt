@@ -1,0 +1,16 @@
+Add Levels of Areas -- Chairman
+List of incomplete Parameters of an area
+Add Tags on Parameter and Files
+-- Chairman can only add tag for parameters
+-- Chairman and Sub Chairman can add tag on files
+Change :
+-- Orgnization to College
+-- Course to Program
+-- MUST to USTSP
+Fullwidth parameter table and creation
+
+so ang final scenario ani kay 
+1. Sulod kos Area
+2. Then naa daun list of Levels
+3. Sulod kos usa Level 
+4. Then sa sulod sa level naa na daun mga list sa params
