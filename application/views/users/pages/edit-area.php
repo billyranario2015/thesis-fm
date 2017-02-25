@@ -21,8 +21,17 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                <?php echo $data['area_name']; ?>
+                                <span class="text-success"><?php echo $level_info['level_name'] ?></span> > <?php echo $data['area_name']; ?>
+                                <?php if( isset($param_info) ) echo ' > ' . $param_info['parameter_name'] ?>
                                 
+
+                                <?php if( isset($param_info) ) { ?>
+                                    <a href="<?php echo base_url('user/level/'.$level_info['id'].'/area/'.$data['id'] . '/edit') ?>" class="btn btn-primary pull-right">BACK</a>
+                                <?php } else { ?>
+                                    <a href="<?php echo base_url('user/level/'.$level_info['id'].'/areas') ?>" class="btn btn-primary pull-right">BACK</a>
+                                <?php } ?>
+                                
+
                                 <?php if ($this->session->userdata('user_level') == 3 ) { ?>
                                 <!-- NOT YET SUBMITTED -->
                                 <button class="btn bg-deep-purple waves-effect btn-lg pull-right" style="position: relative;top: -8px;" 
@@ -43,10 +52,10 @@
                             <ul class="nav nav-tabs tab-nav-right" role="tablist">
                                 <?php if( $this->session->userdata('user_level') != 3 ) { ?>
                                 <li role="presentation" class="<?php if( $tab == 'templates' ) echo 'active'; ?>">
-                                    <a href="<?php echo base_url('user/area/'.$data['id']) ?>">TEMPLATES</a>
+                                    <a href="<?php echo base_url('user/level/'.$data['level_id'].'/area/'.$data['id'].'/edit') ?>">TEMPLATES</a>
                                 </li>
                                 <li role="presentation" class="<?php if( $tab == 'settings' ) echo 'active'; ?>">
-                                    <a href="<?php echo base_url('user/area/'.$data['id'].'/settings') ?>">SETTINGS</a>
+                                    <a href="<?php echo base_url('user/level/'.$data['level_id'].'/area/'.$data['id'].'/settings') ?>">SETTINGS</a>
                                 </li>
                                 <?php } else { ?>
                                 <li role="presentation" class="active">
@@ -92,12 +101,13 @@
                                             <div class="form-group form-float">
                                                 <div class="form-line">
                                                     <input type="hidden" name="id" value="<?php echo $data['id'] ?>" class="form-control">
+                                                    <input type="hidden" name="level_id" value="<?php echo $data['level_id'] ?>" class="form-control">
                                                     <input type="text" name="area_name" value="<?php echo $data['area_name'] ?>" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="col-sm-12">
-                                            <h2 class="card-inside-title">Assign Area to: (Main User)</h2>
+                                            <h2 class="card-inside-title">Assign Area to: </h2>
                                             <div class="form-group form-float form-group-md">
                                                 <div class="form-line">
                                                     <select class="form-control show-tick selectpicker" name="assignee_id" required>
@@ -113,7 +123,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-12" style="display:none">
                                             <h2 class="card-inside-title">Select Sub-Users to manage this area: (Optional)</h2>
                                             <div class="form-group form-float form-group-md">
                                                 <div class="form-line">
@@ -228,6 +238,17 @@
                                 <textarea class="form-control" ng-model="edit_options.description"></textarea>
                             </div>
                         </div>
+
+                        <div class="form-group form-float form-group-md">
+                            <label>Tags <small style="width:100%;display:block">Separate by commas(,)s</label>
+                            <div class="form-line">
+                                <textarea class="form-control" ng-model="edit_options.tags"></textarea>
+                            </div>
+                        </div>
+                        <div class="tags">
+                            <span ng-repeat="tag in extractTag(edit_options.tags)" class="label {{ randomColor() }}" ng-bind="tag" style="margin-right:5px;"></span>
+                        </div>
+                        <br>                    
                         <p class="alert alert-info" ng-if="is_success">
                             File successfully updated.
                         </p>

@@ -46,6 +46,20 @@ class Area_Parameters extends CI_Model {
 			return array();
 	}
 
+	public function get_child_parameters_bulk($parent_id)
+	{
+		$this->db->select( 'area_parameters.*, area_parameters.id as area_parameter_id, area.*, area.id as area_area_id' )
+				 ->where( 'parent_id' , $parent_id )
+				 ->join( 'area', 'area.id = area_parameters.area_id' )
+				 ->order_by( 'area_parameters.id', 'ASC' );
+		$query = $this->db->get($this->table);
+
+		if ($query->num_rows() > 0)
+			return $query->result_array();
+		else
+			return array();
+	}
+
 	public function count_child_params($parameter_id)
 	{
 		$this->db->where( 'parent_id' , $parameter_id );

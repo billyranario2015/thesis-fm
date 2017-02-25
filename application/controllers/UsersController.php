@@ -38,7 +38,7 @@ class UsersController extends CI_Controller {
 			$data['tpl2'] = 'dashboard';
 			$data['logs'] = $this->logs->get();
 			// Load Custom Scripts in footer
-			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/admin/dashboard.js').'"></script>';
+			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/admin/users.js').'"></script>';
 		} elseif ( $tpl == 'users' ) {
 			$data['tpl'] = 'users';
 			$data['tpl2'] = 'users';
@@ -80,13 +80,43 @@ class UsersController extends CI_Controller {
 			/*
 			|  LIST ALL LINKED AREAS ASSIGNED TO CURRENT SUB CHAIRMAN
 			*/
-			$data['linked_areas'] = $this->area->get_linked_areas($this->session->userdata('id'));
+			$data['linked_areas'] = $this->area->my_areas($this->session->userdata('id'));
+			/*
+			|  LIST ALL LEVEL AREAS ASSIGNED TO CURRENT SUB CHAIRMAN
+			*/
+			// $data['level_areas'] = $this->area->get_level_areas($this->session->userdata('id'));
 
 
 			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
 			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>';
-		}
-		// USER LEVEL == 4
+		} elseif ( $tpl == 'levels' ) {
+			$data['tpl'] = 'levels';
+			$data['tpl2'] = 'level';
+			$data['levels'] = $this->levels->get($this->session->userdata('course_id'));
+			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>';
+			// For chairman_info
+			// if ( @$_GET['notification'] ) {
+			// 	// UPDATE NOTIFICATION STATUS
+			// 	$this->notification->update( [
+			// 		'id'=> $_GET['id'],
+			// 		'notification_status' => 1 // Seened
+			// 	] );
+			// }
+		}  elseif ( $tpl == 'create-level' ) {
+			$data['tpl'] = 'levels';
+			$data['tpl2'] = 'create-level';
+
+			// For chairman_info
+			// if ( @$_GET['notification'] ) {
+			// 	// UPDATE NOTIFICATION STATUS
+			// 	$this->notification->update( [
+			// 		'id'=> $_GET['id'],
+			// 		'notification_status' => 1 // Seened
+			// 	] );
+			// }
+		} 
+		
+
 		$this->load->view('users/pages/'.$tpl, $data);
 	}
 
@@ -175,6 +205,18 @@ class UsersController extends CI_Controller {
 
 
 	// Area
+	public function create_level_area($level_id)
+	{
+		$data = array();		
+		$data['tpl'] = 'levels';
+		$data['tpl2'] = 'create-area';
+		$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
+		$data['users'] = $this->users->get_all_users_by_course($this->session->userdata('course_id'));
+		$data['level_info'] = $this->levels->get_by_id($level_id);
+
+
+		$this->load->view('users/pages/create-area', $data);
+	}
 	public function create_area()
 	{
 		// Check if user is already assigned to other area
@@ -182,7 +224,7 @@ class UsersController extends CI_Controller {
 
 		if ( !empty($is_assigned) ) {
 			$this->session->set_flashdata( 'err_message' , $is_assigned['fname'] . ' ' . $is_assigned['lname'] . ' is already assigned to ' . $is_assigned['area_name'] );
-			redirect( base_url( 'user/create-area' ) );
+			redirect( base_url( 'user/level/'.$_POST['level_id'].'/create-area' ) );
 		} else {
 			$id = $this->area->create($_POST);
 			if ( $id ) {
@@ -196,23 +238,25 @@ class UsersController extends CI_Controller {
 				$this->logs->create($log_arr);
 
 				$this->session->set_flashdata( 'message' , 'Area successfully created.' );
-				redirect( base_url( 'user/area/'.$id.'/edit' ) );
+				redirect( base_url( 'user/level/'.$_POST['level_id'].'/area/'.$id.'/edit' ) );
+
 			}
 		}
-
 	}
 
-	public function edit_area($id)
+	public function edit_area($level_id,$id)
 	{
 		$data = array(
-			'tpl' => 'area',
 			'data' => $this->area->get_by_id($id),
+			'level_info' => $this->levels->get_by_id($level_id),
 			'users' => $this->users->get_all_users_by_course($this->session->userdata('course_id')),
 			'sub_users' => $this->area->get_sub_assignees($id),
 			'tab'	=> 'templates',
 			'action' => 'templates',
 			'scripts'=> '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>',
 		);
+		$data['tpl'] = 'levels';
+		$data['tpl2'] = 'area';
 
 		if ( @$_GET['notification'] ) {
 			// UPDATE NOTIFICATION STATUS
@@ -224,6 +268,30 @@ class UsersController extends CI_Controller {
 
 		$data['comments'] = $this->comments->get_comment_by_area_id($id);
 
+
+		$this->load->view('users/pages/edit-area',$data);
+	}
+
+	public function edit_area_settings($level_id,$id)
+	{
+		$data = array(
+			'tpl' => 'area',
+			'data' => $this->area->get_by_id($id),
+			'level_info' => $this->levels->get_by_id($level_id),
+			'users' => $this->users->get_all_users_by_course($this->session->userdata('course_id')),
+			'tab'	=> 'templates',
+			'action' => 'templates',
+			'scripts'=> '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>',
+		);
+		$data['tpl'] = 'levels';
+		$data['tpl2'] = 'area';
+
+		$data['comments'] = $this->comments->get_comment_by_area_id($id);
+		
+		$data['sub_users'] = $this->area->get_sub_assignees($id);
+		$data['tab'] = 'settings';
+		$data['action'] = 'settings';
+		$data['scripts'] .= '<br><script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
 
 		$this->load->view('users/pages/edit-area',$data);
 	}
@@ -275,17 +343,17 @@ class UsersController extends CI_Controller {
 					$log_arr = array(
 						'author_id' => $this->session->userdata('id'),
 						'message'   => $this->session->userdata('fname') . ' updated area ' . $_POST['area_name'] . '.',
-						'link'		=> base_url( 'user/area/'.$_POST['id'] . '/settings' )
+						'link'		=> base_url( 'user/level/'.$_POST['level_id'].'/area/'.$_POST['id'].'/settings' )
 					);
 					$this->logs->create($log_arr);					
 
 				} else {
 					$this->session->set_flashdata( 'err_message' , 'Error on update.' );
 				}
-				redirect( base_url( 'user/area/'.$_POST['id'] . '/settings' ) );
+				redirect( base_url( 'user/level/'.$_POST['level_id'].'/area/'.$_POST['id'].'/settings' ) );
 			} else {
 				$this->session->set_flashdata( 'err_message' , $is_assigned['fname'] . ' ' . $is_assigned['lname'] . ' is already assigned to ' . $is_assigned['area_name'] );
-				redirect( base_url( 'user/area/'.$_POST['id'] . '/settings' ) );
+				redirect( base_url( 'user/level/'.$_POST['level_id'].'/area/'.$_POST['id'].'/settings' ) );
 			}
 		} else {
 			// echo "///";
@@ -304,7 +372,7 @@ class UsersController extends CI_Controller {
 				}
 			}
 
-			redirect( base_url( 'user/area/'.$_POST['id'] . '/settings' ) );
+			redirect( base_url( 'user/level/'.$_POST['level_id'].'/area/'.$_POST['id'].'/settings' ) );
 		}
 
 	}
@@ -373,6 +441,26 @@ class UsersController extends CI_Controller {
 		$this->load->view('users/pages/edit-area',$data);
 	}
 
+	public function get_area_parameters_by_id($level_id,$area_id,$parameter_id)
+	{
+		$data = array(
+			'tpl' => 'levels',
+			'level_info' => $this->levels->get_by_id($level_id),
+			'data' => $this->area->get_by_id($area_id),
+			'users' => $this->users->get_all_users_by_course($this->session->userdata('course_id')),
+			'tab'	=> 'entries',
+			'action' => 'entries',
+			'param_id' => $parameter_id,
+			'param_info' =>  $this->area_params->get_by_id($parameter_id),
+			// 'styles' => '<link rel="stylesheet" type="text/css" href="'.base_url('assets/admin/plugins/dropzone/dropzone.css').'">',
+			// 'scripts' => '<script type="text/javascript" src="'.base_url('assets/admin/plugins/dropzone/dropzone.js').'"></script>',
+			'styles' => '<link rel="stylesheet" type="text/css" href="'.base_url('assets/admin/css/fileinput.min.css').'">',
+			'scripts' => '<script type="text/javascript" src="'.base_url('assets/admin/js/fileinput.min.js').'"></script>',
+		);
+		$data['scripts'] .= '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>';
+		$this->load->view('users/pages/edit-area',$data);
+	}
+
 
 	// Parameters
 	public function create_param()
@@ -388,6 +476,11 @@ class UsersController extends CI_Controller {
 		$this->logs->create($log_arr);
 
 		echo json_encode( [ 'response' => $this->area_params->create($obj) ] );
+	}
+
+	public function get_all_parameters()
+	{
+		echo json_encode( [ 'response' => $this->get_all_parameter_list(0,'','') ] );
 	}
 
 	public function get_parameters($area_id)
@@ -441,9 +534,42 @@ class UsersController extends CI_Controller {
 												$param['id'],
 												$this->area_params->count_child_params($param['id'])
 										   ),
+					"tags"				=> $param['tags']
 				);
 
 				$category_tree_array = $this->categoryParentChildTreeClean($param['id'], '::::: '.$spacing, $category_tree_array, $area_id);
+			}
+		}
+		return $category_tree_array;
+	}
+
+
+	public function get_all_parameter_list($parent = 0, $spacing = '', $category_tree_array = '') {
+		if (!is_array($category_tree_array))
+			$category_tree_array = array();
+
+		$parameters = $this->area_params->get_child_parameters_bulk($parent);
+		$numItems = count( $parameters );
+
+		if ( count( $parameters ) > 0 ) {
+			$num = 0;
+			foreach ($parameters as $key => $param) {
+				$category_tree_array[] = array(
+					"id" 				=> $param['id'], 
+					'area_id'			=> $param['area_id'],
+					"parameter_name"	=> '<span class="spacer">' . $spacing . ++$num .'.) </span> <span class="param_name"> ' . $param['parameter_name'] . '</span>',
+					"clean_parameter"	=> $param['parameter_name'],
+					"parent_id" 		=> $param['parent_id'],
+					"child_param_count" => $this->area_params->count_child_params($param['area_parameter_id']),
+					"parameter_status"	=> $this->files->get_file_count(
+												$param['area_parameter_id'],
+												$this->area_params->count_child_params($param['area_parameter_id'])
+										   ),
+					'level_info'		=> $this->levels->get_by_id($param['level_id']),
+					'area_parameter_id' => $param['area_parameter_id']
+				);
+
+				$category_tree_array = $this->get_all_parameter_list($param['area_parameter_id'], '::::: '.$spacing, $category_tree_array);
 			}
 		}
 		return $category_tree_array;
@@ -551,6 +677,11 @@ class UsersController extends CI_Controller {
 	public function get_uploads($parameter_id)
 	{
 		echo json_encode( ['response'=>$this->files->get($parameter_id)] );
+	}
+
+	public function get_available_files()
+	{
+		echo json_encode( ['response'=>$this->files->get_available_files()] );
 	}
 
 	public function search_file()
@@ -726,7 +857,100 @@ class UsersController extends CI_Controller {
  		}
 
  		var_dump($notification);
-
  	}
+
+ 	// LEVELS
+ 	public function create_level()
+ 	{
+		$level_id = $this->levels->create($_POST);
+		if ( !empty($level_id) ) {
+			$this->session->set_flashdata( 'message' , 'Level successfully created.' );
+			redirect( base_url( 'user/level/'.$level_id.'/edit' ) );
+		} else {
+			$this->session->set_flashdata( 'err_message' , 'Something went wrong. Please try again later.' );
+			redirect( base_url( 'user/create-level/' ) );
+		}
+ 	}
+
+	public function edit_level($id)
+	{
+		$data = array(
+			'tpl' => 'levels',
+			'data' => $this->levels->get_by_id($id),
+		);
+
+		if ( @$_GET['notification'] ) {
+			// UPDATE NOTIFICATION STATUS
+			$this->notification->update( [
+				'id'=> $_GET['id'],
+				'notification_status' => 1 // Seened
+			] );
+		}
+
+		$this->load->view('users/pages/edit-level',$data);
+	}
+
+	public function update_level()
+	{
+		if ( $this->levels->update($_POST) ) {
+			$this->session->set_flashdata( 'message' , 'Level successfully updated.' );
+			
+			// Log current activity
+			$log_arr = array(
+				'author_id' => $this->session->userdata('id'),
+				'message'   => $this->session->userdata('fname') . ' updated level ' . $_POST['level_name'],
+				'link'		=> base_url( 'user/level/'.$_POST['id'].'/edit' )
+			);
+			$this->logs->create($log_arr);					
+
+		} else {
+			$this->session->set_flashdata( 'err_message' , 'Error on update.' );
+		}
+		redirect( base_url( 'user/level/'.$_POST['id'].'/edit' ) );		
+
+	}
+
+	public function get_level_areas($level_id)
+	{
+		$level_info = $this->levels->get_by_id($level_id);
+
+		$data = array(
+			'level_info' 	=> $level_info, 
+			'areas' 		=> $this->levels->get_level_areas($level_id)
+		);
+
+		$data['tpl'] = 'levels';
+		$data['tpl2'] = 'area';
+		$data['users'] = $this->users->get_all_users_by_course($this->session->userdata('course_id'));
+
+		// For chairman_info
+		if ( @$_GET['notification'] ) {
+			// UPDATE NOTIFICATION STATUS
+			$this->notification->update( [
+				'id'=> $_GET['id'],
+				'notification_status' => 1 // Seened
+			] );
+		}
+
+		// Load Custom Scripts in footer
+		$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>';
+
+
+		$this->load->view('users/pages/level_areas', $data);
+	}
+
+	public function delete_level()
+	{
+		$obj = json_decode(file_get_contents('php://input'));
+
+		// Log current activity
+		$log_arr = array(
+			'author_id' => $this->session->userdata('id'),
+			'message'   => $this->session->userdata('fname') . ' deleted a level.',
+		);
+		$this->logs->create($log_arr);
+
+		echo json_encode( [ 'response' => $this->levels->delete($obj) ] );
+	}
 
 }

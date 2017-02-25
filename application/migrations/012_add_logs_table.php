@@ -19,6 +19,11 @@ class Migration_Add_Logs_Table extends CI_Migration {
                 'unsigned' => TRUE,
                 'auto_increment' => TRUE
             ),
+            'course_id' => array(
+                'type' => 'INT',
+                'constraint' => 11,
+                'null' => true 
+            ),
             'author_id' => array(
                 'type' => 'INT',
                 'constraint' => 11,

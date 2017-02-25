@@ -110,15 +110,24 @@ $route['user/(:num)/edit']['GET']						= 'UsersController/edit_user/$1';
 $route['user/user/update']['POST']						= 'UsersController/update_user';
 // AREA
 $route['area/create']['POST']							= 'UsersController/create_area';
-$route['user/area/(:num)']['GET']						= 'UsersController/edit_area/$1';
+$route['user/level/(:num)/create-area']['GET']			= 'UsersController/create_level_area/$1';
+// $route['user/area/(:num)']['GET']						= 'UsersController/edit_area/$1';
 $route['area/update']['POST']							= 'UsersController/update_area';
 // TEMPLATE
 $route['user/area/(:num)/(:any)']['GET']				= 'UsersController/area_view/$1/$2';
+// LEVELS
+$route['level/create']['POST']							= 'UsersController/create_level';
+$route['user/level/(:num)/edit']['GET']					= 'UsersController/edit_level/$1';
+$route['level/update']['POST']							= 'UsersController/update_level';
+$route['user/level/(:num)/areas']['GET']				= 'UsersController/get_level_areas/$1';
+$route['user/level/(:num)/area/(:num)/edit']['GET']		= 'UsersController/edit_area/$1/$2';
+$route['user/level/(:num)/area/(:num)/settings']['GET']	= 'UsersController/edit_area_settings/$1/$2';
+$route['api/level/delete']['POST']						= 'UsersController/delete_level/';
+
 // UPLOADS
 $route['user/area/(:num)/parameter/(:num)']['GET']		= 'UsersController/area_view_entries/$1/$2';
 $route['user/file_upload/(:num)']['POST']				= 'UsersController/file_upload/$1';
-
-
+$route['user/level/(:num)/area/(:num)/parameter/(:num)'] = 'UsersController/get_area_parameters_by_id/$1/$2/$3';
 // UPLOADS
 // SEARCH FOR RELATED FILES
 // -- Seach Via upload
@@ -133,6 +142,7 @@ $route['evaluator/user/(:num)/area/(:num)/parameter/(:num)']['GET']		= 'UsersCon
 
 // -------GET FILES
 $route['api/get_uploads/(:num)']['GET']					= 'UsersController/get_uploads/$1';
+$route['api/get_available_files']['GET']				= 'UsersController/get_available_files';
 // -------EDIT FILE
 $route['api/file/update']['POST']						= 'UsersController/update_file';
 $route['api/file/delete']['POST']						= 'UsersController/delete_file';
@@ -146,6 +156,8 @@ $route['api/edit/parameter/(:num)']['GET']				= 'UsersController/get_parameters_
 $route['api/update/parameter']['POST']					= 'UsersController/update_parameter';
 $route['api/delete/parameter']['POST']					= 'UsersController/delete_parameter';
 $route['api/parameter/(:num)/child_count/(:num)']['GET']= 'UsersController/get_child_params_count/$1/$2';
+$route['api/get_all_parameters']['GET']					= 'UsersController/get_all_parameters/';
+
 /*
 | -------------------------------------------------------------------------
 | SUBMISSIONS

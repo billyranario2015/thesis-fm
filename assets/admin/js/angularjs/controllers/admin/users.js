@@ -11,4 +11,23 @@ fm.controller( "UsersController" , function( $scope, $http, $timeout, settings, 
 
 	}
 
+	$scope.parameter_lists = {};
+	$scope.get_list_of_parameters = function get_list_of_parameters() {
+		$http.get( settings.base_url + 'api/get_all_parameters' )
+		.success( function (response) {
+			console.log(response);
+			$scope.parameter_lists = response.response;
+		} );		
+	}
+	$scope.get_list_of_parameters();
+	
+	// $scope.getRandomColor = function getRandomColor() {
+	//     var letters = '0123456789ABCDEF';
+	//     var color = '#';
+	//     for (var i = 0; i < 6; i++ ) {
+	//         color += letters[Math.floor(Math.random() * 16)];
+	//     }
+	//     return color;
+	// }
+
 });

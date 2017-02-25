@@ -29,6 +29,11 @@ class Migration_Add_Area_Table extends CI_Migration {
                 'constraint' => 11,
                 'default' => 3 // for unassigned value
             ),
+            'level_id' => array(
+                'type' => 'INT',
+                'constraint' => 11,
+                'null' => true
+            ),
             'course_id' => array(
                 'type' => 'INT',
                 'constraint' => 11,

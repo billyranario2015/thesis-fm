@@ -1,8 +1,8 @@
 <?php $this->load->view('header'); ?>
-    <section class="content">
+    <section class="content" ng-controller="UsersController">
         <div class="container-fluid">
             <div class="row clearfix">
-                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
                             <h2>
@@ -33,26 +33,27 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                <div class="col-lg-7 col-md-7 col-sm-12 col-xs-12">
                     <div class="card">
-                        <div class="header">
+                        <div class="header bg-red">
                             <h2>
-                                Activity Feeds
+                                Incomplete Parameters
+                                <small>List of parameters not yet completed.</small>
                             </h2>
                         </div>
                         <div class="body">
-                            <p class="lead">
-                                Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
-                            </p>
-                            <p>
-                                Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus. Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies nisi. Nam eget dui. Etiam rhoncus. Maecenas tempus, tellus eget
-                            </p>
-                            <p>
-                                Nam quam nunc, blandit vel, luctus pulvinar, hendrerit id, lorem. Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero venenatis faucibus. Nullam quis ante. Etiam sit amet orci eget eros faucibus tincidunt. Duis leo. Sed fringilla mauris sit amet nibh. Donec sodales sagittis magna. Sed consequat, leo eget bibendum sodales, augue velit cursus nunc.
-                            </p>
+                            <ul class="list-group">
+                                <li ng-repeat="list in parameter_lists" class="list-group-item item-paramater-{{list.id}} item-paramater-parent-{{list.parent_id}}" ng-if="list.parameter_status == 'incomplete'">
+                                    <a href="<?php  echo base_url( 'user/level/{{ list.level_info.id }}/area/{{ list.area_id }}/parameter/{{list.area_parameter_id}}' ) ?>"  style="text-decoration: none;">
+                                        <span ng-bind-html="list.parameter_name"></span>
+                                        
+                                        <small ng-bind="list.level_info.level_name" class="label bg-pink"></small>
+                                    </a>
+                                </li>
+                            </ul>
                         </div>
                     </div>
-                </div> -->
+                </div>
             </div>
         </div>
     </section>

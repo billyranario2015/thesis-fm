@@ -80,6 +80,19 @@ class Area extends CI_Model {
 			return array();
 	}
 
+	public function my_areas($id)
+	{
+		$this->db->select('area.*,area.id as area_area_id,levels.*, levels.id as level_id')
+				 ->where( 'assignee_id' , $id )
+				 ->join( 'levels', 'levels.id = area.level_id' );
+		$query = $this->db->get($this->table);
+
+		if ($query->num_rows() > 0)
+			return $query->result_array();
+		else
+			return array();
+	}
+
 	public function get_area_by_area_id($id)
 	{
 		$this->db->where( 'id' , $id );
@@ -124,6 +137,7 @@ class Area extends CI_Model {
 		}
 
 		$this->db->where( 'assignee_id', $data['assignee_id'] )
+				 ->where( 'level_id' , $data['level_id'] )
 			     ->join( 'users', 'users.id = area.assignee_id' );
 		$query = $this->db->get($this->table);
 

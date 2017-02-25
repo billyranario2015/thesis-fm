@@ -65,6 +65,7 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		$scope.parameter_edit.parent_id 		= data.parent_id;
 		$scope.parameter_edit.area_id 			= data.area_id;
 		$scope.parameter_edit.parameter_name 	= data.clean_parameter;
+		$scope.parameter_edit.tags 				= data.tags;
 	}
 
 
@@ -301,6 +302,19 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		} );
 	}
 
+	// DISPLAY RELATED FILES FIRST
+	$scope.dispayAllAvailableFiles = function dispayAllAvailableFiles() {
+
+		$http.get( settings.base_url + 'api/get_available_files/' )
+		.success( function (response) {
+			console.log( response.response )
+			$scope.related_files = response.response;
+	    	$scope.related_file_count = response.response.length;
+		} );
+	}
+	$scope.dispayAllAvailableFiles();
+
+
 	$scope.submission_status = 0;
 	$scope.updateEntryStatus = function updateEntryStatus(submission_id , user_id) {
 		console.log( $scope.submission_status, submission_id );
@@ -319,4 +333,23 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 			console.log( response );
 		} );
 	}
+
+	$scope.deleteLevel = function deleteLevel(level_id) {
+		if ( confirm( 'Are you sure you want to delete this level and its contents?' ) ) {
+			$http.post( settings.base_url + 'api/level/delete' , { id:level_id } )
+			.success( function (response) {
+				console.log(response);
+				$( '#level_id-' + level_id ).fadeOut();
+			} );
+		}
+	}
+	$scope.extractTag = function extractTag(stringTags) {
+		var tag_arr = new Array();
+		// this will return an array with strings "1", "2", etc.
+		if ( stringTags ) {
+			tag_arr = stringTags.split(",");
+		}
+		return tag_arr;
+	}
+	
 });

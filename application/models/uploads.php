@@ -21,6 +21,24 @@ class Uploads extends CI_Model {
 			return array();
 	}
 
+	public function get_available_files()
+	{
+
+		$this->db->select( 'uploads.id as upload_id, uploads.filename, uploads.parameter_id, uploads.description, uploads.tags, uploads.shared_status, area_parameters.parameter_name,courses.course_name, courses.id as course_id' )
+				 ->where( 'shared_status', 1 )
+				 ->or_where( 'shared_status', 3 )
+				 ->join( 'area_parameters', 'area_parameters.id = uploads.parameter_id' )
+				 ->join( 'area', 'area.id = area_parameters.area_id' )
+				 ->join( 'courses', 'courses.id = area.course_id' );
+		$query = $this->db->get($this->table);
+
+
+		if ($query->num_rows() > 0)
+			return $query->result_array();
+		else
+			return array();
+	}
+
 	public function get_file_count($parameter_id,$child_count)
 	{
 		$this->db->where( 'parameter_id' , $parameter_id );
@@ -84,9 +102,10 @@ class Uploads extends CI_Model {
 
 	public function search($data)
 	{
-		$this->db->select( 'uploads.id as upload_id, uploads.filename, uploads.parameter_id, uploads.description, uploads.shared_status, area_parameters.parameter_name,courses.course_name, courses.id as course_id' )
+		$this->db->select( 'uploads.id as upload_id, uploads.filename, uploads.parameter_id, uploads.description, uploads.tags, uploads.shared_status, area_parameters.parameter_name,courses.course_name, courses.id as course_id' )
 				 ->like('filename', $data->data, 'both')
 				 ->or_like('description', $data->data, 'both')
+				 ->or_like('uploads.tags', $data->data, 'both')
 				 ->where( 'shared_status', 1 )
 				 ->join( 'area_parameters', 'area_parameters.id = uploads.parameter_id' )
 				 ->join( 'area', 'area.id = area_parameters.area_id' )
@@ -153,6 +172,7 @@ class Uploads extends CI_Model {
 			'parameter_id' 	=>  $parameter_id,
 			'author_id'		=>  $this->session->userdata('id'),
 			'description'	=>  $data->description,
+			'tags'			=>  $data->tags,
 		]);
 
 		if ( $copy_id > 0 ) {

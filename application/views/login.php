@@ -28,7 +28,7 @@
 <body class="login-page">
     <div class="login-box">
         <div class="logo">
-            <a href="javascript:void(0);">MUST</a>
+            <a href="javascript:void(0);">USTSP</a>
             <small>Suggestive File Management System</small>
         </div>
         <div class="card">

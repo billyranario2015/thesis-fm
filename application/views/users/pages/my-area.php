@@ -56,7 +56,8 @@
                             <table class="table table-hover">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
+                                        <!-- <th>#</th> -->
+                                        <th>LEVEL</th>
                                         <th>AREA NAME</th>
                                         <th>TYPE</th>
                                         <th class="text-right">ACTION</th>
@@ -65,8 +66,9 @@
                                 <tbody>
                                     <!-- FOR MAIN AREA ASSIGNED TO CURRENT SUB CHAIRMAN -->
                                     <?php if( count($data) > 0 ) { ?>
-                                    <tr id="main-area">
+                                    <!--tr id="main-area">
                                         <th scope="row" style="vertical-align: middle;">1</th>
+                                        <td  style="vertical-align: middle;"><?php echo $data['level_name'] ?></td>
                                         <td  style="vertical-align: middle;"><?php echo $data['area_name'] ?></td>
                                         <td  style="vertical-align: middle;"><b>MAIN AREA</b></td>
                                         <td  style="vertical-align: middle;" class="text-right">
@@ -74,7 +76,7 @@
                                                 <i class="material-icons">edit</i>
                                             </a>
                                         </td>
-                                    </tr>
+                                    </tr-->
                                     <?php } ?>
 
                                     <!-- FOR ALL LINKED AREAS ASSIGNED TO CURRENT SUB CHAIRMAN -->

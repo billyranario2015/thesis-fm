@@ -145,4 +145,5 @@ $autoload['model'] = array(
 	'notification'	 => 'notification',
 	'submission'	 => 'submission',
 	'logs'	 		 => 'logs',
+	'levels'	 	 => 'levels',
 );

@@ -96,4 +96,33 @@ fm.controller( "MainController" , function( $scope, $http, $timeout, settings, $
 		return notifs.length;
 	}
 
+	var colors = [
+		{ color: 'bg-red' },
+		{ color: 'bg-pink' },
+		{ color: 'bg-purple' },
+		{ color: 'bg-deep-purple' },
+		{ color: 'bg-indigo'},
+		{ color: 'bg-blue' },
+		{ color: 'bg-light-blue' },
+		{ color: 'bg-cyan' },
+		{ color: 'bg-teal' },
+		{ color: 'bg-green'},
+		{ color: 'bg-light-green' },
+		{ color: 'bg-lime' },
+		{ color: 'bg-yellow' },
+		{ color: 'bg-amber' },
+		{ color: 'bg-orange'},
+		{ color: 'bg-deep-orange' },
+		{ color: 'bg-brown' },
+		{ color: 'bg-grey' },
+		{ color: 'bg-blue' },
+		{ color: 'bg-black' }
+	];
+
+
+	$scope.randomColor = function() {
+	  // return colors[Math.floor(Math.random() * colors.length)].color;
+	  return colors[8].color;
+	};
+
 } );

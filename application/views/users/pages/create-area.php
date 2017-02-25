@@ -14,7 +14,9 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                CREATE NEW AREA
+                                <span class="text-success"><?php echo $level_info['level_name']; ?></span> > AREA > NEW AREA
+
+                                <a href="<?php echo base_url('user/level/'.$level_info['id'].'/areas') ?>" class="btn btn-primary pull-right">BACK</a>
                             </h2>
                         </div>
                         <div class="body table-responsive">
@@ -23,6 +25,7 @@
                                     <h2 class="card-inside-title">Area Name</h2>
                                     <div class="form-group form-float">
                                         <div class="form-line">
+                                            <input type="hidden" name="level_id" value="<?php echo $level_info['id']; ?>" class="form-control">
                                             <input type="hidden" name="course_id" value="<?php echo $this->session->userdata('course_id'); ?>" class="form-control">
                                             <input type="text" name="area_name" class="form-control" required>
                                         </div>

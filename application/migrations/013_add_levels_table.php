@@ -2,7 +2,7 @@
 
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Migration_Add_Area_Parameters_Table extends CI_Migration {
+class Migration_Add_Levels_Table extends CI_Migration {
 
     public function __construct()
     {
@@ -19,23 +19,14 @@ class Migration_Add_Area_Parameters_Table extends CI_Migration {
                 'unsigned' => TRUE,
                 'auto_increment' => TRUE
             ),
-            'area_id' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'null' => true
-            ),
-            'parent_id' => array(
-                'type' => 'INT',
-                'constraint' => 11,
-                'default' => 0 // for unassigned value
-            ),
-            'parameter_name' => array(
+            'level_name' => array(
                 'type' => 'VARCHAR',
                 'constraint' => 255,
                 'null' => true
             ),
-            'tags' => array(
-                'type' => 'TEXT',
+            'course_id' => array(
+                'type' => 'INT',
+                'constraint' => 11,
                 'null' => true
             ),
             'created_at' => array(
@@ -47,12 +38,12 @@ class Migration_Add_Area_Parameters_Table extends CI_Migration {
         );
         $this->dbforge->add_field($fields);
         $this->dbforge->add_key('id',TRUE);
-        $this->dbforge->create_table('area_parameters',TRUE); 
+        $this->dbforge->create_table('levels',TRUE); 
 
     }
 
   public function down()
   {
-    $this->dbforge->drop_table('area_parameters', TRUE);
+    $this->dbforge->drop_table('levels', TRUE);
   }
 }

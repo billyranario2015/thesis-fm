@@ -44,11 +44,11 @@
                                             }
                                        </style>
 
-                                        <div class="text-right">
+                                        <!-- <div class="text-right">
                                             <a href="<?php echo base_url( 'user/area/'.$data['id'] . '/templates' ); ?>" class="btn btn-primary">BACK</a>
-                                        </div>
+                                        </div> -->
                                         <br>
-                                        <div class="col-sm-4">
+                                        <div class="col-sm-12">
                                             <form ng-submit="createParameter(<?php echo $data['id']; ?>)">
                                                 <h2 class="card-inside-title">Select Parent Parameter</h2>
                                                 <div class="form-group form-float form-group-md">
@@ -74,8 +74,9 @@
                                                     </span>
                                                 </div>
                                             </form>
+                                            <hr style="border-top: 1px dashed #656565;margin-top: 45px;margin-bottom: 30px;">
                                         </div>
-                                        <div class="col-sm-8">
+                                        <div class="col-sm-12">
                                             <h2 class="card-inside-title">
                                                 <span class="pull-left">Parameters</span>
                                                 <span class="pull-right">
@@ -91,7 +92,7 @@
 
                                                         <span class="label bg-red" style="position: relative;bottom: 9px;cursor:default;margin-right: 5px;" ng-if="list.parameter_status == 'incomplete'">In-complete</span>
 
-                                                        <a href="<?php  echo base_url( 'user/area/' .$data['id'] . '/parameter/{{list.id}}' ) ?>" class="col-green" style="text-decoration: none;">
+                                                        <a href="<?php  echo base_url( 'user/level/'.$level_info['id'].'/area/'.$data['id'] .'/parameter/{{list.id}}' ) ?>" class="col-green" style="text-decoration: none;">
                                                            <i class="material-icons">folder_shared</i>
                                                         </a>
                                                         <span class="col-cyan" ng-click="edit_parameter(list)">
@@ -143,6 +144,17 @@
                                                                     <input type="text" class="form-control date" ng-model="parameter_edit.parameter_name" placeholder="Parameter Name" required>
                                                                 </div>
                                                             </div>
+                                                            <?php if ( $this->session->userdata('user_level') == 2 ) { ?>
+                                                            <h2 class="card-inside-title">Tags <small>Separate by commas(,)s</small></h2>
+                                                            <div class="form-group form-float form-group-md">
+                                                                <div class="form-line">
+                                                                    <textarea class="form-control" ng-model="parameter_edit.tags"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="tags">
+                                                                <span ng-repeat="tag in extractTag(parameter_edit.tags)" class="label {{ randomColor() }}" ng-bind="tag" style="margin-right:5px;"></span>
+                                                            </div>
+                                                            <?php } ?>
                                                        </form>
                                                     </div>
                                                     <div class="modal-footer">

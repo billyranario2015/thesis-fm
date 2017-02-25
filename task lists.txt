@@ -9,8 +9,11 @@ Change :
 -- MUST to USTSP
 Fullwidth parameter table and creation
 
-so ang final scenario ani kay 
-1. Sulod kos Area
-2. Then naa daun list of Levels
-3. Sulod kos usa Level 
-4. Then sa sulod sa level naa na daun mga list sa params
+
+PRIORITY
+LEVELS
+1. Login as Chairman
+2. List of Levels will show 
+3. Inside the Level (for example: Level 1), List of areas will show
+4. Inside the Area (for example, Area 1), List of Parameters will show
+

@@ -38,6 +38,10 @@ class Migration_Add_Uploads_Table extends CI_Migration {
                 'type' => 'TEXT',
                 'null' => true
             ),
+            'tags' => array(
+                'type' => 'TEXT',
+                'null' => true
+            ),
             /*
             | Sharing Status Codes
             | 1 = SHARE TO OTHER ORGANIZATIONS 
