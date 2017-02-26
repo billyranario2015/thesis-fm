@@ -31,7 +31,7 @@ class AuthController extends CI_Controller {
 			if ( $user_info['user_level'] == 1 )
 				redirect( base_url('admin/organizations') );
 			elseif( $user_info['user_level'] == 2 )
-				redirect( base_url('user/area') );
+				redirect( base_url('user/dashboard') );
 			elseif( $user_info['user_level'] == 3 )
 				redirect( base_url('user/my-area') );
 			elseif( $user_info['user_level'] == 4 )
