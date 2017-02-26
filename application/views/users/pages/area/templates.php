@@ -49,7 +49,7 @@
                                         </div> -->
                                         <br>
                                         <div class="col-sm-12">
-                                            <form ng-submit="createParameter(<?php echo $data['id']; ?>)">
+                                            <form ng-submit="createParameter(<?php echo $level_info['id']; ?>,<?php echo $data['id']; ?>)">
                                                 <h2 class="card-inside-title">Select Parent Parameter</h2>
                                                 <div class="form-group form-float form-group-md">
                                                     <div class="form-line">
@@ -121,7 +121,7 @@
                                         </div> -->
 
 
-                                        <div class="modal fade" id="modal-edit-parameter" tabindex="-1" role="dialog">
+                                        <div class="modal fade" id="modal-edit-parameter" tabindex="-1" role="dialog" ng-init=" parameter_edit.level_id = <?php if( !empty($level_info) ) echo $level_info['id']; ?>">
                                             <div class="modal-dialog" role="document">
                                                 <div class="modal-content">
                                                     <div class="modal-header">

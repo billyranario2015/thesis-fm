@@ -43,11 +43,12 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 	}
 
 	$scope.parameter = {};
-	$scope.createParameter = function createParameter(area_id) {
+	$scope.createParameter = function createParameter(level_id, area_id) {
 		if ( !$scope.parameter.parent_id )
 			$scope.parameter.parent_id = 0;
 
-		$scope.parameter.area_id  = area_id;
+		$scope.parameter.area_id   = area_id;
+		$scope.parameter.level_id  = level_id;
 		$http.post( settings.base_url + 'api/create/parameter', $scope.parameter )
 		.success( function(response) {
 			$scope.getParameters( area_id );
@@ -72,6 +73,7 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 	$scope.updateParameter = function updateParameter() {
 		$http.post( settings.base_url + 'api/update/parameter', $scope.parameter_edit )
 		.success( function(response) {
+			console.log(response);
 			$scope.getParameters( $scope.parameter_edit.area_id );
 			$scope.getCleanParameters($scope.parameter_edit.area_id);
 			$( '#modal-edit-parameter' ).modal('hide');
