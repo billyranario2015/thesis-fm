@@ -63,6 +63,11 @@ class Migration_Add_Submission_Table extends CI_Migration {
                 'type' => 'INT',
                 'constraint' => 11,
                 'null' => true
+            ),  
+            'level_id' => array(
+                'type' => 'INT',
+                'constraint' => 11,
+                'null' => true
             ),
             'created_at' => array(
                 'type' => 'TIMESTAMP',

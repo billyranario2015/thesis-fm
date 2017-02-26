@@ -28,14 +28,16 @@
                                 <?php if( isset($param_info) ) { ?>
                                     <a href="<?php echo base_url('user/level/'.$level_info['id'].'/area/'.$data['id'] . '/edit') ?>" class="btn btn-primary pull-right">BACK</a>
                                 <?php } else { ?>
-                                    <a href="<?php echo base_url('user/level/'.$level_info['id'].'/areas') ?>" class="btn btn-primary pull-right">BACK</a>
+                                   <?php if( $this->session->userdata('user_level') != 3 ) { ?>
+                                        <a href="<?php echo base_url('user/level/'.$level_info['id'].'/areas') ?>" class="btn btn-primary pull-right">BACK</a>
+                                    <?php } ?>
                                 <?php } ?>
                                 
 
                                 <?php if ($this->session->userdata('user_level') == 3 ) { ?>
                                 <!-- NOT YET SUBMITTED -->
                                 <button class="btn bg-deep-purple waves-effect btn-lg pull-right" style="position: relative;top: -8px;" 
-                                    ng-click="submitToChairman(<?php echo $data['id'] ?>)" ng-if="submission_count == 0">
+                                    ng-click="submitToChairman(<?php echo $level_info['id'] ?>,<?php echo $data['id'] ?>)" ng-if="submission_count == 0">
                                         Submit Entries
                                 </button>
 
@@ -123,7 +125,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-sm-12" style="display:none">
+                                        <div class="col-sm-12">
                                             <h2 class="card-inside-title">Select Sub-Users to manage this area: (Optional)</h2>
                                             <div class="form-group form-float form-group-md">
                                                 <div class="form-line">
@@ -240,7 +242,7 @@
                         </div>
 
                         <div class="form-group form-float form-group-md">
-                            <label>Tags <small style="width:100%;display:block">Separate by commas(,)s</label>
+                            <label>Tags <small style="width:100%;display:block">Separate tags by comma(,)s</label>
                             <div class="form-line">
                                 <textarea class="form-control" ng-model="edit_options.tags"></textarea>
                             </div>

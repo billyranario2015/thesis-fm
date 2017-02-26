@@ -21,11 +21,11 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                <?php echo $data['area_name'] ?>
+                                <span class="text-primary" style="text-transform:uppercase;"><?php echo $level_info['level_name'] ?></span> > <?php echo $data['area_name'] ?>
                                  <small>ENTRY CONTENTS FROM <span class="font-bold col-pink" style="text-transform:uppercase;"><?php echo $chairman_info['fname']. ' ' .$chairman_info['lname'] ?></span></small>
                                 
 
-                                <a href="/evaluator/user/<?php echo $chairman_info['id'] ?>/area" class="btn btn-primary waves-effect btn-lg pull-right" style="position: relative;top: -38px;">
+                                <a href="/evaluator/user/<?php echo $chairman_info['id'] ?>/level/<?php echo $level_info['id'] ?>/areas" class="btn btn-primary waves-effect btn-lg pull-right" style="position: relative;top: -38px;">
                                     BACK
                                 </a>
 
@@ -38,7 +38,7 @@
                                     <span ng-bind-html="list.parameter_name"></span>
                                     <span class="pull-right action-icons">
                                         
-                                        <a href="<?php  echo base_url( 'evaluator/user/'.$chairman_info['id'].'/area/' .$data['id'] . '/parameter/{{list.id}}' ) ?>" class="col-green" style="text-decoration: none;">
+                                        <a href="<?php  echo base_url( 'evaluator/user/'.$chairman_info['id'].'/level/'.$level_info['id'].'/area/' .$data['id'] . '/parameter/{{list.id}}' ) ?>" class="col-green" style="text-decoration: none;">
                                            <i class="material-icons">folder_shared</i>
                                         </a>
                                         <!-- <span class="col-cyan" ng-click="edit_parameter(list)">

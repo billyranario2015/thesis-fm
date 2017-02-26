@@ -57,7 +57,7 @@
                                 <thead>
                                     <tr>
                                         <!-- <th>#</th> -->
-                                        <th>LEVEL</th>
+                                        <th>LEVEL NAME</th>
                                         <th>AREA NAME</th>
                                         <th>TYPE</th>
                                         <th class="text-right">ACTION</th>
@@ -70,34 +70,38 @@
                                         <th scope="row" style="vertical-align: middle;">1</th>
                                         <td  style="vertical-align: middle;"><?php echo $data['level_name'] ?></td>
                                         <td  style="vertical-align: middle;"><?php echo $data['area_name'] ?></td>
-                                        <td  style="vertical-align: middle;"><b>MAIN AREA</b></td>
+                                        <td  style="vertical-align: middle;"><b>MAIN</b></td>
                                         <td  style="vertical-align: middle;" class="text-right">
-                                            <a href="<?php echo base_url('user/area/'.$data['id']) ?>" class="btn bg-blue waves-effect">
+                                            <a href="<?php echo base_url('user/level/'.$data['level_id'].'/area/'.$data['area_area_id'].'/edit') ?>" class="btn bg-blue waves-effect">
                                                 <i class="material-icons">edit</i>
                                             </a>
                                         </td>
                                     </tr-->
                                     <?php } ?>
 
-                                    <!-- FOR ALL LINKED AREAS ASSIGNED TO CURRENT SUB CHAIRMAN -->
+                                    <!-- FOR ALL LINKED MAIN AREAS ASSIGNED TO CURRENT SUB CHAIRMAN -->
                                     <?php 
-                                    $has_main_area = count($data);
-
-
-                                    foreach ($linked_areas as $key => $area) { 
-                                        $count = 1;
-                                        if ( $has_main_area != 0 ) {
-                                            $count = (++$key + 1);
-                                        } else {
-                                            $count = (++$key);
-                                        }
-                                    ?>
+                                    foreach ($linked_areas as $key => $area) {  ?>
                                     <tr id="area" valign="middle">
-                                        <th scope="row"><?php echo $count; ?></th>
+                                        <th scope="row"><?php echo $area['level_name'] ?></th>
                                         <td  style="vertical-align: middle;"><?php echo $area['area_name'] ?></td>
-                                        <td  style="vertical-align: middle;"><b>SUB AREA</b></td>
+                                        <td  style="vertical-align: middle;"><b class="label bg-green">MAIN</b></td>
                                         <td  style="vertical-align: middle;" class="text-right">
-                                            <a href="<?php echo base_url('user/area/'.$area['area_area_id']) ?>" class="btn bg-blue waves-effect">
+                                            <a href="<?php echo base_url('user/level/'.$area['level_id'].'/area/'.$area['area_area_id'].'/edit') ?>" class="btn bg-blue waves-effect">
+                                                <i class="material-icons">edit</i>
+                                            </a>
+                                        </td>
+                                    </tr>                                        
+                                    <?php } ?>
+
+                                    <?php 
+                                    foreach ($sub_areas as $key => $area) {  ?>
+                                    <tr id="area" valign="middle">
+                                        <th scope="row"><?php echo $area['level_name'] ?></th>
+                                        <td  style="vertical-align: middle;"><?php echo $area['area_name'] ?></td>
+                                        <td  style="vertical-align: middle;"><b class="label bg-orange">ASSOCIATE</b></td>
+                                        <td  style="vertical-align: middle;" class="text-right">
+                                            <a href="<?php echo base_url('user/level/'.$area['level_id'].'/area/'.$area['area_area_id'].'/edit') ?>" class="btn bg-blue waves-effect">
                                                 <i class="material-icons">edit</i>
                                             </a>
                                         </td>
