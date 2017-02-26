@@ -22,7 +22,7 @@
                         <div class="header">
                             <h2>
                                 <span class="text-success"><?php echo $level_info['level_name'] ?></span> > <?php echo $data['area_name']; ?>
-                                <?php if( isset($param_info) ) echo ' > ' . $param_info['parameter_name'] ?>
+                                <?php if( !empty($param_info) ) echo ' > ' . isset($param_info) ? $param_info['parameter_name'] : '' ?>
                                 
 
                                 <?php if( isset($param_info) ) { ?>

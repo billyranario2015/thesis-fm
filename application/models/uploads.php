@@ -118,6 +118,24 @@ class Uploads extends CI_Model {
 			return array();
 	}
 
+	public function get_related_files_by_tag($data)
+	{
+		$this->db->select( 'uploads.id as upload_id, uploads.filename, uploads.parameter_id, uploads.description, uploads.tags, uploads.shared_status, area_parameters.parameter_name,courses.course_name, courses.id as course_id' )
+				 ->like('uploads.tags', $data->tag, 'both')
+				 ->or_like('description', $data->tag, 'both')
+				 ->or_like('filename', $data->tag, 'both')
+				 ->where( 'shared_status', 1 )
+				 ->join( 'area_parameters', 'area_parameters.id = uploads.parameter_id' )
+				 ->join( 'area', 'area.id = area_parameters.area_id' )
+				 ->join( 'courses', 'courses.id = area.course_id' );
+		$query = $this->db->get($this->table);
+
+		if ($query->num_rows() > 0)
+			return $query->result_array();
+		else
+			return array();
+	}
+
 	public function search_by_filename($data)
 	{
 		$this->db->where('id',$data);

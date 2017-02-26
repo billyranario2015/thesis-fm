@@ -13,7 +13,6 @@
                                         }
                                         </style>
 
-
                                         <?php if( $this->session->userdata('user_level') != 3 ) { ?>
                                         <!--div class="text-right">
                                             <a href="<?php echo base_url( 'user/area/' . $data['id']  ); ?>" class="btn btn-primary">BACK</a>
@@ -38,7 +37,7 @@
                                                 <a style="cursor:pointer" ng-click="clearSearch()" class="btn bg-red waves-effect btn-sm" id="btn-copy">
                                                     Clear
                                                 </a>
-                                                <a style="cursor:pointer" ng-click="dispayAllAvailableFiles()" class="btn bg-cyan waves-effect btn-sm" >
+                                                <a style="cursor:pointer" ng-click="dispayAllAvailableFiles('<?php if( !empty($param_info) ) echo $param_info['tags']; ?>')" class="btn bg-cyan waves-effect btn-sm" >
                                                     Display Available Results
                                                 </a>
                                             </span>
@@ -47,7 +46,7 @@
                                         <hr>
 
                                         <!-- SUGGESTED FILES -->
-                                        <div ng-init="getParameterFiles(<?php echo isset($param_id)?$param_id:0; ?>)">
+                                        <div ng-init="getParameterFiles(<?php echo isset($param_id)?$param_id:0; ?>);dispayAllAvailableFiles('<?php if( !empty($param_info) ) echo $param_info['tags']; ?>')">
                                             <div>
                                                 <div class="header">
                                                     <div class="row">

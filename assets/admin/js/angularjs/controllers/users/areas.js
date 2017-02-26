@@ -43,11 +43,12 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 	}
 
 	$scope.parameter = {};
-	$scope.createParameter = function createParameter(area_id) {
+	$scope.createParameter = function createParameter(level_id, area_id) {
 		if ( !$scope.parameter.parent_id )
 			$scope.parameter.parent_id = 0;
 
-		$scope.parameter.area_id  = area_id;
+		$scope.parameter.area_id   = area_id;
+		$scope.parameter.level_id  = level_id;
 		$http.post( settings.base_url + 'api/create/parameter', $scope.parameter )
 		.success( function(response) {
 			$scope.getParameters( area_id );
@@ -72,6 +73,7 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 	$scope.updateParameter = function updateParameter() {
 		$http.post( settings.base_url + 'api/update/parameter', $scope.parameter_edit )
 		.success( function(response) {
+			console.log(response);
 			$scope.getParameters( $scope.parameter_edit.area_id );
 			$scope.getCleanParameters($scope.parameter_edit.area_id);
 			$( '#modal-edit-parameter' ).modal('hide');
@@ -305,16 +307,41 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 	}
 
 	// DISPLAY RELATED FILES FIRST
-	$scope.dispayAllAvailableFiles = function dispayAllAvailableFiles() {
+	$scope.dispayAllAvailableFiles = function dispayAllAvailableFiles(parameter_tags) {
+		var tagArr = $scope.extractTag(parameter_tags);
+		var related_files = [];
+		$scope.loader_search = true;
+		$scope.related_files = [];
+	    $scope.related_file_count = 0;
 
-		$http.get( settings.base_url + 'api/get_available_files/' )
-		.success( function (response) {
-			console.log( response.response )
-			$scope.related_files = response.response;
-	    	$scope.related_file_count = response.response.length;
-		} );
+		if ( tagArr.length > 0 ) {
+			for( x in tagArr ) {
+				$http.post( settings.base_url + 'api/get_related_files_by_tag/', { tag : tagArr[x] })
+				.success( function (response) {
+					$scope.$applyAsync(function () {
+	    				angular.forEach( response.response, function (value2,key2) {
+	    					related_files.push(value2);
+	    				} );
+	    			} );
+				} );				
+			}
+		}
+
+	    setTimeout(function() {
+			$scope.related_file_count = related_files.length;
+	    	$scope.related_files = related_files;
+	    	$scope.loader_search = false;
+	    	$scope.$apply();
+	    	console.log( related_files.length );
+	    }, 1500);	
+	    	
+		// $http.get( settings.base_url + 'api/get_available_files/' + parameter_id )
+		// .success( function (response) {
+		// 	console.log( response.response )
+		// 	$scope.related_files = response.response;
+	 //    	$scope.related_file_count = response.response.length;
+		// } );
 	}
-	$scope.dispayAllAvailableFiles();
 
 
 	$scope.submission_status = 0;

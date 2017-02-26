@@ -261,8 +261,10 @@ class UsersController extends CI_Controller {
 			'sub_users' => $this->area->get_sub_assignees($id),
 			'tab'	=> 'templates',
 			'action' => 'templates',
+			'param_info' => array(),
 			'scripts'=> '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>',
 		);
+
 		$data['tpl'] = 'levels';
 		$data['tpl2'] = 'area';
 
@@ -474,15 +476,15 @@ class UsersController extends CI_Controller {
 	public function create_param()
 	{
 		$obj = json_decode(file_get_contents('php://input'));
-
 		// Log current activity
 		$log_arr = array(
 			'author_id' => $this->session->userdata('id'),
 			'message'   => $this->session->userdata('fname') . ' created parameter ' . $obj->parameter_name,
-			'link'		=> base_url( 'user/area/'.$obj->area_id )
+			'link'		=> base_url( 'user/level/'.$obj->level_id.'/area/'.$obj->area_id.'/edit' )
 		);
 		$this->logs->create($log_arr);
 
+		unset($obj->level_id);
 		echo json_encode( [ 'response' => $this->area_params->create($obj) ] );
 	}
 
@@ -595,10 +597,11 @@ class UsersController extends CI_Controller {
 		$log_arr = array(
 			'author_id' => $this->session->userdata('id'),
 			'message'   => $this->session->userdata('fname') . ' updated parameter ' . $obj->parameter_name,
-			'link'		=> base_url( 'user/area/'.$obj->area_id )
+			'link'		=> base_url( 'user/level/'.$obj->level_id.'/area/'.$obj->area_id.'/edit' )
 		);
 		$this->logs->create($log_arr);
 
+		unset($obj->level_id);
 		echo json_encode( [ 'response' => $this->area_params->update($obj) ] );
 	}
 
@@ -690,6 +693,12 @@ class UsersController extends CI_Controller {
 	public function get_available_files()
 	{
 		echo json_encode( ['response'=>$this->files->get_available_files()] );
+	}
+
+	public function get_related_files_by_tag()
+	{
+		$obj = json_decode(file_get_contents('php://input'));
+		echo json_encode( [ 'response' => $this->files->get_related_files_by_tag($obj) ] );
 	}
 
 	public function search_file()

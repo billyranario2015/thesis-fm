@@ -40,6 +40,22 @@ class Migration_Add_Levels_Table extends CI_Migration {
         $this->dbforge->add_key('id',TRUE);
         $this->dbforge->create_table('levels',TRUE); 
 
+        // Default Account
+        $data = array(
+            array(
+                'id'                => 1,
+                'level_name'        => 'LEVEL 1',
+                'course_id'         => 1,
+            ),
+            array(
+                'id'                => 2,
+                'level_name'        => 'LEVEL 2',
+                'course_id'         => 1,
+            ),
+        );
+        $this->db->insert_batch('levels', $data);
+
+
     }
 
   public function down()
