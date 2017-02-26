@@ -25,7 +25,7 @@
                                         <?php } ?>
                                         
                                         <p style="margin:0">
-                                            <small><?php echo date("M d, Y h:ma", strtotime($log['created_at'])); ?></small>
+                                            <small><?php echo date("M d, Y H:i a", strtotime($log['created_at'])); ?></small>
                                         </p>
                                     </li>
                                 <?php } ?>

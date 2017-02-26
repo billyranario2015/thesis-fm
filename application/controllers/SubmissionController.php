@@ -7,7 +7,6 @@ class SubmissionController extends CI_Controller {
 	public function addSubmissionArea()
 	{
 		$obj = json_decode(file_get_contents('php://input'));
-
 		// Get Course data 
 		$course = $this->course->get_course_by_id($obj->userdata->course_id);
 
@@ -20,6 +19,14 @@ class SubmissionController extends CI_Controller {
 			'area_id'			=> $obj->userdata->area_id,
 		];
 
+		// Log current activity
+		$log_arr = array(
+			'author_id' => $this->session->userdata('id'),
+			'message'   => $this->session->userdata('fname') . ' submitted an area.',
+			'link'		=> base_url( 'user/level/'.$obj->userdata->level_id.'/area/'.$obj->userdata->area_id.'/edit' )
+		);
+		$this->logs->create($log_arr);		
+
 		// GET Chairman's ID
 		$course_data = $this->users->get_users_by_course_with_level($obj->userdata->course_id,2);
 
@@ -29,7 +36,7 @@ class SubmissionController extends CI_Controller {
 			'target_id'				=> $course_data['id'],
 			'notification_status'	=> 0, // UNSEENED 
 			'course_id'				=> $obj->userdata->course_id,
-			// 'submission_type'		=> 1, // SUBMIT AREA TO CHAIRMAN
+			'link'					=> base_url( 'user/level/'.$obj->userdata->level_id.'/area/'.$obj->userdata->area_id.'/edit' ), // SUBMIT AREA TO CHAIRMAN
 		];
 
 		echo json_encode( [ 
@@ -58,7 +65,16 @@ class SubmissionController extends CI_Controller {
 			'course_id'			=> $obj->userdata->course_id,
 			'submission_type'	=> 2, // SUBMIT TO IN-HOUSE EVALUATOR 
 			'submission_status'	=> 3, // UNAPPROVED
+			'level_id'			=> $obj->userdata->level_id, // UNAPPROVED
 		];
+
+		// Log current activity
+		$log_arr = array(
+			'author_id' => $this->session->userdata('id'),
+			'message'   => $this->session->userdata('fname') . ' has submitted an entry to evaluator.',
+			'link'		=> base_url( 'user/level/'.$obj->userdata->level_id.'/areas' )
+		);
+		$this->logs->create($log_arr);	
 
 		// GET Chairman's ID
 		$course_data = $this->users->get_users_by_course_with_level($obj->userdata->course_id,4);
@@ -70,6 +86,7 @@ class SubmissionController extends CI_Controller {
 			'notification_status'	=> 0, // UNSEENED 
 			'course_id'				=> $obj->userdata->course_id,
 			// 'submission_type'		=> 1, // SUBMIT AREA TO CHAIRMAN
+			'link'					=> base_url( 'user/level/'.$obj->userdata->level_id.'/areas' ), // SUBMIT 
 		];
 
 		echo json_encode( [ 
@@ -81,6 +98,8 @@ class SubmissionController extends CI_Controller {
 	public function status_update()
 	{
 		$obj = json_decode(file_get_contents('php://input'));
+		// GET submission data
+		$submission_info = $this->submission->get_submission_by_ID($obj->id);
 
 		$notification_arr = [
 			'user_id' 				=> $this->session->userdata('id'),
@@ -88,6 +107,7 @@ class SubmissionController extends CI_Controller {
 			'target_id'				=> $obj->user_id,
 			'notification_status'	=> 0, // UNSEENED 
 			'course_id'				=> $this->session->userdata('course_id'),
+			'link'					=> base_url( 'user/level/'.$submission_info['level_id'].'/areas' ) ,
 		];
 
 		echo json_encode( 

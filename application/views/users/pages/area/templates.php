@@ -145,7 +145,7 @@
                                                                 </div>
                                                             </div>
                                                             <?php if ( $this->session->userdata('user_level') == 2 ) { ?>
-                                                            <h2 class="card-inside-title">Tags <small>Separate by commas(,)s</small></h2>
+                                                            <h2 class="card-inside-title">Tags <small>Separate tags by comma(,)</small></h2>
                                                             <div class="form-group form-float form-group-md">
                                                                 <div class="form-line">
                                                                     <textarea class="form-control" ng-model="parameter_edit.tags"></textarea>

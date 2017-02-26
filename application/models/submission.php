@@ -20,6 +20,17 @@ class submission extends CI_Model {
 			return array();
 	}
 
+	public function get_submission_by_ID($submission_id)
+	{	
+		$this->db->where('id',$submission_id);
+		$query = $this->db->get($this->table);
+
+		if ($query->num_rows() > 0)
+			return $query->row_array();
+		else
+			return array();
+	}
+
 	public function get_by_id($data)
 	{
 		$this->db->where('user_id',$data);
@@ -44,6 +55,18 @@ class submission extends CI_Model {
 			return $query->result_array();
 		else
 			return array();
+	}
+
+	public function check_chairman_submission($user_id, $level_id)
+	{
+		$this->db->where('user_id',$user_id)
+				 ->where('level_id',$level_id);
+		$query = $this->db->get($this->table);
+
+		if ($query->num_rows() > 0)
+			return $query->result_array();
+		else
+			return 0;
 	}
 
 	public function get_submission_by_areaID($area_id)

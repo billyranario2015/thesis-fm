@@ -13,6 +13,14 @@ class UsersController extends CI_Controller {
 			'submission'		=>  $this->submission->get_by_id( $this->session->userdata('id') ),
 		] );
 	}
+
+	public function check_submission($level_id)
+	{
+		echo json_encode([
+			'submission_count' => count(  $this->submission->check_chairman_submission( $this->session->userdata('id') , $level_id ) ),
+			'submission_data' =>  $this->submission->check_chairman_submission( $this->session->userdata('id') , $level_id ),
+		]);
+	}
 	public function user_page($tpl)
 	{
 		/*
@@ -84,7 +92,7 @@ class UsersController extends CI_Controller {
 			/*
 			|  LIST ALL LEVEL AREAS ASSIGNED TO CURRENT SUB CHAIRMAN
 			*/
-			// $data['level_areas'] = $this->area->get_level_areas($this->session->userdata('id'));
+			$data['sub_areas'] = $this->area->get_linked_areas($this->session->userdata('id'));
 
 
 			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
@@ -322,7 +330,7 @@ class UsersController extends CI_Controller {
 			$log_arr = array(
 				'author_id' => $this->session->userdata('id'),
 				'message'   => $this->session->userdata('fname') . ' added new users on area ' . $_POST['area_name'] . '.',
-				'link'		=> base_url( 'user/area/'.$_POST['id'] . '/settings' )
+				'link'		=> base_url( 'user/level/'.$_POST['level_id'].'/area/'.$_POST['id'].'/settings' )
 			);
 			$this->logs->create($log_arr);
 
@@ -731,32 +739,46 @@ class UsersController extends CI_Controller {
 			$data['chairman_info'] = $this->users->get_course_chairman($this->session->userdata('course_id'));
 
 			// CHECK IF ALREADY SUBMITTED AN ENTRY FOR IN-HOUSE EVALUATOR
-			$data['submitted_entry'] = $this->submission->submitted_entry( 
+			$submitted_entry = $this->submission->submitted_entry( 
 				array(
 					'course_id' 		=> $this->session->userdata('course_id'),
 					'user_id'			=> $data['chairman_info']['id'], // Submitted by 
 					'submission_type'	=> 2 // 2 = SUBMIT TO IN-HOUSE EVALUATOR 
 				) 
 			);
+			// $data['submitted_entry']
+			$submission_arr = [];
+			foreach ($submitted_entry as $key => $entry) {
+				$submission_arr[] = array(
+					'u_user_id' => $entry['u_user_id'],
+					'submission_id' => $entry['submission_id'],
+					'submission_status' => $entry['submission_status'],
+					'fname' => $entry['fname'],
+					'lname' => $entry['lname'],
+					'role' => $entry['role'],
+					'level_info' => $this->levels->get_by_id($entry['level_id']),
+					// 'area_name' => $entry['area_name'],
+				);
+			}
+
+			$data['submitted_entry'] = $submission_arr;
 
 		}
 		$this->load->view('users/pages/evaluator/'.$tpl, $data);
 	}
  	
 
- 	public function evaluate_area($user_id)
+ 	public function evaluate_area($user_id,$level_id)
  	{
-
  		// get user's course_id
  		$chairman_info = $this->users->get_user_by_id($user_id);
 
-
  		$data = array(
- 			'areas'			=> $this->area->get_by_course_id($chairman_info['course_id']),
+ 			'areas'			=> $this->area->get_by_level_id($level_id),
  			'chairman_info' => $chairman_info,
+ 			'level_info' => $this->levels->get_by_id($level_id),
  		);
 
-	
 		if ( @$_GET['notification'] ) {
 			// UPDATE NOTIFICATION STATUS
 			$this->notification->update( [
@@ -766,11 +788,10 @@ class UsersController extends CI_Controller {
 		}
 
 
-
 		$this->load->view('users/pages/evaluator/evaluatee', $data);
  	}
 
- 	public function evaluate_area_content($user_id,$area_id)
+ 	public function evaluate_area_content($user_id, $level_id,$area_id)
  	{
 
  		// get user's course_id
@@ -781,6 +802,7 @@ class UsersController extends CI_Controller {
 			'tpl' => 'area',
 			'data' => $this->area->get_by_id($area_id),
 			'users' => $this->users->get_user_by_id($user_id),
+ 			'level_info' => $this->levels->get_by_id($level_id),
 			'tab'	=> 'templates',
 			'action' => 'templates',
 			'chairman_info' => $chairman_info,
@@ -800,7 +822,7 @@ class UsersController extends CI_Controller {
 		$this->load->view('users/pages/evaluator/evaluate-area-content',$data);
  	}
 
- 	public function evaluate_parameter_content($user_id,$area_id,$parameter_id)
+ 	public function evaluate_parameter_content($user_id,$level_id,$area_id,$parameter_id)
  	{
 		// get user's course_id
  		$chairman_info = $this->users->get_user_by_id($user_id);
@@ -809,6 +831,7 @@ class UsersController extends CI_Controller {
 			'tpl' => 'area',
 			'data' => $this->area->get_by_id($area_id),
 			'users' => $this->users->get_user_by_id($user_id),
+ 			'level_info' => $this->levels->get_by_id($level_id),
 			'tab'	=> 'templates',
 			'action' => 'templates',
 			'chairman_info' => $chairman_info,
@@ -915,12 +938,12 @@ class UsersController extends CI_Controller {
 		$level_info = $this->levels->get_by_id($level_id);
 
 		$data = array(
-			'level_info' 	=> $level_info, 
 			'areas' 		=> $this->levels->get_level_areas($level_id)
 		);
 
 		$data['tpl'] = 'levels';
 		$data['tpl2'] = 'area';
+		$data['level_info'] = $level_info;
 		$data['users'] = $this->users->get_all_users_by_course($this->session->userdata('course_id'));
 
 		// For chairman_info

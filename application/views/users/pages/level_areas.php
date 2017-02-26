@@ -16,18 +16,17 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>
+                            <h2 ng-init="checkLevelSubmission(<?php echo $level_info['id']; ?>)">
                                 <span class="text-success"><?php echo $level_info['level_name']; ?></span>&nbsp; > AREAS
                                 <?php if ($this->session->userdata('user_level') == 2 ) { ?>
                                 <!-- NOT YET SUBMITTED -->
                                 <button class="btn btn-success waves-effect btn-lg pull-right" style="position: relative;top: -8px;" 
-                                    ng-click="submitToEvaluator()" ng-if="submission_count == 0">
+                                    ng-click="submitToEvaluator(<?php echo $level_info['id']; ?>)" ng-if="submission_count == 0">
                                         Submit Entries to In-house Evaluator
                                 </button>
-
                                 <button class="btn bg-deep-purple waves-effect btn-lg pull-right" style="position: relative;top: -8px;" ng-if="submission_count > 0">
-                                        <span ng-if="submission_data.submission_status != 1">Entry Submitted on {{ dateParser(submission_data.created_at) | date: "MMM dd, yyyy ' ' hh:mma" : '+08' }}</span>
-                                        <span ng-if="submission_data.submission_status == 1">ENTRY APPROVED</span>
+                                        <span ng-if="submission_data.submission_count != 1;submission_data.submission_status == 3">Entry Submitted on {{ dateParser(submission_data.created_at) | date: "MMM dd, yyyy ' ' hh:mma" : '+08' }}</span>
+                                        <span ng-if="submission_data.submission_count == 1;submission_data.submission_status == 1">ENTRY APPROVED</span>
                                 </button>
                                 <!-- SUBMITTED -->
                                 <?php } ?>

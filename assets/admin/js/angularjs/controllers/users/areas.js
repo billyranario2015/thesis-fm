@@ -223,10 +223,11 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		}
 	}
 
-	$scope.submitToChairman = function submitToChairman(area_id) {
+	$scope.submitToChairman = function submitToChairman(level_id, area_id) {
 		var userdata = settings.userdata();
 		if ( confirm( 'Are you sure you want to send your submission?' ) ) {
 			userdata.success( function (response) {
+				response.userdata.level_id = level_id;
 				response.userdata.area_id = area_id;
 				console.log(response);
 				$http.post( settings.base_url + 'api/submission/area', response )
@@ -244,10 +245,11 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 	}
 
 	// ADD SUBMISSION TO IN-HOUSE EVALUATOR
-	$scope.submitToEvaluator = function submitToEvaluator() {
+	$scope.submitToEvaluator = function submitToEvaluator(level_id) {
 		var userdata = settings.userdata();
 		if ( confirm( 'Are you sure you want to send entry to In-House Evaluator?' ) ) {
 			userdata.success( function (response) {
+				response.userdata.level_id = level_id;
 				$http.post( settings.base_url + 'api/submission/evaluate', response )
 				.success(function (data_response) {
 					console.log(data_response);
@@ -320,7 +322,7 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		console.log( $scope.submission_status, submission_id );
 		$http.post( settings.base_url + 'api/submission/status_update/', { submission_status : $scope.submission_status, id : submission_id , user_id : user_id } )
 		.success( function (response) {
-			console.log( response.response );
+			console.log( response );
 			location.reload();
 		} );
 

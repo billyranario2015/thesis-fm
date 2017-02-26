@@ -37,9 +37,10 @@ class Area extends CI_Model {
 
 	public function get_linked_areas($user_id)
 	{
-		$this->db->select('area_sub_users.*,area_sub_users.id as area_sub_users_id, area.*, area.id as area_area_id,area_sub_users.assignee_id as asu_assignee_id, area.assignee_id as u_assignee_id,')
+		$this->db->select('area.*, area.id as area_area_id, area_sub_users.*, area_sub_users.id as area_sub_users_id,levels.*, levels.id as level_id')
 				 ->where( 'area_sub_users.assignee_id', $user_id )
-				 ->join( 'area', 'area_sub_users.area_id = area.id' );
+				 ->join( 'area', 'area_sub_users.area_id = area.id' )
+				 ->join( 'levels', 'levels.id = area.level_id' );
 		$query = $this->db->get('area_sub_users');
 
 		if ($query->num_rows() > 0)
@@ -84,7 +85,8 @@ class Area extends CI_Model {
 	{
 		$this->db->select('area.*,area.id as area_area_id,levels.*, levels.id as level_id')
 				 ->where( 'assignee_id' , $id )
-				 ->join( 'levels', 'levels.id = area.level_id' );
+				 ->join( 'levels', 'levels.id = area.level_id' )
+				 ->order_by( 'levels.level_name' , 'ASC' );
 		$query = $this->db->get($this->table);
 
 		if ($query->num_rows() > 0)
@@ -126,6 +128,22 @@ class Area extends CI_Model {
 
 		if ($query->num_rows() == 1)
 			return $query->row_array();
+		else
+			return array();
+	}
+
+	public function get_by_level_id($data)
+	{
+		$this->db->select('area.area_name,area.id as area_id,users.fname,users.mname,users.lname,users.id as user_id, levels.*, levels.id as level_level_id')
+				 ->from( $this->table )
+				 ->join( 'users', 'users.id = area.assignee_id' )
+				 ->join( 'levels', 'levels.id = area.level_id' )
+				 ->where( 'area.level_id' , $data )
+				 ->order_by( 'area.area_name', 'ASC' );
+		$query = $this->db->get();
+
+		if ($query->num_rows() > 0)
+			return $query->result_array();
 		else
 			return array();
 	}

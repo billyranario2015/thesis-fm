@@ -64,6 +64,11 @@ class Migration_Add_Notification_Table extends CI_Migration {
                 'constraint' => 11,
                 'null' => true
             ),
+            'link' => array(
+                'type' => 'VARCHAR',
+                'constraint' => 255,
+                'null' => true
+            ),
             /*
             | SUBMISSION TYPES
             | 1 = SUBMIT AREA TO CHAIRMAN 
