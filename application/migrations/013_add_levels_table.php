@@ -49,7 +49,7 @@ class Migration_Add_Levels_Table extends CI_Migration {
             ),
             array(
                 'id'                => 2,
-                'level_name'        => 'LEVEL 1',
+                'level_name'        => 'LEVEL 2',
                 'course_id'         => 1,
             ),
         );

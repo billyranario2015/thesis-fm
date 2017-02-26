@@ -305,16 +305,41 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 	}
 
 	// DISPLAY RELATED FILES FIRST
-	$scope.dispayAllAvailableFiles = function dispayAllAvailableFiles() {
+	$scope.dispayAllAvailableFiles = function dispayAllAvailableFiles(parameter_tags) {
+		var tagArr = $scope.extractTag(parameter_tags);
+		var related_files = [];
+		$scope.loader_search = true;
+		$scope.related_files = [];
+	    $scope.related_file_count = 0;
 
-		$http.get( settings.base_url + 'api/get_available_files/' )
-		.success( function (response) {
-			console.log( response.response )
-			$scope.related_files = response.response;
-	    	$scope.related_file_count = response.response.length;
-		} );
+		if ( tagArr.length > 0 ) {
+			for( x in tagArr ) {
+				$http.post( settings.base_url + 'api/get_related_files_by_tag/', { tag : tagArr[x] })
+				.success( function (response) {
+					$scope.$applyAsync(function () {
+	    				angular.forEach( response.response, function (value2,key2) {
+	    					related_files.push(value2);
+	    				} );
+	    			} );
+				} );				
+			}
+		}
+
+	    setTimeout(function() {
+			$scope.related_file_count = related_files.length;
+	    	$scope.related_files = related_files;
+	    	$scope.loader_search = false;
+	    	$scope.$apply();
+	    	console.log( related_files.length );
+	    }, 1500);	
+	    	
+		// $http.get( settings.base_url + 'api/get_available_files/' + parameter_id )
+		// .success( function (response) {
+		// 	console.log( response.response )
+		// 	$scope.related_files = response.response;
+	 //    	$scope.related_file_count = response.response.length;
+		// } );
 	}
-	$scope.dispayAllAvailableFiles();
 
 
 	$scope.submission_status = 0;

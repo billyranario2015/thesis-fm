@@ -261,6 +261,7 @@ class UsersController extends CI_Controller {
 			'sub_users' => $this->area->get_sub_assignees($id),
 			'tab'	=> 'templates',
 			'action' => 'templates',
+			'param_info' => array(),
 			'scripts'=> '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>',
 		);
 		$data['tpl'] = 'levels';
@@ -690,6 +691,12 @@ class UsersController extends CI_Controller {
 	public function get_available_files()
 	{
 		echo json_encode( ['response'=>$this->files->get_available_files()] );
+	}
+
+	public function get_related_files_by_tag()
+	{
+		$obj = json_decode(file_get_contents('php://input'));
+		echo json_encode( [ 'response' => $this->files->get_related_files_by_tag($obj) ] );
 	}
 
 	public function search_file()

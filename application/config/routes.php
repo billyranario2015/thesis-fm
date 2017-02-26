@@ -143,6 +143,8 @@ $route['evaluator/user/(:num)/level/(:num)/area/(:num)/parameter/(:num)']['GET']
 // -------GET FILES
 $route['api/get_uploads/(:num)']['GET']					= 'UsersController/get_uploads/$1';
 $route['api/get_available_files']['GET']				= 'UsersController/get_available_files';
+$route['api/get_related_files_by_tag']['POST']			= 'UsersController/get_related_files_by_tag';
+
 // -------EDIT FILE
 $route['api/file/update']['POST']						= 'UsersController/update_file';
 $route['api/file/delete']['POST']						= 'UsersController/delete_file';
