@@ -6,11 +6,11 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                <?php echo $data['area_name'] . ' > <span class="font-bold col-pink">' . $param_info['parameter_name'] . '</span>' ?>
+                                <span class="text-primary" style="text-transform:uppercase;"><?php echo $level_info['level_name'] ?></span>  > <?php echo $data['area_name'] . ' > <span class="font-bold col-pink">' . $param_info['parameter_name'] . '</span>' ?>
                                 <small>ENTRY CONTENTS FROM <span class="font-bold col-pink" style="text-transform:uppercase;"><?php echo $chairman_info['fname']. ' ' .$chairman_info['lname'] ?></span></small>
                                 <!-- <small>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</small> -->
 
-                                <a href="/evaluator/user/<?php echo $chairman_info['id'] ?>/area/<?php echo $area_id ?>" class="btn btn-primary waves-effect btn-lg pull-right" style="position: relative;top: -38px;">
+                                <a href="/evaluator/user/<?php echo $chairman_info['id'] ?>/level/<?php echo $level_info['id'] ?>/area/<?php echo $area_id ?>" class="btn btn-primary waves-effect btn-lg pull-right" style="position: relative;top: -38px;">
                                     BACK    
                                 </a>
                             </h2>
@@ -27,6 +27,7 @@
                                                 <th>#</th>
                                                 <th>FILENAME</th>
                                                 <th>DESCRIPTION</th>
+                                                <th>TAGS</th>
                                                 <th class="text-right">ACTIONS</th>
                                             </tr>
                                         </thead>
@@ -40,6 +41,9 @@
                                                 <td>
                                                     <span>{{file.description | limitTo: 35}}</span>
                                                     <span>{{file.description.length > 35 ? '......' : ''}}</span>
+                                                </td>
+                                                <td>
+                                                    <span ng-repeat="tag in extractTag(file.tags)" class="label {{ randomColor() }}" ng-bind="tag" style="margin-right:5px;"></span>
                                                 </td>
                                                 <td class="text-right">
                                                     <a href="/uploads/{{ file.filename }}" download="{{ file.filename }}" class="btn bg-cyan waves-effect">

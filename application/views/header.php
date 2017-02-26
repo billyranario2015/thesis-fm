@@ -106,7 +106,7 @@
                                         <!-- 
                                             ===== SUBMISSION
                                          -->
-                                        <a href="/goto/user/{{ notif.u_user_id }}/area?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 2">
+                                        <a href="{{notif.link}}?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 2">
                                             <div class="icon-circle bg-light-green" ng-if="notif.notification_type == 2">
                                                 <i class="material-icons">mode_edit</i>
                                             </div>
@@ -120,7 +120,7 @@
                                         <!-- 
                                             ===== COMMENTS
                                          -->
-                                        <a href="/goto/user/{{ notif.u_user_id }}/area?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 1">
+                                        <a href="{{notif.link}}?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 1">
                                             <div class="icon-circle bg-blue-grey" ng-if="notif.notification_type == 1">
                                                 <i class="material-icons">comment</i>
                                             </div>
@@ -135,7 +135,7 @@
                                         <!-- 
                                             ===== ENTRY STATUS
                                          -->
-                                        <a href="/user/area?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 3">
+                                        <a href="{{ notif.link }}?notification=seened&id={{notif.notification_id}}" ng-if="notif.notification_type == 3">
                                             <div class="icon-circle bg-green">
                                                 <i class="material-icons">thumb_up</i>
                                             </div>

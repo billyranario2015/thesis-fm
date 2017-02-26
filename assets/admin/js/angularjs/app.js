@@ -125,4 +125,19 @@ fm.controller( "MainController" , function( $scope, $http, $timeout, settings, $
 	  return colors[8].color;
 	};
 
+	$scope.checkLevelSubmission = function (level_id) {
+		$http.get( settings.base_url + 'api/submission/chairman_check/level/' + level_id  )
+		.success( function (response) {
+			console.log(response);
+			$scope.submission_count = response.submission_count;
+			$scope.submission_data = response.submission_data[0];
+
+			if ( response.submission_data == 0 ) {
+				$scope.submission_count = 0;
+			} else {
+				$scope.submission_count = response.submission_count;
+			}
+		} )
+	}
+
 } );

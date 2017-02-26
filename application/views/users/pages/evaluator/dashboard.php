@@ -17,6 +17,7 @@
                                             <th>#</th>
                                             <th>NAME</th>
                                             <th>ROLE</th>
+                                            <th>LEVEL NAME</th>
                                             <th>STATUS</th>
                                             <th>CONTENT</th>
                                             <th>ACTION</th>
@@ -28,6 +29,7 @@
                                             <th scope="row"><?php echo $key + 1; ?></th>
                                             <td><?php echo $entry['fname'].' '.$entry['lname']; ?></td>
                                             <td><?php echo $entry['role']; ?></td>
+                                            <th><?php echo $entry['level_info']['level_name']; ?></th>
                                             <td>
                                                 <?php if ( $entry['submission_status'] == 1 ) { // APPROVED ?>
                                                 <label class="label label-success">APPROVED</label>
@@ -38,14 +40,13 @@
                                                 <?php } ?>
                                             </td>
                                             <td>
-                                                <a href="/evaluator/user/<?php echo $entry['u_user_id']; ?>/area/">
+                                                <a href="/evaluator/user/<?php echo $entry['u_user_id']; ?>/level/<?php echo $entry['level_info']['id']; ?>/areas/">
                                                     VIEW
                                                 </a>
                                             </td>
                                             <td>
                                                 
                                                 <select class="form-control" ng-model="submission_status" ng-change="updateEntryStatus(<?php echo $entry['submission_id'] ?> , <?php echo $entry['u_user_id']; ?>)">
-                                                    <option value="">Choose Action</option>
                                                     <option value="1">Approve Entry</option>
                                                     <option value="3">Mark as Unapproved</option>
                                                 </select>

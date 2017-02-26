@@ -60,7 +60,7 @@ $route['translate_uri_dashes'] = FALSE;
 | -------------------------------------------------------------------------
 */
 $route['get/userdata']['GET']							= 'UsersController/userdata';
-
+$route['api/submission/chairman_check/level/(:num)']['GET'] = 'UsersController/check_submission/$1';
 /*
 | -------------------------------------------------------------------------
 | AUTHENTICATION
@@ -135,9 +135,9 @@ $route['api/search_for_file']['POST']					= 'UsersController/search_file';
 
 // EVALUATOR 
 $route['evaluator/(:any)']['GET']						= 'UsersController/evaluator_page/$1';
-$route['evaluator/user/(:num)/area']['GET']				= 'UsersController/evaluate_area/$1';
-$route['evaluator/user/(:num)/area/(:num)']['GET']		= 'UsersController/evaluate_area_content/$1/$2';
-$route['evaluator/user/(:num)/area/(:num)/parameter/(:num)']['GET']		= 'UsersController/evaluate_parameter_content/$1/$2/$3';
+$route['evaluator/user/(:num)/level/(:num)/areas']['GET'] = 'UsersController/evaluate_area/$1/$2';
+$route['evaluator/user/(:num)/level/(:num)/area/(:num)']['GET']		= 'UsersController/evaluate_area_content/$1/$2/$3';
+$route['evaluator/user/(:num)/level/(:num)/area/(:num)/parameter/(:num)']['GET']		= 'UsersController/evaluate_parameter_content/$1/$2/$3/$4';
 
 
 // -------GET FILES

@@ -6,7 +6,7 @@
                     <div class="card">
                         <div class="header">
                             <h2>
-                                ENTRY CONTENTS FROM <span class="font-bold col-pink" style="text-transform:uppercase;"><?php echo $chairman_info['fname']. ' ' .$chairman_info['lname'] ?></span>
+                                <span class="text-primary" style="text-transform:uppercase;"><?php echo $level_info['level_name'] ?></span> ENTRY CONTENTS FROM <span class="font-bold col-pink" style="text-transform:uppercase;"><?php echo $chairman_info['fname']. ' ' .$chairman_info['lname'] ?></span>
                                 <!-- <small>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</small> -->
 
                                 <a href="/evaluator/dashboard" class="btn btn-primary waves-effect btn-lg pull-right" style="position: relative;top: -8px;">
@@ -31,7 +31,7 @@
                                         <td><?php echo $area['area_name'] ?></td>
                                         <td><?php echo $area['fname'] . ' ' . $area['lname']; ?></td>
                                         <td class="text-right">
-                                            <a href="<?php echo base_url('evaluator/user/'.$chairman_info['id'].'/area/'.$area['area_id']) ?>" class="btn bg-blue waves-effect">
+                                            <a href="<?php echo base_url('evaluator/user/'.$chairman_info['id'].'/level/'.$level_info['id'].'/area/'.$area['area_id']) ?>" class="btn bg-blue waves-effect">
                                                 <i class="material-icons">edit</i>
                                             </a>
                                             <!-- <a href="#" ng-click="deleteArea(<?php echo $area['area_id']; ?>)" class="btn bg-pink waves-effect">

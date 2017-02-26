@@ -18,7 +18,7 @@
                                 <?php if ($this->session->userdata('user_level') == 2 ) { ?>
                                 <!-- NOT YET SUBMITTED -->
                                 <button class="btn btn-success waves-effect btn-lg pull-right" style="position: relative;top: -8px;" 
-                                    ng-click="submitToEvaluator()" ng-if="submission_count == 0">
+                                    ng-click="submitToEvaluator(<?php echo $level_info['level_id']; ?>)" ng-if="submission_count == 0">
                                         Submit Entries to In-house Evaluator
                                 </button>
 

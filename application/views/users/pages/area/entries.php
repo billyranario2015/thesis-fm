@@ -200,7 +200,7 @@
                                                                     <a href="/uploads/{{ file.filename }}" download="{{ file.filename }}" class="btn bg-cyan waves-effect">
                                                                         <i class="material-icons">file_download</i>
                                                                     </a>
-                                                                    <a style="cursor:pointer" ng-click="editFile(file)" class="btn bg-blue waves-effect" ng-if="file.author_id == <?php echo $this->session->userdata('id') ?>">
+                                                                    <a style="cursor:pointer" ng-click="editFile(file)" class="btn bg-blue waves-effect">
                                                                         <i class="material-icons">edit</i>
                                                                     </a>
                                                                     <a style="cursor:pointer" ng-click="deleteFile(file)" class="btn bg-pink waves-effect" ng-if="file.author_id == <?php echo $this->session->userdata('id') ?>">
