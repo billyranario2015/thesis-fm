@@ -227,28 +227,23 @@ class UsersController extends CI_Controller {
 	}
 	public function create_area()
 	{
-		// Check if user is already assigned to other area
-		$is_assigned = $this->area->check_if_assigned($_POST);
 
-		if ( !empty($is_assigned) ) {
-			$this->session->set_flashdata( 'err_message' , $is_assigned['fname'] . ' ' . $is_assigned['lname'] . ' is already assigned to ' . $is_assigned['area_name'] );
-			redirect( base_url( 'user/level/'.$_POST['level_id'].'/create-area' ) );
+		$id = $this->area->create($_POST);
+		if ( $id ) {
+			// Log current activity
+			$log_arr = array(
+				'author_id' => $this->session->userdata('id'),
+				'message'   => $this->session->userdata('fname') . ' created an area.',
+				'link'		=> base_url( 'user/level/'.$_POST['level_id'].'/area/'.$id.'/edit' )
+			);
+			$this->logs->create($log_arr);
+
+			$this->session->set_flashdata( 'message' , 'Area successfully created.' );
+			redirect( base_url( 'user/level/'.$_POST['level_id'].'/area/'.$id.'/edit' ) );
+
 		} else {
-			$id = $this->area->create($_POST);
-			if ( $id ) {
-
-				// Log current activity
-				$log_arr = array(
-					'author_id' => $this->session->userdata('id'),
-					'message'   => $this->session->userdata('fname') . ' created an area.',
-					'link'		=> base_url( 'user/area/'.$id.'/edit' )
-				);
-				$this->logs->create($log_arr);
-
-				$this->session->set_flashdata( 'message' , 'Area successfully created.' );
-				redirect( base_url( 'user/level/'.$_POST['level_id'].'/area/'.$id.'/edit' ) );
-
-			}
+			$this->session->set_flashdata( 'err_message' , 'There was some problem on creating an area. Please try again later.' );
+			redirect( base_url( 'user/level/'.$_POST['level_id'].'/create-area' ) );
 		}
 	}
 
@@ -342,8 +337,8 @@ class UsersController extends CI_Controller {
 			unset( $_POST['sub_assignee_id'] );
 		}
 
-		if ( !empty($is_assigned) ) {
-			if ( $is_assigned['assignee_id'] == $_POST['assignee_id'] ) {
+		// if ( !empty($is_assigned) ) {
+		// 	if ( $is_assigned['assignee_id'] == $_POST['assignee_id'] ) {
 				#unset $_POST['check_area']
 				unset($_POST['check_area']);
 				if ( $this->area->update($_POST) ) {
@@ -361,30 +356,29 @@ class UsersController extends CI_Controller {
 					$this->session->set_flashdata( 'err_message' , 'Error on update.' );
 				}
 				redirect( base_url( 'user/level/'.$_POST['level_id'].'/area/'.$_POST['id'].'/settings' ) );
-			} else {
-				$this->session->set_flashdata( 'err_message' , $is_assigned['fname'] . ' ' . $is_assigned['lname'] . ' is already assigned to ' . $is_assigned['area_name'] );
-				redirect( base_url( 'user/level/'.$_POST['level_id'].'/area/'.$_POST['id'].'/settings' ) );
-			}
-		} else {
+			// } else {
+			// 	$this->session->set_flashdata( 'err_message' , $is_assigned['fname'] . ' ' . $is_assigned['lname'] . ' is already assigned to ' . $is_assigned['area_name'] );
+			// 	redirect( base_url( 'user/level/'.$_POST['level_id'].'/area/'.$_POST['id'].'/settings' ) );
+			// }
+		// } else {
 			// echo "///";
 			// Check if user is already assigned to other area
-			$_POST['check_area'] = 0;
-			$is_assigned = $this->area->check_if_assigned($_POST);
+		// 	$_POST['check_area'] = 0;
+		// 	$is_assigned = $this->area->check_if_assigned($_POST);
 
-			if ( !empty($is_assigned) ) {
-				$this->session->set_flashdata( 'err_message' , $is_assigned['fname'] . ' ' . $is_assigned['lname'] . ' is already assigned to ' . $is_assigned['area_name'] );
-			} else {
-				unset($_POST['check_area']);
-				if ( $this->area->update($_POST) ) {
-					$this->session->set_flashdata( 'message' , 'Area successfully updated.' );
-				} else {
-					$this->session->set_flashdata( 'err_message' , 'Error on update.' );
-				}
-			}
+		// 	if ( !empty($is_assigned) ) {
+		// 		$this->session->set_flashdata( 'err_message' , $is_assigned['fname'] . ' ' . $is_assigned['lname'] . ' is already assigned to ' . $is_assigned['area_name'] );
+		// 	} else {
+		// 		unset($_POST['check_area']);
+		// 		if ( $this->area->update($_POST) ) {
+		// 			$this->session->set_flashdata( 'message' , 'Area successfully updated.' );
+		// 		} else {
+		// 			$this->session->set_flashdata( 'err_message' , 'Error on update.' );
+		// 		}
+		// 	}
 
-			redirect( base_url( 'user/level/'.$_POST['level_id'].'/area/'.$_POST['id'].'/settings' ) );
-		}
-
+		// 	redirect( base_url( 'user/level/'.$_POST['level_id'].'/area/'.$_POST['id'].'/settings' ) );
+		// }
 	}
 
 	public function delete_area()
