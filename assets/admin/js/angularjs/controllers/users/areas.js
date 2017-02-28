@@ -8,6 +8,15 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 			} );
 		}
 	}
+	$scope.trashArea = function trashArea(id) {
+		if ( confirm( 'Are you sure you want to trash this area?' ) ) {
+			$http.post( settings.base_url + 'api/area/trash' , { id:id } )
+			.success( function (response) {
+				console.log(response);
+				$( '#area-' + id ).fadeOut();
+			} );
+		}
+	}
 
 	$scope.parameters = {};
 	$scope.getParameters = function getParameters(area_id) {
@@ -19,6 +28,7 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 	}
 
 	$scope.cleanParameters = {};
+	$scope.trashedCleanParameters = {};
 	$scope.totalParentParameters = 0;
 	$scope.completedParentParameters = 0;
 	$scope.getCleanParameters = function getCleanParameters(area_id) {
@@ -26,6 +36,27 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		.success(function (response) {
 			console.log(response.response);
 			$scope.cleanParameters = response.response;
+
+			var count_parents = 0;
+			var count_completed_parents = 0;
+			for( x in response.response ) {
+				if ( response.response[x].parent_id == 0 ) {
+					count_parents = count_parents + 1;
+					if ( response.response[x].parameter_status == 'complete' ) {
+						count_completed_parents = count_completed_parents + 1;
+					}
+				}
+			}
+			$scope.totalParentParameters = count_parents;
+			$scope.completedParentParameters = count_completed_parents;
+		})
+	}
+
+	$scope.getTrashedCleanParameters = function getTrashedCleanParameters(area_id) {
+		$http.get( settings.base_url + 'api/get/trashed_clean_parameters/'+area_id )
+		.success(function (response) {
+			console.log(response);
+			$scope.trashedCleanParameters = response.response;
 
 			var count_parents = 0;
 			var count_completed_parents = 0;
@@ -83,6 +114,21 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 	$scope.delete_parameter = function delete_parameter(data) {
 		if ( confirm( 'Are you sure you want to delete this parameter?' ) ) {
 			$http.post( settings.base_url + 'api/delete/parameter', data )
+			.success( function(response) {
+				$( '.item-paramater-' + data.id ).fadeOut('slow');
+				$( '.item-paramater-parent-' + data.id ).fadeOut('slow');
+				setTimeout(function() {
+					$scope.getParameters( data.area_id );
+					$scope.getCleanParameters(data.area_id);
+				}, 1000);
+				console.log( response );
+			} );
+		}
+	}
+
+	$scope.trash_parameter = function trash_parameter(data) {
+		if ( confirm( 'Are you sure you want to trash this parameter?' ) ) {
+			$http.post( settings.base_url + 'api/trash/parameter', data )
 			.success( function(response) {
 				$( '.item-paramater-' + data.id ).fadeOut('slow');
 				$( '.item-paramater-parent-' + data.id ).fadeOut('slow');
@@ -173,6 +219,15 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		});
 	}
 
+	$scope.trashed_parameter_files = {};
+	$scope.getTrashedParameterFiles = function getTrashedParameterFiles(parameter_id) {
+		$http.get(  settings.base_url + 'api/get_trashed_uploads/' + parameter_id )
+		.success(function(response) {
+			console.log(response);
+			$scope.trashed_parameter_files = response.response;
+		});
+	}
+
 
 	$scope.edit_options = {};
 	$scope.editFile = function editFile(file) {
@@ -201,6 +256,15 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		$scope.edit_options = {};
 		$scope.getParameterFiles(parameter_id);
 		console.log(parameter_id)
+	}
+
+	$scope.trashFile = function trashFile(file) {
+		if (confirm('Are you sure you want to trash this file?')) {
+			$http.post( settings.base_url + 'api/file/trash', file )
+			.success( function (response) {
+				$( '.row-file-' + file.id ).fadeOut();
+			} );
+		}
 	}
 
 	$scope.deleteFile = function deleteFile(file) {
@@ -321,6 +385,7 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 					$scope.$applyAsync(function () {
 	    				angular.forEach( response.response, function (value2,key2) {
 	    					related_files.push(value2);
+
 	    				} );
 	    			} );
 				} );				
@@ -328,11 +393,10 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		}
 
 	    setTimeout(function() {
-			$scope.related_file_count = related_files.length;
-	    	$scope.related_files = related_files;
+			$scope.related_file_count = unique(related_files).length;
+	    	$scope.related_files = unique(related_files);
 	    	$scope.loader_search = false;
 	    	$scope.$apply();
-	    	console.log( related_files.length );
 	    }, 1500);	
 	    	
 		// $http.get( settings.base_url + 'api/get_available_files/' + parameter_id )
@@ -342,7 +406,34 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 	 //    	$scope.related_file_count = response.response.length;
 		// } );
 	}
+    function unique(arr) {
+        var comparer = function compareObject(a, b) {
+            if (a.upload_id == b.upload_id) {
+                if (a.artist < b.artist) {
+                    return -1;
+                } else if (a.artist > b.artist) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            } else {
+                if (a.upload_id < b.upload_id) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+        }
 
+        arr.sort(comparer);
+        var end;
+        for (var i = 0; i < arr.length - 1; ++i) {
+            if (comparer(arr[i], arr[i+1]) === 0) {
+                arr.splice(i, 1);
+            }
+        }
+        return arr;
+    }
 
 	$scope.submission_status = 0;
 	$scope.updateEntryStatus = function updateEntryStatus(submission_id , user_id) {
@@ -372,6 +463,19 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 			} );
 		}
 	}
+
+	$scope.trashLevel = function trashLevel(level_id) {
+		if ( confirm( 'Are you sure you want to put this level on trash?' ) ) {
+			$http.post( settings.base_url + 'api/level/trash' , { id:level_id } )
+			.success( function (response) {
+				console.log(response);
+				$( '#level_id-' + level_id ).fadeOut();
+			} );
+		}
+
+	}
+
+
 	$scope.extractTag = function extractTag(stringTags) {
 		var tag_arr = new Array();
 		// this will return an array with strings "1", "2", etc.

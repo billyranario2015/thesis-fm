@@ -6,6 +6,7 @@ class Logs extends CI_Model {
 	{
 		$query = $this->db->order_by( 'created_at' , 'desc' )
 		  				  ->limit(30)
+		  				  ->where( 'course_id', $this->session->userdata('course_id') )
 						  ->get($this->table);
 
 		if ($query->num_rows() > 0)

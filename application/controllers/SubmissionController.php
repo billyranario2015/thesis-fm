@@ -21,6 +21,7 @@ class SubmissionController extends CI_Controller {
 
 		// Log current activity
 		$log_arr = array(
+			'course_id'	=> $this->session->userdata('course_id'),
 			'author_id' => $this->session->userdata('id'),
 			'message'   => $this->session->userdata('fname') . ' submitted an area.',
 			'link'		=> base_url( 'user/level/'.$obj->userdata->level_id.'/area/'.$obj->userdata->area_id.'/edit' )
@@ -70,6 +71,7 @@ class SubmissionController extends CI_Controller {
 
 		// Log current activity
 		$log_arr = array(
+			'course_id'	=> $this->session->userdata('course_id'),
 			'author_id' => $this->session->userdata('id'),
 			'message'   => $this->session->userdata('fname') . ' has submitted an entry to evaluator.',
 			'link'		=> base_url( 'user/level/'.$obj->userdata->level_id.'/areas' )

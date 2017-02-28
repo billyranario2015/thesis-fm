@@ -169,13 +169,19 @@ class Area extends CI_Model {
 	{
 		$this->db->where('id',$data['id']);
 		$query = $this->db->update( $this->table, $data );
-
-
 		
 		if ( $query )
 			return true;
 		else 
 			return false;
+	}
+
+	public function trash($data)
+	{
+		if ( $this->db->where( 'id' , $data->id )->update( $this->table, ['is_trash' => 1] ) )
+			return $data->id;	
+		else 
+			return false;	
 	}
 
 	public function delete($data)

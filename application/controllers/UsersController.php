@@ -51,6 +51,7 @@ class UsersController extends CI_Controller {
 			$data['tpl'] = 'users';
 			$data['tpl2'] = 'users';
 			$data['users'] = $this->users->get_all_users_by_course($this->session->userdata('course_id'));
+			$data['trash'] = $this->users->get_all_trash($this->session->userdata('course_id'));
 			// Load Custom Scripts in footer
 			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
 			$data['scripts'] .= '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/admin/users.js').'"></script>';
@@ -101,6 +102,7 @@ class UsersController extends CI_Controller {
 			$data['tpl'] = 'levels';
 			$data['tpl2'] = 'level';
 			$data['levels'] = $this->levels->get($this->session->userdata('course_id'));
+			$data['trash'] = $this->levels->get_all_trash($this->session->userdata('course_id'));
 			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>';
 			// For chairman_info
 			// if ( @$_GET['notification'] ) {
@@ -148,6 +150,7 @@ class UsersController extends CI_Controller {
 
 				// Log current activity
 				$log_arr = array(
+					'course_id' => $this->session->userdata('course_id'),
 					'author_id' => $this->session->userdata('id'),
 					'message'   => $this->session->userdata('fname') . ' created new user.',
 					'link'		=> base_url( 'user/'.$response['data'].'/edit' )
@@ -176,6 +179,33 @@ class UsersController extends CI_Controller {
 		$this->load->view('users/pages/edit-user',$data);
 	}
 
+	public function restore_user($id)
+	{
+		$data_arr = array(
+			'id' => $id,
+			'is_trash' => 0
+		);
+
+		if ( $this->users->update($data_arr) ) {
+			// Log current activity
+			$log_arr = array(
+				'course_id' => $this->session->userdata('course_id'),
+				'author_id' => $this->session->userdata('id'),
+				'message'   => $this->session->userdata('fname') . ' restored a user.',
+				'link'		=> base_url( 'user/'.$id.'/edit' )
+			);
+			$this->logs->create($log_arr);			
+			redirect( base_url( 'user/users' ) );
+		} else {
+			echo "
+			<script>
+				alert('Something went wrong. Please try again later');
+				location.reload();
+			</script>
+			";
+		}
+	}
+
 	public function update_user()
 	{
 		if ( $_POST['password'] != $_POST['confirm_password'] ) {
@@ -197,6 +227,7 @@ class UsersController extends CI_Controller {
 
 				// Log current activity
 				$log_arr = array(
+					'course_id' => $this->session->userdata('course_id'),
 					'author_id' => $this->session->userdata('id'),
 					'message'   => $this->session->userdata('fname') . ' updated a user.',
 					'link'		=> base_url( 'user/'.$_POST['id'].'/edit' )
@@ -232,6 +263,7 @@ class UsersController extends CI_Controller {
 		if ( $id ) {
 			// Log current activity
 			$log_arr = array(
+				'course_id' => $this->session->userdata('course_id'),
 				'author_id' => $this->session->userdata('id'),
 				'message'   => $this->session->userdata('fname') . ' created an area.',
 				'link'		=> base_url( 'user/level/'.$_POST['level_id'].'/area/'.$id.'/edit' )
@@ -277,13 +309,41 @@ class UsersController extends CI_Controller {
 		$this->load->view('users/pages/edit-area',$data);
 	}
 
+	public function restore_area($level_id,$id)
+	{
+		$data_arr = array(
+			'id' => $id,
+			'is_trash' => 0
+		);
+
+		if ( $this->area->update($data_arr) ) {
+			// Log current activity
+			$log_arr = array(
+				'course_id' => $this->session->userdata('course_id'),
+				'author_id' => $this->session->userdata('id'),
+				'message'   => $this->session->userdata('fname') . ' restored an area.',
+				'link'		=> base_url( 'user/level/'.$level_id.'/area/' . $id . '/edit' )
+			);
+			$this->logs->create($log_arr);			
+			redirect( base_url( 'user/level/'.$level_id.'/areas?action=trash' ) );
+		} else {
+			echo "
+			<script>
+				alert('Something went wrong. Please try again later');
+				location.reload();
+			</script>
+			";
+		}
+	}
+
 	public function edit_area_settings($level_id,$id)
 	{
 		$data = array(
 			'tpl' => 'area',
 			'data' => $this->area->get_by_id($id),
 			'level_info' => $this->levels->get_by_id($level_id),
-			'users' => $this->users->get_all_users_by_course($this->session->userdata('course_id')),
+			// 'users' => $this->users->get_all_users_by_course($this->session->userdata('course_id')),
+			'users' => $this->users->get_all_users_by_org($this->session->userdata('course_id')),
 			'tab'	=> 'templates',
 			'action' => 'templates',
 			'scripts'=> '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>',
@@ -325,6 +385,7 @@ class UsersController extends CI_Controller {
 
 			// Log current activity
 			$log_arr = array(
+				'course_id' => $this->session->userdata('course_id'),
 				'author_id' => $this->session->userdata('id'),
 				'message'   => $this->session->userdata('fname') . ' added new users on area ' . $_POST['area_name'] . '.',
 				'link'		=> base_url( 'user/level/'.$_POST['level_id'].'/area/'.$_POST['id'].'/settings' )
@@ -346,6 +407,7 @@ class UsersController extends CI_Controller {
 					
 					// Log current activity
 					$log_arr = array(
+						'course_id' => $this->session->userdata('course_id'),
 						'author_id' => $this->session->userdata('id'),
 						'message'   => $this->session->userdata('fname') . ' updated area ' . $_POST['area_name'] . '.',
 						'link'		=> base_url( 'user/level/'.$_POST['level_id'].'/area/'.$_POST['id'].'/settings' )
@@ -387,12 +449,29 @@ class UsersController extends CI_Controller {
 
 		// Log current activity
 		$log_arr = array(
+			'course_id' => $this->session->userdata('course_id'),
 			'author_id' => $this->session->userdata('id'),
 			'message'   => $this->session->userdata('fname') . ' deleted an area.',
 		);
 		$this->logs->create($log_arr);
 
 		echo json_encode( [ 'response' => $this->area->delete($obj) ] );
+	}
+
+	public function trash_area()
+	{
+		$obj = json_decode(file_get_contents('php://input'));
+		
+		// Log current activity
+		$log_arr = array(
+			'course_id' => $this->session->userdata('course_id'),
+			'author_id' => $this->session->userdata('id'),
+			'message'   => $this->session->userdata('fname') . ' trashed an area.',
+		);
+		$this->logs->create($log_arr);
+		$obj->is_trash = 1;
+
+		echo json_encode( [ 'response' => $this->area->trash($obj) ] );
 	}
 
 	// Area Template
@@ -465,6 +544,32 @@ class UsersController extends CI_Controller {
 		$this->load->view('users/pages/edit-area',$data);
 	}
 
+	public function restore_area_parameters_by_id($level_id,$area_id,$parameter_id)
+	{
+		$data_arr = array(
+			'id' => $parameter_id,
+			'is_trash' => 0
+		);
+
+		if ( $this->area_params->restore($data_arr) ) {
+			// Log current activity
+			$log_arr = array(
+				'course_id' => $this->session->userdata('course_id'),
+				'author_id' => $this->session->userdata('id'),
+				'message'   => $this->session->userdata('fname') . ' restored a parameter.',
+				'link'		=> base_url( 'user/level/'.$level_id.'/area/'.$area_id.'/parameter/'.$parameter_id )
+			);
+			$this->logs->create($log_arr);			
+			redirect( base_url( 'user/level/'.$level_id.'/area/'.$area_id . '/edit?action=trash' ) );
+		} else {
+			echo "
+			<script>
+				alert('Something went wrong. Please try again later');
+				location.reload();
+			</script>
+			";
+		}
+	}
 
 	// Parameters
 	public function create_param()
@@ -472,6 +577,7 @@ class UsersController extends CI_Controller {
 		$obj = json_decode(file_get_contents('php://input'));
 		// Log current activity
 		$log_arr = array(
+			'course_id' => $this->session->userdata('course_id'),
 			'author_id' => $this->session->userdata('id'),
 			'message'   => $this->session->userdata('fname') . ' created parameter ' . $obj->parameter_name,
 			'link'		=> base_url( 'user/level/'.$obj->level_id.'/area/'.$obj->area_id.'/edit' )
@@ -495,7 +601,10 @@ class UsersController extends CI_Controller {
 	{
 		echo json_encode( [ 'response' => $this->categoryParentChildTreeClean(0,'','',$area_id) ] );
 	}
-
+	public function get_trashed_parameters_clean($area_id)
+	{
+		echo json_encode( [ 'response' => $this->categoryParentChildTreeCleanTrashed(0,'','',$area_id) ] );
+	}
 	public function categoryParentChildTree($parent = 0, $spacing = '', $category_tree_array = '', $area_id) {
 		if (!is_array($category_tree_array))
 			$category_tree_array = array();
@@ -547,7 +656,42 @@ class UsersController extends CI_Controller {
 		return $category_tree_array;
 	}
 
+	/*
+	| GET TRASHED PARAMETERS
+	*/ 
+	public function categoryParentChildTreeCleanTrashed($parent = 0, $spacing = '', $category_tree_array = '', $area_id) {
+		if (!is_array($category_tree_array))
+			$category_tree_array = array();
+		// Fetch parameter by area_id and parent_id
+		$parameters = $this->area_params->get_child_by_parent_id_neutral($parent,$area_id);
+		$numItems = count( $parameters );
 
+		// return $parameters;
+
+		if ( count( $parameters ) > 0 ) {
+			$num = 0;
+			foreach ($parameters as $key => $param) {
+				if ( $param['is_trash'] == 1 ) {
+					$category_tree_array[] = array(
+						"id" 				=> $param['id'], 
+						'area_id'			=> $param['area_id'],
+						"parameter_name"	=> '<span class="spacer">' . $spacing . ++$num .'.) </span> <span class="param_name"> ' . $param['parameter_name'] . '</span>',
+						"clean_parameter"	=> $param['parameter_name'],
+						"parent_id" 		=> $param['parent_id'],
+						"child_param_count" => $this->area_params->count_child_params_neutral($param['id']),
+						"parameter_status"	=> $this->files->get_file_count_neutral(
+													$param['id'],
+													$this->area_params->count_child_params_neutral($param['id'])
+											   ),
+						"tags"				=> $param['tags']
+					);
+				}
+				$category_tree_array = $this->categoryParentChildTreeCleanTrashed($param['id'], '::::: '.$spacing, $category_tree_array, $area_id);
+
+			}
+		}
+		return $category_tree_array;
+	}
 	public function get_all_parameter_list($parent = 0, $spacing = '', $category_tree_array = '') {
 		if (!is_array($category_tree_array))
 			$category_tree_array = array();
@@ -589,6 +733,7 @@ class UsersController extends CI_Controller {
 		$obj = json_decode(file_get_contents('php://input'));
 		// Log current activity
 		$log_arr = array(
+			'course_id' => $this->session->userdata('course_id'),
 			'author_id' => $this->session->userdata('id'),
 			'message'   => $this->session->userdata('fname') . ' updated parameter ' . $obj->parameter_name,
 			'link'		=> base_url( 'user/level/'.$obj->level_id.'/area/'.$obj->area_id.'/edit' )
@@ -605,12 +750,28 @@ class UsersController extends CI_Controller {
 
 		// Log current activity
 		$log_arr = array(
+			'course_id' => $this->session->userdata('course_id'),
 			'author_id' => $this->session->userdata('id'),
 			'message'   => $this->session->userdata('fname') . ' deleted a parameter.',
 		);
 		$this->logs->create($log_arr);
 
 		echo json_encode( [ 'response' => $this->area_params->delete($obj) ] );
+	}
+
+	public function trash_parameter()
+	{
+		$obj = json_decode(file_get_contents('php://input'));
+		
+		// Log current activity
+		$log_arr = array(
+			'course_id' => $this->session->userdata('course_id'),
+			'author_id' => $this->session->userdata('id'),
+			'message'   => $this->session->userdata('fname') . ' trashed a parameter.',
+		);
+		$this->logs->create($log_arr);
+		$obj->is_trash = 1;
+		echo json_encode( [ 'response' => $this->area_params->trash($obj) ] );
 	}
 
 	public function get_child_params_count($parameter_id,$child_count)
@@ -658,6 +819,7 @@ class UsersController extends CI_Controller {
 
 			// Log current activity
 			$log_arr = array(
+				'course_id' => $this->session->userdata('course_id'),
 				'author_id' => $this->session->userdata('id'),
 				'message'   => $this->session->userdata('fname') . ' uploaded a file '.$fileName,
 			);
@@ -684,6 +846,11 @@ class UsersController extends CI_Controller {
 		echo json_encode( ['response'=>$this->files->get($parameter_id)] );
 	}
 
+	public function get_trashed_uploads($parameter_id)
+	{
+		echo json_encode( ['response'=>$this->files->get_trashed_uploads($parameter_id)] );
+	}
+
 	public function get_available_files()
 	{
 		echo json_encode( ['response'=>$this->files->get_available_files()] );
@@ -699,6 +866,48 @@ class UsersController extends CI_Controller {
 	{
 		$obj = json_decode(file_get_contents('php://input'));
 		echo json_encode( [ 'response' => $this->files->search($obj) ] );
+	}
+
+	public function trash_file()
+	{
+		$obj = json_decode(file_get_contents('php://input'));
+		// Log current activity
+		$log_arr = array(
+			'course_id' => $this->session->userdata('course_id'),
+			'author_id' => $this->session->userdata('id'),
+			'message'   => $this->session->userdata('fname') . ' trashed a file.',
+		);
+		$this->logs->create($log_arr);
+		$obj->is_trash = 1;
+		echo json_encode( [ 'response' => $this->files->update($obj) ] );		
+	}
+
+	public function restore_file($level_id,$area_id,$parameter_id,$file_id)
+	{
+		$data_arr = array(
+			'id' => $file_id,
+			'is_trash' => 0
+		);
+
+		if ( $this->files->restore($data_arr) ) {
+			// Log current activity
+			$log_arr = array(
+				'course_id' => $this->session->userdata('course_id'),
+				'author_id' => $this->session->userdata('id'),
+				'message'   => $this->session->userdata('fname') . ' restored a file.',
+				'link'		=> base_url( 'user/level/'.$level_id.'/area/'.$area_id.'/parameter/'.$parameter_id )
+			);
+			$this->logs->create($log_arr);			
+			redirect( base_url( 'user/level/'.$level_id.'/area/'.$area_id.'/parameter/'.$parameter_id.'?action=trash' ) );
+		} else {
+			echo "
+			<script>
+				alert('Something went wrong. Please try again later');
+				location.reload();
+			</script>
+			";
+		}
+
 	}
 
 	public function update_file()
@@ -916,6 +1125,33 @@ class UsersController extends CI_Controller {
 		$this->load->view('users/pages/edit-level',$data);
 	}
 
+	public function restore_level($id)
+	{
+		$data_arr = array(
+			'id' => $id,
+			'is_trash' => 0
+		);
+
+		if ( $this->levels->update($data_arr) ) {
+			// Log current activity
+			$log_arr = array(
+				'course_id' => $this->session->userdata('course_id'),
+				'author_id' => $this->session->userdata('id'),
+				'message'   => $this->session->userdata('fname') . ' restored a level.',
+				'link'		=> base_url( 'user/level/'.$id.'/edit' )
+			);
+			$this->logs->create($log_arr);			
+			// redirect( base_url( 'user/levels' ) );
+		} else {
+			echo "
+			<script>
+				alert('Something went wrong. Please try again later');
+				location.reload();
+			</script>
+			";
+		}
+	}
+
 	public function update_level()
 	{
 		if ( $this->levels->update($_POST) ) {
@@ -923,6 +1159,7 @@ class UsersController extends CI_Controller {
 			
 			// Log current activity
 			$log_arr = array(
+				'course_id' => $this->session->userdata('course_id'),
 				'author_id' => $this->session->userdata('id'),
 				'message'   => $this->session->userdata('fname') . ' updated level ' . $_POST['level_name'],
 				'link'		=> base_url( 'user/level/'.$_POST['id'].'/edit' )
@@ -933,7 +1170,21 @@ class UsersController extends CI_Controller {
 			$this->session->set_flashdata( 'err_message' , 'Error on update.' );
 		}
 		redirect( base_url( 'user/level/'.$_POST['id'].'/edit' ) );		
+	}
 
+	public function trash_level()
+	{
+		$obj = json_decode(file_get_contents('php://input'));
+		
+		// Log current activity
+		$log_arr = array(
+			'course_id' => $this->session->userdata('course_id'),
+			'author_id' => $this->session->userdata('id'),
+			'message'   => $this->session->userdata('fname') . ' trashed a level.',
+		);
+		$this->logs->create($log_arr);
+		$obj->is_trash = 1;
+		echo json_encode( [ 'response' => $this->levels->trash($obj) ] );
 	}
 
 	public function get_level_areas($level_id)
@@ -941,7 +1192,8 @@ class UsersController extends CI_Controller {
 		$level_info = $this->levels->get_by_id($level_id);
 
 		$data = array(
-			'areas' 		=> $this->levels->get_level_areas($level_id)
+			'areas' 		=> $this->levels->get_level_areas($level_id),
+			'trash'			=> $this->levels->get_all_trashed_areas($level_id)
 		);
 
 		$data['tpl'] = 'levels';
@@ -971,6 +1223,7 @@ class UsersController extends CI_Controller {
 
 		// Log current activity
 		$log_arr = array(
+			'course_id' => $this->session->userdata('course_id'),
 			'author_id' => $this->session->userdata('id'),
 			'message'   => $this->session->userdata('fname') . ' deleted a level.',
 		);

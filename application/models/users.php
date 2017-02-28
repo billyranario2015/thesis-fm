@@ -56,6 +56,19 @@ class Users extends CI_Model {
 			return array();
 	}
 
+	public function get_user_org($data)
+	{
+		$this->db->select( 'courses.*, courses.id as course_id, organization.*, organization.id as organization_id' )
+				 ->where( 'courses.id', $data )
+				 ->join( 'organization', 'courses.organization_id = organization.id' );
+		$query = $this->db->get( 'courses' );	
+
+		if ($query->num_rows() > 0 )
+			return $query->row_array();
+		else
+			return array();	
+	}
+
 	public function get_user_by_id($data)
 	{
 		$this->db->where('id',$data);
@@ -69,7 +82,54 @@ class Users extends CI_Model {
 
 	public function get_all_users_by_course($data)
 	{
-		$this->db->where('course_id',$data);
+		$this->db->where('course_id',$data)
+				 ->where('is_trash',0);
+		$query = $this->db->get($this->table);
+
+		if ($query->num_rows() > 0 )
+			return $query->result_array();
+		else
+			return array();
+	}
+
+	public function get_all_users_by_org($data)
+	{
+		$current_org_data = $this->db->select( 'courses.*, courses.id as course_id, organization.*, organization.id as organization_id' )
+							 ->where( 'courses.id', $data )
+							 ->join( 'organization', 'courses.organization_id = organization.id' )
+							 ->get( 'courses' )->row_array();
+
+		// Get all courses under this org
+		$courses = $this->db->select( 'courses.*, courses.id as course_id, organization.*, organization.id as organization_id' )
+							->where( 'organization_id' , $current_org_data['organization_id'] )
+							->join( 'organization', 'courses.organization_id = organization.id' )
+							->get('courses')
+							->result_array();
+
+		$users = array();
+		if ( count($courses) > 0 ) {
+			foreach ($courses as $key => $course) {
+				if ( $course['organization_id'] == $this->session->userdata('organization_id') ) {
+					$query = $this->db->where( 'course_id', $course['course_id'] )->get('users');
+					if ( $query->num_rows() > 0 ) {
+						$users = array_merge_recursive($users, $query->result_array());
+					}
+				}
+			}
+		}
+		$this->db->where('course_id',$data)
+				 ->where('is_trash',0);
+		$query = $this->db->get($this->table);
+
+		if (count($users) > 0 )
+			return $users;
+		else
+			return array();
+	}
+	public function get_all_trash($data)
+	{
+		$this->db->where('course_id',$data)
+				 ->where('is_trash',1);
 		$query = $this->db->get($this->table);
 
 		if ($query->num_rows() > 0 )
@@ -124,6 +184,14 @@ class Users extends CI_Model {
 			return [ 'status' => 'success', 'message' => 'User successfully updated.' , 'data' => null ];	
 		else 
 			return [ 'status' => 'error', 'message' => 'Error on update.' , 'data' => null ];	
+	}
+
+	public function trash($data)
+	{
+		if ( $this->db->where( 'id' , $data->id )->update( $this->table, ['is_trash' => 1] ) )
+			return $data->id;	
+		else 
+			return false;	
 	}
 
 	public function delete($data)

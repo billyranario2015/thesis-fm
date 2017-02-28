@@ -6,6 +6,20 @@ class Levels extends CI_Model {
 	{
 		$query = $this->db->order_by( 'level_name' , 'asc' )
 						  ->where( 'course_id', $this->session->userdata('course_id') )
+						  ->where( 'is_trash', 0 )
+						  ->get($this->table);
+
+		if ($query->num_rows() > 0)
+			return $query->result_array();
+		else
+			return array();
+	}
+
+	public function get_all_trash()
+	{
+		$query = $this->db->order_by( 'level_name' , 'asc' )
+						  ->where( 'course_id', $this->session->userdata('course_id') )
+						  ->where( 'is_trash', 1 )
 						  ->get($this->table);
 
 		if ($query->num_rows() > 0)
@@ -32,6 +46,7 @@ class Levels extends CI_Model {
 				 ->from( 'area')
 				 ->join( 'users', 'users.id = area.assignee_id' )
 				 ->where( 'area.level_id' , $level_id )
+				 ->where( 'area.is_trash' , 0 )
 				 ->order_by( 'area.area_name', 'ASC' );
 		$query = $this->db->get();
 
@@ -41,7 +56,21 @@ class Levels extends CI_Model {
 			return array();
 	}
 
+	public function get_all_trashed_areas($level_id)
+	{
+		$this->db->select('area.area_name,area.id as area_id,users.fname,users.mname,users.lname,users.id as user_id')
+				 ->from( 'area')
+				 ->join( 'users', 'users.id = area.assignee_id' )
+				 ->where( 'area.level_id' , $level_id )
+				 ->where( 'area.is_trash' , 1 )
+				 ->order_by( 'area.area_name', 'ASC' );
+		$query = $this->db->get();
 
+		if ($query->num_rows() > 0)
+			return $query->result_array();
+		else
+			return array();
+	}
 
 	public function create($data)
 	{
@@ -60,6 +89,14 @@ class Levels extends CI_Model {
 			return true;
 		else 
 			return false;
+	}
+
+	public function trash($data)
+	{
+		if ( $this->db->where( 'id' , $data->id )->update( $this->table, ['is_trash' => 1] ) )
+			return $data->id;	
+		else 
+			return false;	
 	}
 
 	public function delete($data)

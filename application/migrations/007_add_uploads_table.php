@@ -53,6 +53,11 @@ class Migration_Add_Uploads_Table extends CI_Migration {
                 'constraint' => 11,
                 'default' => 1
             ),
+            'is_trash' => array(
+                'type' => 'INT',
+                'constraint' => 11,
+                'default' => 0
+            ),
             'created_at' => array(
                 'type' => 'TIMESTAMP',
             ),

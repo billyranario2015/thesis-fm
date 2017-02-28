@@ -19,11 +19,14 @@ class AuthController extends CI_Controller {
 			// Retrieve User Info and Make SESSION for user
 			$user_info = $this->users->get_user_auth( $_POST );
 
+			// Get User Organization
+			$organization_info = $this->users->get_user_org( $user_info['course_id'] );
 			// Session User Info 
 			$this->session->set_userdata($user_info);
 
 			// Session Auth Access
 			$this->session->set_userdata( ['is_logged_in' => true ] );
+			$this->session->set_userdata( ['organization_id' => $organization_info['organization_id'] ] );
 
 			$this->session->set_flashdata( 'message' , '' );
 

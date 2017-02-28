@@ -1,6 +1,6 @@
 <?php $this->load->view('header'); ?>
 
-    <section class="content" ng-controller="AreasController" ng-init="getParameters(<?php echo $data['id'] ?>);getCleanParameters(<?php echo $data['id'] ?>);getSubmissionStatus(<?php echo $data['id'] ?>)">
+    <section class="content" ng-controller="AreasController" ng-init="getParameters(<?php echo $data['id'] ?>);getCleanParameters(<?php echo $data['id'] ?>);getSubmissionStatus(<?php echo $data['id'] ?>);getTrashedCleanParameters(<?php echo $data['id']; ?>)">
         <div class="container-fluid">
             <div class="block-header">
                 <?php if ( $this->session->flashdata('message') ) { ?>
@@ -22,11 +22,15 @@
                         <div class="header">
                             <h2>
                                 <span class="text-success"><?php echo $level_info['level_name'] ?></span> > <?php echo $data['area_name']; ?>
-                                <?php if( !empty($param_info) ) echo ' > ' . isset($param_info) ? $param_info['parameter_name'] : '' ?>
+                                <?php if( !empty($param_info) ) echo  isset($param_info) ? ' > ' . $param_info['parameter_name'] : '' ?>
                                 
 
                                 <?php if( isset($param_info) ) { ?>
-                                    <a href="<?php echo base_url('user/level/'.$level_info['id'].'/area/'.$data['id'] . '/edit') ?>" class="btn btn-primary pull-right">BACK</a>
+                                    <?php if( isset( $param_info['parameter_name'] ) && !empty($param_info['parameter_name']) ) { ?>
+                                        <a href="<?php echo base_url('user/level/'.$level_info['id'].'/area/'.$data['id'].'/edit') ?>" class="btn btn-primary pull-right">BACK</a>
+                                    <?php } else { ?>
+                                        <a href="<?php echo base_url('user/level/'.$level_info['id'].'/areas') ?>" class="btn btn-primary pull-right">BACK</a>
+                                    <?php } ?>
                                 <?php } else { ?>
                                    <?php if( $this->session->userdata('user_level') != 3 ) { ?>
                                         <a href="<?php echo base_url('user/level/'.$level_info['id'].'/areas') ?>" class="btn btn-primary pull-right">BACK</a>

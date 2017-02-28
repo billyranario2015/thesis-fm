@@ -223,19 +223,34 @@ class AdminController extends CI_Controller {
 			}
 		}
 	}
+	public function trash_user()
+	{
+		$obj = json_decode(file_get_contents('php://input'));
+		
+		// Log current activity
+		$log_arr = array(
+			'course_id' => $this->session->userdata('course_id'),
+			'author_id' => $this->session->userdata('id'),
+			'message'   => $this->session->userdata('fname') . ' put a user to trash.',
+		);
+		$this->logs->create($log_arr);
+
+		echo json_encode( [ 'response' => $this->users->trash($obj) ] );
+	}
+
 	public function delete_user()
 	{
 		$obj = json_decode(file_get_contents('php://input'));
 		
 		// Log current activity
 		$log_arr = array(
+			'course_id' => $this->session->userdata('course_id'),
 			'author_id' => $this->session->userdata('id'),
 			'message'   => $this->session->userdata('fname') . ' deleted a user.',
 		);
 		$this->logs->create($log_arr);
 
 		echo json_encode( [ 'response' => $this->users->delete($obj) ] );
-
 	}
 
 	/*

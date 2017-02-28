@@ -49,24 +49,49 @@
                                         <th>#</th>
                                         <th>AREA NAME</th>
                                         <th>ASSIGNED TO</th>
-                                        <th class="text-right">ACTION</th>
+                                        <th class="text-right">
+                                            <?php if ( isset($_GET['action']) && $_GET['action'] == 'trash'  ) { ?>
+                                                <a href="<?php echo base_url('user/level/'.$level_info['id'].'/areas'); ?>">VIEW ALL</a> 
+                                            <?php } else { ?>
+                                                <a href="?action=trash">VIEW TRASH</a> 
+                                            <?php } ?>
+                                            | ACTION
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($areas as $key => $area) { ?>
-                                    <tr id="area-<?php echo $area['area_id'] ?>">
-                                        <th scope="row"><?php echo ++$key; ?></th>
-                                        <td><?php echo $area['area_name'] ?></td>
-                                        <td><?php echo $area['fname'] . ' ' . $area['lname']; ?></td>
-                                        <td class="text-right">
-                                            <a href="<?php echo base_url('user/level/'.$level_info['id'].'/area/'.$area['area_id'].'/edit') ?>" class="btn bg-blue waves-effect">
-                                                <i class="material-icons">edit</i>
-                                            </a>
-                                            <a href="#" ng-click="deleteArea(<?php echo $area['area_id']; ?>)" class="btn bg-pink waves-effect">
-                                                <i class="material-icons">delete_sweep</i>
-                                            </a> &nbsp;
-                                        </td>
-                                    </tr>
+                                    <?php if ( isset($_GET['action']) && $_GET['action'] == 'trash'  ) { ?>
+                                        <?php foreach ($trash as $key => $area) { ?>
+                                        <tr id="area-<?php echo $area['area_id'] ?>">
+                                            <th scope="row"><?php echo ++$key; ?></th>
+                                            <td><?php echo $area['area_name'] ?></td>
+                                            <td><?php echo $area['fname'] . ' ' . $area['lname']; ?></td>
+                                            <td class="text-right">
+                                                <a href="<?php echo base_url('user/level/'.$level_info['id'].'/area/'.$area['area_id'].'/restore') ?>" class="btn bg-green waves-effect">
+                                                    <i class="material-icons">restore</i>
+                                                </a>
+                                                <a href="#" ng-click="deleteArea(<?php echo $area['area_id']; ?>)" class="btn bg-pink waves-effect">
+                                                    <i class="material-icons">delete_sweep</i>
+                                                </a> &nbsp;
+                                            </td>
+                                        </tr>
+                                        <?php } ?>
+                                    <?php } else { ?>
+                                        <?php foreach ($areas as $key => $area) { ?>
+                                        <tr id="area-<?php echo $area['area_id'] ?>">
+                                            <th scope="row"><?php echo ++$key; ?></th>
+                                            <td><?php echo $area['area_name'] ?></td>
+                                            <td><?php echo $area['fname'] . ' ' . $area['lname']; ?></td>
+                                            <td class="text-right">
+                                                <a href="<?php echo base_url('user/level/'.$level_info['id'].'/area/'.$area['area_id'].'/edit') ?>" class="btn bg-blue waves-effect">
+                                                    <i class="material-icons">edit</i>
+                                                </a>
+                                                <a href="#" ng-click="trashArea(<?php echo $area['area_id']; ?>)" class="btn bg-pink waves-effect">
+                                                    <i class="material-icons">delete_sweep</i>
+                                                </a> &nbsp;
+                                            </td>
+                                        </tr>
+                                        <?php } ?>
                                     <?php } ?>
                                 </tbody>
                             </table>

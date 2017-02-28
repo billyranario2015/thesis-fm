@@ -29,32 +29,74 @@
                                         <th>#</th>
                                         <th>NAME</th>
                                         <th>ROLE</th>
-                                        <th class="text-right">ACTION</th>
+                                        <th class="text-right">
+                                            <?php if ( isset($_GET['action']) && $_GET['action'] == 'trash'  ) { ?>
+                                                <a href="<?php echo base_url('user/users'); ?>">VIEW ALL</a> 
+                                            <?php } else { ?>
+                                                <a href="?action=trash">VIEW TRASH</a> 
+                                            <?php } ?>
+                                            | ACTION
+                                        </th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php foreach ($users as $key => $user) { ?>
-                                    <tr id="user-<?php echo $user['id']; ?>">
-                                        <th scope="row"><?php echo ++$key; ?></th>
-                                        <td><?php echo $user['fname'] . ' ' . $user['mname'] . ' ' . $user['lname'] ?></td>
-                                        <td><b><?php echo $user['role']; ?></b></td>
-                                        <td class="text-right">
-                                            <?php if( $this->session->userdata('id') != $user['id'] ) { ?>
-                                                <?php if ( $user['user_level'] != 4 ) { ?>
-                                                    <a href="<?php echo base_url('user/'.$user['id'].'/edit') ?>" class="btn bg-blue waves-effect">
-                                                        <i class="material-icons">edit</i>
-                                                    </a>
-                                                    <a href="#" ng-click="deleteUser(<?php echo $user['id']; ?>)" class="btn bg-pink waves-effect">
-                                                        <i class="material-icons">delete_sweep</i>
-                                                    </a> &nbsp;
+                                    <?php if ( isset($_GET['action']) && $_GET['action'] == 'trash'  ) { ?>
+                                        <?php foreach ($trash as $key => $user) { ?>
+                                        <tr id="user-<?php echo $user['id']; ?>">
+                                            <th scope="row"><?php echo ++$key; ?></th>
+                                            <td><?php echo $user['fname'] . ' ' . $user['mname'] . ' ' . $user['lname'] ?></td>
+                                            <td><b><?php echo $user['role']; ?></b></td>
+                                            <td class="text-right">
+                                                <?php if( $this->session->userdata('id') != $user['id'] ) { ?>
+                                                    <?php if ( $user['user_level'] != 4 ) { ?>
+                                                        <a href="<?php echo base_url('user/'.$user['id'].'/restore') ?>" title="Restore User" class="btn bg-green waves-effect">
+                                                            <i class="material-icons">restore</i>
+                                                        </a>
+
+
+                                                        <!-- DELETE PERMANENTLY -->
+                                                        <a href="#" ng-click="deleteUser(<?php echo $user['id']; ?>)" title="Delete Permanently" class="btn bg-red waves-effect">
+                                                            <i class="material-icons">delete_sweep</i>
+                                                        </a> &nbsp;
+
+
+                                                    <?php } else { ?>
+                                                        <b>It's the In-House Evaluator!</b>
+                                                    <?php } ?>
                                                 <?php } else { ?>
-                                                    <b>It's the In-House Evaluator!</b>
+                                                    <b>It's you!</b>
                                                 <?php } ?>
-                                            <?php } else { ?>
-                                                <b>It's you!</b>
-                                            <?php } ?>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
+                                        <?php } ?>
+                                    <?php } else { ?> 
+                                        <?php foreach ($users as $key => $user) { ?>
+                                        <tr id="user-<?php echo $user['id']; ?>">
+                                            <th scope="row"><?php echo ++$key; ?></th>
+                                            <td><?php echo $user['fname'] . ' ' . $user['mname'] . ' ' . $user['lname'] ?></td>
+                                            <td><b><?php echo $user['role']; ?></b></td>
+                                            <td class="text-right">
+                                                <?php if( $this->session->userdata('id') != $user['id'] ) { ?>
+                                                    <?php if ( $user['user_level'] != 4 ) { ?>
+                                                        <a href="<?php echo base_url('user/'.$user['id'].'/edit') ?>" class="btn bg-blue waves-effect">
+                                                            <i class="material-icons">edit</i>
+                                                        </a>
+                                                        
+                                                        <!-- PUT IN TRASH -->
+                                                        <a href="#" ng-click="trashUser(<?php echo $user['id']; ?>)" class="btn bg-pink waves-effect">
+                                                            <i class="material-icons">delete_sweep</i>
+                                                        </a> &nbsp;
+
+
+                                                    <?php } else { ?>
+                                                        <b>It's the In-House Evaluator!</b>
+                                                    <?php } ?>
+                                                <?php } else { ?>
+                                                    <b>It's you!</b>
+                                                <?php } ?>
+                                            </td>
+                                        </tr>
+                                        <?php } ?>
                                     <?php } ?>
                                 </tbody>
                             </table>

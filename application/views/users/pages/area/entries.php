@@ -46,7 +46,7 @@
                                         <hr>
 
                                         <!-- SUGGESTED FILES -->
-                                        <div ng-init="getParameterFiles(<?php echo isset($param_id)?$param_id:0; ?>);dispayAllAvailableFiles('<?php if( !empty($param_info) ) echo $param_info['tags']; ?>')">
+                                        <div ng-init="getParameterFiles(<?php echo isset($param_id)?$param_id:0; ?>);getTrashedParameterFiles(<?php echo isset($param_id)?$param_id:0; ?>);dispayAllAvailableFiles('<?php if( !empty($param_info) ) echo $param_info['tags']; ?>')">
                                             <div>
                                                 <div class="header">
                                                     <div class="row">
@@ -178,10 +178,41 @@
                                                                 <th>FILENAME</th>
                                                                 <th>DESCRIPTION</th>
                                                                 <th>TAGS</th>
-                                                                <th style="width: 200px;" class="text-right">ACTIONS</th>
+                                                                <th style="width: 200px;" class="text-right">
+                                                                    <?php if ( isset($_GET['action']) && $_GET['action'] == 'trash'  ) { ?>
+                                                                        <a href="<?php echo base_url('user/level/'.$data['level_id'].'/area/'.$data['id'].'/parameter/'.$param_id); ?>">VIEW ALL</a> | ALL TRASHED FILES
+                                                                    <?php } else { ?>
+                                                                        <a href="?action=trash">VIEW TRASH</a> | ACTION
+                                                                    <?php } ?>
+                                                                    
+                                                                </th>                                                                
                                                             </tr>
                                                         </thead>
                                                         <tbody>
+                                                            <?php if ( isset($_GET['action']) && $_GET['action'] == 'trash'  ) { ?>
+                                                            <tr ng-repeat="file in trashed_parameter_files  track by $index" class="row-file-{{ file.id }}" >
+                                                                <th scope="row">{{ $index+1 }}</th>
+                                                                <td>
+                                                                    <span>{{file.filename | limitTo: 35}}</span>
+                                                                    <span>{{file.filename.length > 35 ? '......' : ''}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span>{{file.description | limitTo: 35}}</span>
+                                                                    <span>{{file.description.length > 35 ? '......' : ''}}</span>
+                                                                </td>
+                                                                <td>
+                                                                    <span ng-repeat="tag in extractTag(file.tags)" class="label {{ randomColor() }}" ng-bind="tag" style="margin-right:5px;"></span>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <a href="<?php echo base_url('user/level/'.$data['level_id'].'/area/'.$data['id'].'/parameter/' . $param_id ) ?>/file/{{ file.id }}/restore"  class="btn bg-cyan waves-effect">
+                                                                        <i class="material-icons">restore</i>
+                                                                    </a>
+                                                                    <a style="cursor:pointer" ng-click="deleteFile(file)" class="btn bg-pink waves-effect" ng-if="file.author_id == <?php echo $this->session->userdata('id') ?>">
+                                                                        <i class="material-icons">delete_sweep</i>
+                                                                    </a> &nbsp;
+                                                                </td>
+                                                            </tr>
+                                                            <?php } else {  ?>
                                                             <tr ng-repeat="file in parameter_files  track by $index" class="row-file-{{ file.id }}" >
                                                                 <th scope="row">{{ $index+1 }}</th>
                                                                 <td>
@@ -202,11 +233,12 @@
                                                                     <a style="cursor:pointer" ng-click="editFile(file)" class="btn bg-blue waves-effect">
                                                                         <i class="material-icons">edit</i>
                                                                     </a>
-                                                                    <a style="cursor:pointer" ng-click="deleteFile(file)" class="btn bg-pink waves-effect" ng-if="file.author_id == <?php echo $this->session->userdata('id') ?>">
+                                                                    <a style="cursor:pointer" ng-click="trashFile(file)" class="btn bg-pink waves-effect" ng-if="file.author_id == <?php echo $this->session->userdata('id') ?>">
                                                                         <i class="material-icons">delete_sweep</i>
                                                                     </a> &nbsp;
                                                                 </td>
-                                                            </tr>
+                                                            </tr>                                                                
+                                                            <?php }  ?>
                                                         </tbody>
                                                     </table>
                                                 </div>

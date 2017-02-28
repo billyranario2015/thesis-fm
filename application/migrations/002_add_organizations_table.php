@@ -23,6 +23,11 @@ class Migration_Add_Organizations_Table extends CI_Migration {
                 'type' => 'VARCHAR',
                 'constraint' => 255,
             ),
+            'is_trash' => array(
+                'type' => 'INT',
+                'constraint' => 11,
+                'default' => 0
+            ),
             'created_at' => array(
                 'type' => 'TIMESTAMP',
             ),

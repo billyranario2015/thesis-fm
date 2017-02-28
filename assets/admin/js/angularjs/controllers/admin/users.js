@@ -1,5 +1,16 @@
 fm.controller( "UsersController" , function( $scope, $http, $timeout, settings, $timeout ) {
 
+	$scope.trashUser = function trashUser(id) {
+		if ( confirm( 'Are you sure you want to put this user on trash?' ) ) {
+			$http.post( settings.base_url + 'api/user/trash' , { id:id } )
+			.success( function (response) {
+				console.log(response);
+				$( '#user-' + id ).fadeOut();
+			} );
+		}
+
+	}
+
 	$scope.deleteUser = function deleteUser(id) {
 		if ( confirm( 'Are you sure you want to delete this user?' ) ) {
 			$http.post( settings.base_url + 'api/user/delete' , { id:id } )
@@ -9,7 +20,7 @@ fm.controller( "UsersController" , function( $scope, $http, $timeout, settings, 
 			} );
 		}
 
-	}
+	}	
 
 	$scope.parameter_lists = {};
 	$scope.get_list_of_parameters = function get_list_of_parameters() {

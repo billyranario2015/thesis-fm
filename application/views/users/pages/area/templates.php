@@ -80,28 +80,36 @@
                                             <h2 class="card-inside-title">
                                                 <span class="pull-left">Parameters</span>
                                                 <span class="pull-right">
-                                                   No. of Completed Parameters <span class="text-success" ng-bind="completedParentParameters"></span> / <span class="text-success" ng-bind="totalParentParameters"></span>
+                                                    <?php if ( isset($_GET['action']) && $_GET['action'] == 'trash'  ) { ?>
+                                                        <a href="<?php echo base_url('user/level/'.$level_info['id'].'/area/' . $data['id'] . '/edit' ); ?>">VIEW ALL</a> &nbsp;&nbsp;  |  &nbsp;&nbsp;
+                                                        Trashed Parameters 
+                                                    <?php } else { ?>
+                                                        <a href="?action=trash">VIEW TRASH</a> &nbsp;&nbsp;  |  &nbsp;&nbsp;
+                                                        No. of Completed Parameters <span class="text-success" ng-bind="completedParentParameters"></span> / <span class="text-success" ng-bind="totalParentParameters"></span>
+                                                    <?php } ?>
+                                                    
                                                 </span>
                                                 <div style="clear:both"></div>
                                             </h2>
                                             <ul class="list-group">
-                                                <li ng-repeat="list in cleanParameters" class="list-group-item item-paramater-{{list.id}} item-paramater-parent-{{list.parent_id}}">
+                                                <?php if ( isset($_GET['action']) && $_GET['action'] == 'trash'  ) { ?>
+                                                <li ng-repeat="list in trashedCleanParameters" class="list-group-item item-paramater-{{list.id}} item-paramater-parent-{{list.parent_id}}">
                                                     <span ng-bind-html="list.parameter_name"></span>
-                                                    <span class="pull-right action-icons">
-                                                        <span class="label bg-green" style="position: relative;bottom: 9px;cursor:default;margin-right: 5px;" ng-if="list.parameter_status == 'complete'">Complete</span>
+                                                    <span class="pull-right action-icons" style="margin-top: 15px;">
 
-                                                        <span class="label bg-red" style="position: relative;bottom: 9px;cursor:default;margin-right: 5px;" ng-if="list.parameter_status == 'incomplete'">In-complete</span>
+                                                        <div class="tags pull-left">
+                                                            <span ng-repeat="tag in extractTag(list.tags)" class="label {{ randomColor() }}" ng-bind="tag" style="margin-right:5px;"></span>
+                                                        </div>
 
-                                                        <a href="<?php  echo base_url( 'user/level/'.$level_info['id'].'/area/'.$data['id'] .'/parameter/{{list.id}}' ) ?>" class="col-green" style="text-decoration: none;">
-                                                           <i class="material-icons">folder_shared</i>
+                                                        <a href="<?php  echo base_url( 'user/level/'.$level_info['id'].'/area/'.$data['id'] .'/parameter/{{list.id}}/restore' ) ?>" class="col-green" style="text-decoration: none;">
+                                                           <i class="material-icons">restore</i>
                                                         </a>
-                                                        <span class="col-cyan" ng-click="edit_parameter(list)">
-                                                           <i class="material-icons">mode_edit</i>
-                                                        </span>
                                                         <span class="col-pink" ng-click="delete_parameter(list)">
                                                            <i class="material-icons">delete_forever</i>
                                                         </span>
 
+
+                                                        <div style="clear:both"></div>
                                                         <!-- parameter status -->
 
                                                         <!-- <span class="" ng-if="checkIfHasFiles(list) > 0" style="cursor:default">
@@ -112,6 +120,42 @@
                                                         </span> -->
                                                     </span>
                                                 </li>
+                                                <?php } else {  ?>
+                                                <li ng-repeat="list in cleanParameters" class="list-group-item item-paramater-{{list.id}} item-paramater-parent-{{list.parent_id}}">
+                                                    <span ng-bind-html="list.parameter_name"></span>
+                                                    <span class="pull-right action-icons" style="margin-top: 15px;">
+
+                                                        <div class="tags pull-left">
+                                                            <span ng-repeat="tag in extractTag(list.tags)" class="label {{ randomColor() }}" ng-bind="tag" style="margin-right:5px;"></span>
+                                                        </div>
+
+                                                        <span class="label bg-green" style="position: relative;bottom: 9px;cursor:default;margin-right: 5px;" ng-if="list.parameter_status == 'complete'">Complete</span>
+
+                                                        <span class="label bg-red" style="position: relative;bottom: 9px;cursor:default;margin-right: 5px;" ng-if="list.parameter_status == 'incomplete'">In-complete</span>
+
+                                                        <a href="<?php  echo base_url( 'user/level/'.$level_info['id'].'/area/'.$data['id'] .'/parameter/{{list.id}}' ) ?>" class="col-green" style="text-decoration: none;">
+                                                           <i class="material-icons">folder_shared</i>
+                                                        </a>
+                                                        <span class="col-cyan" ng-click="edit_parameter(list)">
+                                                           <i class="material-icons">mode_edit</i>
+                                                        </span>
+                                                        <span class="col-pink" ng-click="trash_parameter(list)">
+                                                           <i class="material-icons">delete_forever</i>
+                                                        </span>
+
+
+                                                        <div style="clear:both"></div>
+                                                        <!-- parameter status -->
+
+                                                        <!-- <span class="" ng-if="checkIfHasFiles(list) > 0" style="cursor:default">
+                                                            <i class="material-icons text-success">check_circle</i> 
+                                                        </span>
+                                                        <span class="" title="In-completed" ng-if="checkIfHasFiles(list) == 0" style="cursor:default">
+                                                            <i class="material-icons text-danger">not_interested</i> 
+                                                        </span> -->
+                                                    </span>
+                                                </li> 
+                                                <?php }  ?>
                                             </ul>
                                         </div>
                                         <!-- <div class="col-sm-12">

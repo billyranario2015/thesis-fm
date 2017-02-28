@@ -38,6 +38,11 @@ class Migration_Add_Area_Parameters_Table extends CI_Migration {
                 'type' => 'TEXT',
                 'null' => true
             ),
+            'is_trash' => array(
+                'type' => 'INT',
+                'constraint' => 11,
+                'default' => 0
+            ),
             'created_at' => array(
                 'type' => 'TIMESTAMP',
             ),

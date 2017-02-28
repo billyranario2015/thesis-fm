@@ -37,6 +37,20 @@ class Area_Parameters extends CI_Model {
 	{
 		$this->db->where( 'area_id' , $area_id )
 				 ->where( 'parent_id' , $parent_id )
+				 ->where( 'is_trash' , 0 )
+				 ->order_by( 'id', 'ASC' );
+		$query = $this->db->get($this->table);
+
+		if ($query->num_rows() > 0)
+			return $query->result_array();
+		else
+			return array();
+	}
+
+	public function get_child_by_parent_id_neutral($parent_id,$area_id)
+	{
+		$this->db->where( 'area_id' , $area_id )
+				 ->where( 'parent_id' , $parent_id )
 				 ->order_by( 'id', 'ASC' );
 		$query = $this->db->get($this->table);
 
@@ -50,6 +64,7 @@ class Area_Parameters extends CI_Model {
 	{
 		$this->db->select( 'area_parameters.*, area_parameters.id as area_parameter_id, area.*, area.id as area_area_id' )
 				 ->where( 'parent_id' , $parent_id )
+				 ->where( 'area.course_id' , $this->session->userdata('course_id') )
 				 ->join( 'area', 'area.id = area_parameters.area_id' )
 				 ->order_by( 'area_parameters.id', 'ASC' );
 		$query = $this->db->get($this->table);
@@ -61,6 +76,15 @@ class Area_Parameters extends CI_Model {
 	}
 
 	public function count_child_params($parameter_id)
+	{
+		$this->db->where( 'parent_id' , $parameter_id )
+				 ->where( 'is_trash' , 0 );
+		$query = $this->db->get($this->table);
+
+		return $query->num_rows();
+	}
+
+	public function count_child_params_neutral($parameter_id)
 	{
 		$this->db->where( 'parent_id' , $parameter_id );
 		$query = $this->db->get($this->table);
@@ -98,6 +122,22 @@ class Area_Parameters extends CI_Model {
 		
 		if ( $query )
 			return true;
+		else 
+			return false;
+	}
+
+	public function trash($data)
+	{
+		if ( $this->db->where( 'id' , $data->id )->update( $this->table, ['is_trash' => 1] ) )
+			return $data->id;	
+		else 
+			return false;	
+	}	
+
+	public function restore($data)
+	{
+		if ( $this->db->where( 'id' , $data['id'] )->update( $this->table, ['is_trash' => 0] ) )
+			return $data['id'];	
 		else 
 			return false;
 	}
