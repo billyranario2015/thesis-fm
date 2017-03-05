@@ -8,6 +8,7 @@
                             <h2>
                                 LISTS OF LEVELS
                             </h2>
+                            <?php if( $this->session->userdata( 'user_level' ) == 2 ) { ?>                            
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -18,6 +19,7 @@
                                     </ul>
                                 </li>
                             </ul>
+                            <?php } ?>
                         </div>
                         <div class="body table-responsive">
                             <table class="table table-hover">
@@ -43,15 +45,16 @@
                                             <td><?php echo $level['level_name']; ?></td>
                                             <td class="text-right">
 
+                                                <?php if( $this->session->userdata( 'user_level' ) == 2 ) { ?> 
                                                 <a href="<?php echo base_url('user/level/'.$level['id'].'/restore') ?>" title="Restore Level" class="btn bg-green waves-effect">
                                                     <i class="material-icons">restore</i>
                                                 </a>
-
 
                                                 <!-- DELETE PERMANENTLY -->
                                                 <a href="#" ng-click="deleteLevel(<?php echo $level['id']; ?>)" title="Delete Permanently" class="btn bg-red waves-effect">
                                                     <i class="material-icons">delete_sweep</i>
                                                 </a> &nbsp;
+                                                <?php } ?>
                                             </td>
                                         </tr>
                                         <?php } ?>
@@ -65,12 +68,15 @@
                                                 <a href="<?php echo base_url('user/level/'.$level['id'].'/areas') ?>" class="btn bg-green waves-effect" title="View Contents">
                                                     <i class="material-icons">link</i>
                                                 </a>
+
+                                                <?php if( $this->session->userdata( 'user_level' ) == 2 ) { ?> 
                                                 <a href="<?php echo base_url('user/level/'.$level['id'].'/edit') ?>" class="btn bg-blue waves-effect">
                                                     <i class="material-icons">edit</i>
                                                 </a>
                                                 <a href="#" ng-click="trashLevel(<?php echo $level['id']; ?>)" class="btn bg-pink waves-effect">
                                                     <i class="material-icons">delete_sweep</i>
                                                 </a>
+                                                <?php } ?>
                                             </td>
                                         </tr>
                                         <?php } ?>

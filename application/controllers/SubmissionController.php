@@ -29,7 +29,7 @@ class SubmissionController extends CI_Controller {
 		$this->logs->create($log_arr);		
 
 		// GET Chairman's ID
-		$course_data = $this->users->get_users_by_course_with_level($obj->userdata->course_id,2);
+		$course_data = $this->users->get_users_by_course_with_level($obj->userdata->course_id,5);
 
 		$notification_arr = [
 			'user_id' 				=> $obj->userdata->id,

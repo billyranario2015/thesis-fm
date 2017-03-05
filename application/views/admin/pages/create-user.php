@@ -25,6 +25,7 @@
                                     <h2 class="card-inside-title">First Name</h2>
                                     <div class="form-group form-float form-group-md">
                                         <div class="form-line">
+                                            <input type="hidden" name="organization_id" value="" class="form-control" required>
                                             <input type="text" name="fname" value="<?php echo $this->session->flashdata('fname') ?>" class="form-control" required>
                                         </div>
                                     </div>
@@ -48,9 +49,9 @@
                                 <div class="col-sm-12">
                                     <h2 class="card-inside-title">Select Course</h2>
                                     <div class="form-group form-float form-group-md">
-                                        <select class="form-control show-tick selectpicker" name="course_id" required>
+                                        <select class="form-control course_id" name="course_id" style="border-bottom: 1px solid #ccc;" required>
                                             <?php foreach ($courses as $key => $course) { ?>
-                                                <option value="<?php echo $course['course_id']; ?>" <?php if ( $this->session->flashdata('course_id') == $course['course_id'] ) echo 'selected' ?>>
+                                                <option orgID="<?php echo $course['organization_id']; ?>" value="<?php echo $course['course_id']; ?>" <?php if ( $this->session->flashdata('course_id') == $course['course_id'] ) echo 'selected' ?>>
                                                     <?php echo $course['course_name'] . ' (' . $course['organization_name']. ')'  ; ?>
                                                 </option>
                                             <?php } ?>
@@ -69,10 +70,12 @@
                                     <h2 class="card-inside-title">User Level</h2>
                                     <div class="form-group form-float form-group-md">
                                         <div class="form-line">
-                                            <select class="form-control show-tick selectpicker" name="user_level" required>
+                                            <select class="form-control" name="user_level" required>
                                                 <option value="1" disabled>Superadmin</option>
                                                 <option value="2" <?php if ( $this->session->flashdata('user_level') == 2 ) echo 'selected' ?>>Admin</option>
-                                                <!--option value="3" <?php if ( $this->session->flashdata('user_level') == 3 ) echo 'selected' ?>>User</option-->
+                                                
+                                                <option value="5" <?php if ( $this->session->flashdata('user_level') == 5 ) echo 'selected' ?>>Over All Chairman</option>
+
                                                 <option value="4" <?php if ( $this->session->flashdata('user_level') == 4 ) echo 'selected' ?>>In-house Evaluator</option>
                                             </select>
                                         </div>
@@ -113,4 +116,18 @@
         </div>
     </section>
  
+    <!-- script -->
+    <script type="text/javascript">
+            var organization_id = $('select.course_id option:selected').first().attr( 'orgID' );
+            setTimeout(function() {
+                $( 'input[name="organization_id"]' ).val( organization_id );
+            }, 1500);
+
+        $( 'select.course_id' ).on( 'change' , function () {
+            var orgID = $( 'option:selected', this ).attr( 'orgID' );
+            console.log(orgID); 
+            $( 'input[name="organization_id"]' ).val( orgID );
+        } );
+    </script>
+
 <?php $this->load->view('footer'); ?>

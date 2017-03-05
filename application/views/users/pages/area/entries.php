@@ -27,7 +27,7 @@
                                         <!-- <form action="" ng-submit="submitFileUpload()" method="post" enctype="multipart/form-data"> -->
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="file" name="file_data" ng-model="file_data" class="form-control" onchange="angular.element(this).scope().uploadFile(this.files, <?php echo isset($param_id) ? $param_id : '' ?>)" multiple/>
+                                                <input type="file" name="file_data" ng-model="file_data" class="form-control" onchange="angular.element(this).scope().uploadFile(this.files, <?php echo isset($param_id) ? $param_id : '' ?>, <?php echo $data['id']; ?>)" multiple/>
                                             </div>
                                         </div>
 
@@ -87,7 +87,7 @@
                                                 </div>
                                                 
                                                 <div class="scroll-table-list" style="max-height:500px;overflow-y:scroll;">
-                                                    <div class="body table-responsive" ng-if="related_file_count > 0">
+                                                    <div class="body table-responsive" >
 
                                                         <table class="table table-condensed table-hovered">
                                                             <thead>
@@ -151,6 +151,78 @@
                                                                         <!-- Default -->
                                                                         <a style="cursor:pointer" ng-click="copyFile(file[0],<?php echo isset($param_id)?$param_id:0; ?>)" class="btn bg-blue waves-effect btn-lg" id="btn-copy">
                                                                             Copy file
+                                                                        </a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                                
+                                                <div class="header">
+                                                    <div class="row">
+                                                        <div class="col-sm-5" style="margin: 0;">
+                                                            <h2 class="col-pink" style=" position: relative;">
+                                                                RELATED PARAMETERS 
+                                                            </h2>
+                                                        </div>
+                                                        <div class="col-sm-7 text-right" style="margin: 0;">
+                                                            <!-- <form ng-submit="searchRelatedFiles()">
+                                                                <div class="input-group" style="margin: 0;position: relative;top: 20px;">
+                                                                    <div class="form-line">
+                                                                        <input type="text" class="form-control date" ng-model="searchQuery" placeholder="Search Related files" required>
+                                                                    </div>
+                                                                   <span class="input-group-addon">
+                                                                        <button type="submit" style="cursor:pointer" class="btn btn-default">
+                                                                            <div class="demo-google-material-icon"> 
+                                                                                <i class="material-icons">search</i> 
+                                                                                <span class="icon-name" style="position: relative;top: -3px">SEARCH</span>
+                                                                            </div>
+                                                                        </button>
+                                                                    </span>
+                                                                </div>
+                                                            </form> -->
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="preloader pl-size-xl" ng-if="loader_search">
+                                                    <div class="spinner-layer">
+                                                        <div class="circle-clipper left">
+                                                            <div class="circle"></div>
+                                                        </div>
+                                                        <div class="circle-clipper right">
+                                                            <div class="circle"></div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="scroll-table-list" style="max-height:500px;overflow-y:scroll;">
+                                                    <div class="body table-responsive">
+
+                                                        <table class="table table-condensed table-hovered">
+                                                            <thead>
+                                                                <tr >
+                                                                    <th>#</th>
+                                                                    <th>PARAMETER NAME</th>
+                                                                    <th>TAGS</th>
+                                                                    <th style="width: 140px;" class="text-right">ACTIONS</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr ng-repeat="param in related_parameters | groupBy : 'parameter_name'" ng-if="param[0].id != <?php echo isset($param_id)?$param_id:0; ?>">
+                                                                    <th scope="row">{{ $index+1 }}</th>
+                                                                    <td>
+                                                                        <span>{{param[0].parameter_name | limitTo: 35}}</span>
+                                                                        <span>{{param[0].parameter_name.length > 35 ? '......' : ''}}</span>
+                                                                    </td>
+                                                                    <td>
+                                                                        <span ng-repeat="tag in extractTag(param[0].tags)" class="label {{ randomColor() }}" ng-bind="tag" style="margin-right:5px;"></span>
+                                                                    </td>
+                                                                    <td class="text-right">
+                                                                        <a style="cursor:pointer" ng-click="uploadFileToParameter(param[0])" title="Upload file(s) to {{ param[0].parameter_name }}">
+                                                                            <i class="material-icons">file_upload</i>
                                                                         </a>
                                                                     </td>
                                                                 </tr>

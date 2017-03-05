@@ -37,6 +37,7 @@ class Migration_Add_Users_Table extends CI_Migration {
             // user_levels = [ 
             //  1 => 'Superadmin'
             //  2 => 'Admin'
+            //  5 => 'Over All Chairman'
             //  3 => 'User'
             //  4 => 'Guest'
             // ]
@@ -53,6 +54,11 @@ class Migration_Add_Users_Table extends CI_Migration {
                 'type' => 'VARCHAR',
                 'constraint' => 255,
                 'default' => 'avatar5.png'
+            ),
+            'organization_id' => array(
+                'type' => 'INT',
+                'constraint' => 11,
+                'null' => true
             ),
             'course_id' => array(
                 'type' => 'INT',
@@ -86,45 +92,56 @@ class Migration_Add_Users_Table extends CI_Migration {
         // Default Account
         $data = array(
             array(
-                'id'                => 1,
                 'fname'             => 'Admin',
                 'mname'             => 'User',
                 'lname'             => 'Account',
                 'user_level'        => 1,
                 'role'              => 'Website Admin',
+                'organization_id'   => null,
                 'course_id'         => null,
                 'email'             => 'admin@must.edu.ph',
                 'password'          => sha1( '123' ),
             ),
             array(
-                'id'                => 2,
                 'fname'             => 'Jane',
                 'mname'             => 'Smith',
                 'lname'             => 'Doe',
                 'user_level'        => 2,
-                'role'              => 'Chairman',
+                'role'              => 'Admin',
+                'organization_id'   => 1,
                 'course_id'         => 1,
                 'email'             => 'jane@doe.com',
                 'password'          => sha1( '123' ),
             ),
             array(
-                'id'                => 3,
+                'fname'             => 'Jane',
+                'mname'             => 'Smith',
+                'lname'             => 'Doe',
+                'user_level'        => 5,
+                'role'              => 'Overall Chairman',
+                'organization_id'   => 1,
+                'course_id'         => 1,
+                'email'             => 'over@gmail.com',
+                'password'          => sha1( '123' ),
+            ),
+            array(
                 'fname'             => 'John',
                 'mname'             => 'Smith',
                 'lname'             => 'Doe',
                 'user_level'        => 3,
                 'role'              => 'Sub Chairman',
+                'organization_id'   => 1,
                 'course_id'         => 1,
                 'email'             => 'john@doe.com',
                 'password'          => sha1( '123' ),
             ),
             array(
-                'id'                => 4,
                 'fname'             => 'Jonathan',
                 'mname'             => 'Smith',
                 'lname'             => 'Doe',
                 'user_level'        => 4,
                 'role'              => 'In-House Evaluator',
+                'organization_id'   => 1,
                 'course_id'         => 1,
                 'email'             => 'jonathan@doe.com',
                 'password'          => sha1( '123' ),

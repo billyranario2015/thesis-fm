@@ -19,23 +19,23 @@ class AdminController extends CI_Controller {
 			'tpl' => $tpl,
 		);
 
-		$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
 
 		if ( $tpl == 'create-organization' ) {
 			$data['tpl'] = 'organizations';
 			$data['tpl2'] = 'create-organizations';
+			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
 		} elseif ( $tpl == 'organizations' ) {
 			$data['tpl'] = 'organizations';
 			$data['tpl2'] = 'organizations';
 			// Load Custom Scripts in footer
-			$data['scripts'] .= '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/admin/organization.js').'"></script>';
+			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/admin/organization.js').'"></script>';
 			$data['orgs'] = $this->org->get();
 		} elseif ( $tpl == 'users' ) {
 			$data['tpl'] = 'users';
 			$data['tpl2'] = 'users';
 			$data['users'] = $this->users->get_all_users();
 			// Load Custom Scripts in footer
-			$data['scripts'] .= '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/admin/users.js').'"></script>';
+			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/admin/users.js').'"></script>';
 		} elseif ( $tpl == 'create-user' ) {
 			$data['tpl'] = 'users';
 			$data['tpl2'] = 'create-user';
@@ -43,13 +43,15 @@ class AdminController extends CI_Controller {
 		} elseif ( $tpl == 'create-course' ) {
 			$data['tpl'] = 'courses';
 			$data['tpl2'] = 'create-course';
+			$data['scripts'] = '<script src="'.base_url( 'assets/admin/plugins/bootstrap-select/js/bootstrap-select.js' ).'"></script>';
+
 			$data['orgs'] = $this->org->get();
 		} elseif ( $tpl == 'courses' ) {
 			$data['tpl'] = 'courses';
 			$data['tpl2'] = 'create-course';
 			$data['courses'] = $this->course->get();
 			// Load Custom Scripts in footer
-			$data['scripts'] .= '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/admin/course.js').'"></script>';
+			$data['scripts'] = '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/admin/course.js').'"></script>';
 		}
 
 		$this->load->view('admin/pages/'.$tpl , $data);

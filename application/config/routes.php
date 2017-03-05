@@ -139,6 +139,8 @@ $route['user/level/(:num)/area/(:num)/parameter/(:num)/restore'] = 'UsersControl
 // SEARCH FOR RELATED FILES
 // -- Seach Via upload
 $route['api/search_for_file']['POST']					= 'UsersController/search_file';
+$route['api/search_for_parameters']['POST']				= 'UsersController/search_parameters';
+
 
 // EVALUATOR 
 $route['evaluator/(:any)']['GET']						= 'UsersController/evaluator_page/$1';

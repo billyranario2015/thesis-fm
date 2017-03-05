@@ -48,6 +48,7 @@
                                             <a href="<?php echo base_url( 'user/area/'.$data['id'] . '/templates' ); ?>" class="btn btn-primary">BACK</a>
                                         </div> -->
                                         <br>
+                                        <?php if( $this->session->userdata('user_level') == 2 ){ ?>
                                         <div class="col-sm-12">
                                             <form ng-submit="createParameter(<?php echo $level_info['id']; ?>,<?php echo $data['id']; ?>)">
                                                 <h2 class="card-inside-title">Select Parent Parameter</h2>
@@ -57,6 +58,14 @@
                                                             <option value="0">---- No Parent ----</option>
                                                             <option ng-repeat="list in parameters" value="{{ list.id }}">{{ list.parameter_name }}</option>
                                                         </select>
+                                                    </div>
+                                                </div>
+                                                <h2 class="card-inside-title">Set total documents to be uploaded 
+                                                    <small>Default number of total files to be uploaded is <b>10</b></small>
+                                                </h2>
+                                                <div class="form-group">
+                                                    <div class="form-line">
+                                                        <input type="number" class="form-control date" ng-model="parameter.total_files" placeholder="Parameter Total Files" min="1">
                                                     </div>
                                                 </div>
                                                 <h2 class="card-inside-title">Parameter Name</h2>
@@ -76,6 +85,7 @@
                                             </form>
                                             <hr style="border-top: 1px dashed #656565;margin-top: 45px;margin-bottom: 30px;">
                                         </div>
+                                        <?php } ?>
                                         <div class="col-sm-12">
                                             <h2 class="card-inside-title">
                                                 <span class="pull-left">Parameters</span>
@@ -95,19 +105,22 @@
                                                 <?php if ( isset($_GET['action']) && $_GET['action'] == 'trash'  ) { ?>
                                                 <li ng-repeat="list in trashedCleanParameters" class="list-group-item item-paramater-{{list.id}} item-paramater-parent-{{list.parent_id}}">
                                                     <span ng-bind-html="list.parameter_name"></span>
+                                                    
                                                     <span class="pull-right action-icons" style="margin-top: 15px;">
 
                                                         <div class="tags pull-left">
-                                                            <span ng-repeat="tag in extractTag(list.tags)" class="label {{ randomColor() }}" ng-bind="tag" style="margin-right:5px;"></span>
+                                                            <span ng-repeat="tag in extractTag(list.tags) track by $index" class="label {{ randomColor() }}" ng-bind="tag" style="margin-right:5px;"></span>
                                                         </div>
 
+
+                                                        <?php if( $this->session->userdata('user_level') == 2 ){ ?>
                                                         <a href="<?php  echo base_url( 'user/level/'.$level_info['id'].'/area/'.$data['id'] .'/parameter/{{list.id}}/restore' ) ?>" class="col-green" style="text-decoration: none;">
                                                            <i class="material-icons">restore</i>
                                                         </a>
                                                         <span class="col-pink" ng-click="delete_parameter(list)">
                                                            <i class="material-icons">delete_forever</i>
                                                         </span>
-
+                                                        <?php } ?>
 
                                                         <div style="clear:both"></div>
                                                         <!-- parameter status -->
@@ -126,23 +139,35 @@
                                                     <span class="pull-right action-icons" style="margin-top: 15px;">
 
                                                         <div class="tags pull-left">
-                                                            <span ng-repeat="tag in extractTag(list.tags)" class="label {{ randomColor() }}" ng-bind="tag" style="margin-right:5px;"></span>
+                                                            <span ng-repeat="tag in extractTag(list.tags) track by $index" class="label {{ randomColor() }}" ng-bind="tag" style="margin-right:5px;"></span>
                                                         </div>
 
-                                                        <span class="label bg-green" style="position: relative;bottom: 9px;cursor:default;margin-right: 5px;" ng-if="list.parameter_status == 'complete'">Complete</span>
+                                                        <span class="label bg-green" style="position: relative;bottom: 9px;cursor:default;margin-right: 5px;" ng-if="list.parameter_status == 'complete'">
+                                                            Complete &nbsp; 
+                                                            <span ng-if="list.child_param_count == 0 ">
+                                                                {{ list.count_files }} / {{ list.total_files }}
+                                                            </span>
+                                                        </span>
 
-                                                        <span class="label bg-red" style="position: relative;bottom: 9px;cursor:default;margin-right: 5px;" ng-if="list.parameter_status == 'incomplete'">In-complete</span>
+                                                        <span class="label bg-red" style="position: relative;bottom: 9px;cursor:default;margin-right: 5px;" ng-if="list.parameter_status == 'incomplete'">
+                                                            In-complete &nbsp; 
+                                                            <span ng-if="list.child_param_count == 0 ">
+                                                                {{ list.count_files }} / {{ list.total_files }}
+                                                            </span>
+                                                        </span>
 
+                                                        
                                                         <a href="<?php  echo base_url( 'user/level/'.$level_info['id'].'/area/'.$data['id'] .'/parameter/{{list.id}}' ) ?>" class="col-green" style="text-decoration: none;">
                                                            <i class="material-icons">folder_shared</i>
                                                         </a>
+                                                        <?php if( $this->session->userdata('user_level') == 2 ){ ?>
                                                         <span class="col-cyan" ng-click="edit_parameter(list)">
                                                            <i class="material-icons">mode_edit</i>
                                                         </span>
                                                         <span class="col-pink" ng-click="trash_parameter(list)">
                                                            <i class="material-icons">delete_forever</i>
                                                         </span>
-
+                                                        <?php } ?>
 
                                                         <div style="clear:both"></div>
                                                         <!-- parameter status -->
@@ -189,6 +214,14 @@
                                                                 </div>
                                                             </div>
                                                             <?php if ( $this->session->userdata('user_level') == 2 ) { ?>
+                                                            <h2 class="card-inside-title">Set total documents to be uploaded 
+                                                                <small>Default number of total files to be uploaded is <b>10</b></small>
+                                                            </h2>
+                                                            <div class="form-group">
+                                                                <div class="form-line">
+                                                                    <input type="number" class="form-control date" ng-model="parameter_edit.total_files" placeholder="Parameter Total Files" min="1">
+                                                                </div>
+                                                            </div>                                                                
                                                             <h2 class="card-inside-title">Tags <small>Separate tags by comma(,)</small></h2>
                                                             <div class="form-group form-float form-group-md">
                                                                 <div class="form-line">
@@ -196,7 +229,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="tags">
-                                                                <span ng-repeat="tag in extractTag(parameter_edit.tags)" class="label {{ randomColor() }}" ng-bind="tag" style="margin-right:5px;"></span>
+                                                                <span ng-repeat="tag in extractTag(parameter_edit.tags) track by $index" class="label {{ randomColor() }}" ng-bind="tag" style="margin-right:5px;"></span>
                                                             </div>
                                                             <?php } ?>
                                                        </form>

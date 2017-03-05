@@ -109,25 +109,6 @@
                         </a>
                     </li>
 
-                    <!--li class="<?php if( isset( $tpl ) && $tpl == 'area' ) echo 'active'; ?>">
-                        <a href="javascript:void(0);" class="menu-toggle">
-                            <i class="material-icons">poll</i>
-                            <span>Area</span>
-                        </a>
-                        <ul class="ml-menu">
-                            <li class="<?php if( isset($tpl2) && $tpl2 == 'area' ) echo 'active'; ?>">
-                                <a href="<?php echo base_url( 'user/area' ); ?>">
-                                    <span>All Areas</span>
-                                </a>
-                            </li>
-                            <li class="<?php if( isset($tpl2) && $tpl2 == 'create-area' ) echo 'active'; ?>">
-                                <a href="<?php echo base_url( 'user/create-area' ); ?>">
-                                    <span>New Area</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li-->
-
                     <li class="<?php if( isset( $tpl ) && $tpl == 'levels' ) echo 'active'; ?>">
                         <a href="javascript:void(0);" class="menu-toggle">
                             <i class="material-icons">poll</i>
@@ -142,25 +123,6 @@
                             <li class="<?php if( isset($tpl2) && $tpl2 == 'create-level' ) echo 'active'; ?>">
                                 <a href="<?php echo base_url( 'user/create-level' ); ?>">
                                     <span>New Level</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-
-                    <li class="<?php if( isset( $tpl ) && $tpl == 'users' ) echo 'active'; ?>">
-                        <a href="javascript:void(0);" class="menu-toggle">
-                            <i class="material-icons">people</i>
-                            <span>Users</span>
-                        </a>
-                        <ul class="ml-menu">
-                            <li class="<?php if( isset($tpl2) && $tpl2 == 'users' ) echo 'active'; ?>">
-                                <a href="<?php echo base_url( 'user/users' ); ?>">
-                                    <span>All Users</span>
-                                </a>
-                            </li>
-                            <li class="<?php if( isset($tpl2) && $tpl2 == 'create-user' ) echo 'active'; ?>">
-                                <a href="<?php echo base_url( 'user/create-user' ); ?>">
-                                    <span>New User</span>
                                 </a>
                             </li>
                         </ul>
@@ -182,6 +144,46 @@
                             <i class="material-icons">home</i>
                             <span>Entries</span>
                         </a>
+                    </li>
+
+                     <!-- USER_LEVEL == 5 -->
+                    <?php } elseif ( $this->session->userdata( 'user_level' ) == 5 ) { ?>
+                    <li class="<?php if( isset( $tpl ) && $tpl == 'levels' ) echo 'active'; ?>">
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">poll</i>
+                            <span>Levels</span>
+                        </a>
+                        <ul class="ml-menu">
+                            <li class="<?php if( isset($tpl2) && $tpl2 == 'level' ) echo 'active'; ?>">
+                                <a href="<?php echo base_url( 'user/levels' ); ?>">
+                                    <span>All Levels</span>
+                                </a>
+                            </li>
+                            <!--li class="<?php if( isset($tpl2) && $tpl2 == 'create-level' ) echo 'active'; ?>">
+                                <a href="<?php echo base_url( 'user/create-level' ); ?>">
+                                    <span>New Level</span>
+                                </a>
+                            </li-->
+                        </ul>
+                    </li>                        
+                    <li class="<?php if( isset( $tpl ) && $tpl == 'users' ) echo 'active'; ?>">
+                        <a href="javascript:void(0);" class="menu-toggle">
+                            <i class="material-icons">people</i>
+                            <span>Users</span>
+                        </a>
+
+                        <ul class="ml-menu">
+                            <li class="<?php if( isset($tpl2) && $tpl2 == 'users' ) echo 'active'; ?>">
+                                <a href="<?php echo base_url( 'user/users' ); ?>">
+                                    <span>All Users</span>
+                                </a>
+                            </li>
+                            <li class="<?php if( isset($tpl2) && $tpl2 == 'create-user' ) echo 'active'; ?>">
+                                <a href="<?php echo base_url( 'user/create-user' ); ?>">
+                                    <span>New User</span>
+                                </a>
+                            </li>
+                        </ul>
                     </li>
                     <?php } ?>
                 </ul>

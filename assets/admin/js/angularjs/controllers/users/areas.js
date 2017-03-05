@@ -1,4 +1,6 @@
 fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, $timeout, $rootScope ) {
+	$scope.pre_upload_files = {};
+
 	$scope.deleteArea = function deleteArea(id) {
 		if ( confirm( 'Are you sure you want to delete this area?' ) ) {
 			$http.post( settings.base_url + 'api/area/delete' , { id:id } )
@@ -95,6 +97,7 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 		console.log(data)
 		$scope.parameter_edit.id 				= data.id;
 		$scope.parameter_edit.parent_id 		= data.parent_id;
+		$scope.parameter_edit.total_files 		= parseInt(data.total_files);
 		$scope.parameter_edit.area_id 			= data.area_id;
 		$scope.parameter_edit.parameter_name 	= data.clean_parameter;
 		$scope.parameter_edit.tags 				= data.tags;
@@ -145,10 +148,14 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 
 	$scope.parameter_id = 0;
 	$scope.loader_search = false;
-	$scope.uploadFile = function(files,parameter_id) {
+	$scope.uploadFile = function(files,parameter_id,area_id) {
 		$scope.loader_search = true;
 		var related_files = [];
+		var related_parameters = [];
+
 		$scope.related_files = [];
+		$scope.related_parameters = [];
+
 	    $scope.files = files;
 	    $scope.related_file_count = 0;
 
@@ -159,7 +166,9 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
 	    var search_request = angular.forEach( files, function (value,key) {
 	    	var file = value.name;
 			var name = file.substring(file.lastIndexOf('/')+1, file.lastIndexOf('.'));
-	    	$http.post( settings.base_url + 'api/search_for_file/', { data : name, parameter_id : parameter_id } )
+
+			// Search for related files
+	    	$http.post( settings.base_url + 'api/search_for_file/', { data : name, parameter_id : parameter_id, area_id : area_id } )
     		.success( function (response) {
     			$scope.$applyAsync(function () {
     				angular.forEach( response.response, function (value2,key2) {
@@ -167,18 +176,65 @@ fm.controller( "AreasController" , function( $scope, $http, $timeout, settings, 
     				} );
     			} );
     		} );
+
+    		// Search for related parameters
+	    	$http.post( settings.base_url + 'api/search_for_parameters/', { data : name, parameter_id : parameter_id, area_id : area_id } )
+    		.success( function (response) {
+    			console.log( response );
+
+    			$scope.$applyAsync(function () {
+    				angular.forEach( response.response, function (value2,key2) {
+    					related_parameters.push(value2);
+    				} );
+    			} );
+    		} );
+
 	    } );
 
 	    setTimeout(function() {
 			$scope.related_file_count = related_files.length;
+	    	
 	    	$scope.related_files = related_files;
+	    	$scope.related_parameters = related_parameters;
+
 	    	$scope.loader_search = false;
 	    	$scope.$apply();
 	    	console.log( $scope.related_files );
-	    }, 1000);
+	    	console.log( $scope.related_parameters );
+	    }, 1500);
 
 	};
 
+	// Upload Selected FILE to specific PARAMETER
+	$scope.uploadFileToParameter = function uploadFileToParameter(parameter) {
+		if ( confirm( 'Are you sure you want to upload file(s) to ' + parameter.parameter_name +'?' ) ) {
+			$scope.submitFileUploadToParameter(parameter.id, parameter.parameter_name);
+		}
+	}
+	$scope.submitFileUploadToParameter = function submitFileUploadToParameter(parameter_id,parameter_name) {
+		var fd = new FormData();
+
+		if ( $scope.files != null ) {
+
+			for( var x in $scope.files ) {
+				if ( $scope.files[x].name  ) {
+					$scope.files[x].parameter_id = parameter_id;
+					fd.append("file[]", $scope.files[x], $scope.files[x].name);
+				}
+			}
+
+			$http.post( settings.base_url + 'user/file_upload/' + parameter_id, fd, {
+				headers: {'Content-Type': undefined },
+				transformRequest: angular.identity
+		  	}).success( function(data) {
+				console.log( data );
+				alert( 'File(s) successfully uploaded to ' + parameter_name )
+			});
+
+		} else {
+			console.log( 'empty' );
+		}
+	}
 	// CLEAR SEARCHED
 	$scope.clearSearch = function clearSearch() {
 		$scope.related_files = [];

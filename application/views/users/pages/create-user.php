@@ -26,6 +26,7 @@
                                     <div class="form-group form-float form-group-md">
                                         <div class="form-line">
 
+                                            <input type="hidden" name="organization_id" value="<?php echo $this->session->userdata('organization_id') ?>" class="form-control" required>
                                             <input type="hidden" name="course_id" value="<?php echo $this->session->userdata('course_id') ?>" class="form-control" required>
                                             <input type="text" name="fname" value="<?php echo $this->session->flashdata('fname') ?>" class="form-control" required>
                                         </div>
@@ -101,5 +102,5 @@
             </div>
         </div>
     </section>
- 
+
 <?php $this->load->view('footer'); ?>

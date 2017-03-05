@@ -343,7 +343,7 @@ class UsersController extends CI_Controller {
 			'data' => $this->area->get_by_id($id),
 			'level_info' => $this->levels->get_by_id($level_id),
 			// 'users' => $this->users->get_all_users_by_course($this->session->userdata('course_id')),
-			'users' => $this->users->get_all_users_by_org($this->session->userdata('course_id')),
+			'users' => $this->users->get_all_users_by_org($this->session->userdata('organization_id')),
 			'tab'	=> 'templates',
 			'action' => 'templates',
 			'scripts'=> '<script type="text/javascript" src="'.base_url('assets/admin/js/angularjs/controllers/users/areas.js').'"></script>',
@@ -642,7 +642,9 @@ class UsersController extends CI_Controller {
 					"parameter_name"	=> '<span class="spacer">' . $spacing . ++$num .'.) </span> <span class="param_name"> ' . $param['parameter_name'] . '</span>',
 					"clean_parameter"	=> $param['parameter_name'],
 					"parent_id" 		=> $param['parent_id'],
+					"total_files"		=> $param['total_files'],
 					"child_param_count" => $this->area_params->count_child_params($param['id']),
+					"count_files" 		=> $this->files->count_params_files($param['id']),
 					"parameter_status"	=> $this->files->get_file_count(
 												$param['id'],
 												$this->area_params->count_child_params($param['id'])
@@ -866,6 +868,12 @@ class UsersController extends CI_Controller {
 	{
 		$obj = json_decode(file_get_contents('php://input'));
 		echo json_encode( [ 'response' => $this->files->search($obj) ] );
+	}
+
+	public function search_parameters()
+	{
+		$obj = json_decode(file_get_contents('php://input'));
+		echo json_encode( [ 'response' => $this->files->search_parameters($obj) ] );
 	}
 
 	public function trash_file()

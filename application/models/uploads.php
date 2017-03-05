@@ -52,11 +52,32 @@ class Uploads extends CI_Model {
 			return array();
 	}
 
+	public function count_params_files($parameter_id)
+	{
+		// Get parameter files using parameter ID 
+		$this->db->where( 'parameter_id' , $parameter_id );
+		$query = $this->db->get($this->table);
+
+		return $query->num_rows();	
+	}
+
 	public function get_file_count($parameter_id,$child_count)
 	{
+		// Get parameter files using parameter ID 
 		$this->db->where( 'parameter_id' , $parameter_id )
 				 ->where( 'is_trash' , 0 );
 		$query = $this->db->get($this->table);
+
+		// Get parameter info using parameter ID
+		$parameter_query = $this->db->where( 'id' , $parameter_id )
+				 ->where( 'is_trash' , 0 )
+				 ->get('area_parameters');
+
+		$param_info = array();
+
+		if ( $parameter_query->num_rows() > 0 ) {
+			$param_info = $parameter_query->row_array();		
+		}
 
 		/* 
 		| If paramater has no child, then count the files inside this parameter and mark as complete
@@ -65,7 +86,11 @@ class Uploads extends CI_Model {
 		$status = '';
 		if ( $child_count == 0 ) {
 			if ( $query->num_rows() > 0 ) { // if HAS files, mark as complete
-				$status = 'complete';
+				if ( $query->num_rows() == $param_info['total_files'] ) {
+					$status = 'complete';
+				} else {
+					$status = 'incomplete';
+				}
 			} else {
 				$status = 'incomplete';
 			}
@@ -128,11 +153,7 @@ class Uploads extends CI_Model {
 			foreach ($sub_params as $key => $sub) {
 				// Get Child Parameter Count 
 				$sub_child_count = $this->count_child_params_trashed($sub['id']);
-				if ( $sub_child_count > 0 ) { // if HAS files, 
-					array_push( $sub_paramater_status_arr, $this->get_file_count_neutral($sub['id'],$sub_child_count) );
-				} else {
-					array_push( $sub_paramater_status_arr, $this->get_file_count_neutral($sub['id'],$sub_child_count) );
-				}
+				array_push( $sub_paramater_status_arr, $this->get_file_count_neutral($sub['id'],$sub_child_count) );
 			}
 			// $status = $sub_paramater_status_arr;
 			if ( in_array('incomplete', $sub_paramater_status_arr) ) {
@@ -191,6 +212,20 @@ class Uploads extends CI_Model {
 				 ->join( 'area', 'area.id = area_parameters.area_id' )
 				 ->join( 'courses', 'courses.id = area.course_id' );
 		$query = $this->db->get($this->table);
+
+		if ($query->num_rows() > 0)
+			return $query->result_array();
+		else
+			return array();
+	}
+
+	public function search_parameters($data)
+	{
+		$this->db->like('tags', $data->data, 'both')
+				 ->or_like('parameter_name', $data->data, 'both')
+				 ->where( 'is_trash', 0 )
+				 ->where( 'area_id', $data->area_id );
+		$query = $this->db->get('area_parameters');
 
 		if ($query->num_rows() > 0)
 			return $query->result_array();

@@ -102,16 +102,22 @@
                                 <div role="tabpanel" class="tab-pane <?php if( $tab == 'settings' ) echo 'active'; ?> fade in" id="settings">
                                     <br>
                                     <form method="POST" action="<?php echo base_url('area/update') ?>">
+                                        <input type="hidden" name="id" value="<?php echo $data['id'] ?>" class="form-control">
+                                        <input type="hidden" name="level_id" value="<?php echo $data['level_id'] ?>" class="form-control">
+                                        
+                                        <?php if ($this->session->userdata('user_level') == 2 ) { ?>
                                         <div class="col-sm-12">
                                             <h2 class="card-inside-title">Area Name</h2>
                                             <div class="form-group form-float">
                                                 <div class="form-line">
-                                                    <input type="hidden" name="id" value="<?php echo $data['id'] ?>" class="form-control">
-                                                    <input type="hidden" name="level_id" value="<?php echo $data['level_id'] ?>" class="form-control">
                                                     <input type="text" name="area_name" value="<?php echo $data['area_name'] ?>" class="form-control">
                                                 </div>
                                             </div>
                                         </div>
+                                        <?php } ?>
+
+
+                                        <?php if ($this->session->userdata('user_level') == 5 ) { ?>
                                         <div class="col-sm-12">
                                             <h2 class="card-inside-title">Assign Area to: </h2>
                                             <div class="form-group form-float form-group-md">
@@ -160,6 +166,8 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <?php } ?>
+
                                         <div class="col-sm-12">
                                             <button type="submit" class="btn bg-cyan btn-lg waves-effect">UPDATE</button>
                                         </div>

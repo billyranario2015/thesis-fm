@@ -3,7 +3,9 @@
         <div class="container-fluid">
             <div class="block-header">
 
+                <?php if( $this->session->userdata( 'user_level' ) == 2 ) { ?> 
                 <a href="<?php echo base_url( 'user/level/'.$level_info['id'].'/create-area' ); ?>" class="btn btn-primary">NEW AREA</a>
+                <?php } ?>
 
                 <?php if ( $this->session->flashdata('message') ) { ?>
                 <br>
@@ -18,7 +20,7 @@
                         <div class="header">
                             <h2 ng-init="checkLevelSubmission(<?php echo $level_info['id']; ?>)">
                                 <span class="text-success"><?php echo $level_info['level_name']; ?></span>&nbsp; > AREAS
-                                <?php if ($this->session->userdata('user_level') == 2 ) { ?>
+                                <?php if ($this->session->userdata('user_level') == 5 ) { ?>
                                 <!-- NOT YET SUBMITTED -->
                                 <button class="btn btn-success waves-effect btn-lg pull-right" style="position: relative;top: -8px;" 
                                     ng-click="submitToEvaluator(<?php echo $level_info['id']; ?>)" ng-if="submission_count == 0">
@@ -67,12 +69,17 @@
                                             <td><?php echo $area['area_name'] ?></td>
                                             <td><?php echo $area['fname'] . ' ' . $area['lname']; ?></td>
                                             <td class="text-right">
+
+                                                <?php if( $this->session->userdata( 'user_level' ) == 2 ) { ?> 
                                                 <a href="<?php echo base_url('user/level/'.$level_info['id'].'/area/'.$area['area_id'].'/restore') ?>" class="btn bg-green waves-effect">
                                                     <i class="material-icons">restore</i>
                                                 </a>
+
                                                 <a href="#" ng-click="deleteArea(<?php echo $area['area_id']; ?>)" class="btn bg-pink waves-effect">
                                                     <i class="material-icons">delete_sweep</i>
                                                 </a> &nbsp;
+                                                <?php } ?>
+
                                             </td>
                                         </tr>
                                         <?php } ?>
@@ -86,9 +93,11 @@
                                                 <a href="<?php echo base_url('user/level/'.$level_info['id'].'/area/'.$area['area_id'].'/edit') ?>" class="btn bg-blue waves-effect">
                                                     <i class="material-icons">edit</i>
                                                 </a>
+                                                <?php if( $this->session->userdata( 'user_level' ) == 2 ) { ?> 
                                                 <a href="#" ng-click="trashArea(<?php echo $area['area_id']; ?>)" class="btn bg-pink waves-effect">
                                                     <i class="material-icons">delete_sweep</i>
                                                 </a> &nbsp;
+                                                <?php } ?>
                                             </td>
                                         </tr>
                                         <?php } ?>
